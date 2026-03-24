@@ -1,0 +1,194 @@
+repo_name: Request-Service-API
+current_state: bootstrap_only
+
+workflow:
+  stage_order:
+    - Intake
+    - Repo Mapping
+    - Design Review
+    - Implementation
+    - Verification
+    - Cross-Repo Handoff
+
+  stage_owners:
+    Intake: intake_mapper
+    Repo Mapping: intake_mapper
+    Design Review: designer_guard
+    Implementation: implementer
+    Verification: verifier
+    Cross-Repo Handoff: intake_mapper
+
+  stage_exit_artifacts:
+    Intake: scope-report.md
+    Repo Mapping: task-envelope.md
+    Design Review: design-review.md
+    Implementation: implementation-report.md
+    Verification: verification-report.md
+    Cross-Repo Handoff: cross-repo-handoff.md
+
+  stage_exit_rules:
+    Intake:
+      next_stage: Repo Mapping
+      task_status_on_clean_exit: new
+    Repo Mapping:
+      next_stage: Design Review
+      task_status_on_clean_exit: mapped
+    Design Review:
+      next_stage: Implementation
+      task_status_on_clean_exit: designed
+    Implementation:
+      next_stage: Verification
+      task_status_on_clean_exit: implemented
+    Verification:
+      next_stage: null
+      task_status_on_clean_exit: done
+    Cross-Repo Handoff:
+      next_stage: null
+      task_status_on_clean_exit: closed
+
+models:
+  task:
+    durable: true
+    source_of_truth: true
+    fields:
+      - task_id
+      - repo_name
+      - title
+      - objective
+      - stage
+      - status
+      - owner
+      - scope
+      - constraints
+      - inputs
+      - artifacts
+      - changed_files
+      - verification_status
+      - blockers
+      - next_expected_actor
+    statuses:
+      - new
+      - mapped
+      - designed
+      - implementing
+      - implemented
+      - verifying
+      - done
+      - blocked
+      - handoff_required
+      - closed
+    allowed_transitions:
+      new:
+        - mapped
+        - blocked
+        - handoff_required
+        - closed
+      mapped:
+        - designed
+        - blocked
+        - handoff_required
+        - closed
+      designed:
+        - implementing
+        - blocked
+        - handoff_required
+        - closed
+      implementing:
+        - implemented
+        - blocked
+        - handoff_required
+        - closed
+      implemented:
+        - verifying
+        - blocked
+        - handoff_required
+        - closed
+      verifying:
+        - done
+        - blocked
+        - handoff_required
+        - closed
+      done:
+        - closed
+      blocked:
+        - new
+        - mapped
+        - designed
+        - implementing
+        - verifying
+        - handoff_required
+        - closed
+      handoff_required:
+        - closed
+        - mapped
+      closed: []
+
+  message:
+    durable: true
+    attached_to_task: true
+    source_of_truth: false
+    fields:
+      - message_id
+      - task_id
+      - from_actor
+      - to_actor
+      - message_type
+      - summary
+      - body
+      - related_artifacts
+      - timestamp
+
+  handoff_artifact:
+    durable: true
+    formal_transfer_packet: true
+    fields:
+      - task_id
+      - repo_name
+      - from_stage
+      - to_stage
+      - objective
+      - scope
+      - assumptions
+      - findings
+      - changed_files
+      - open_risks
+      - blockers
+      - required_inputs
+      - verification_status
+      - next_expected_actor
+
+  execution:
+    durable: false
+    resume_allowed: false
+    fresh_invocation_required: true
+    termination_required: true
+    fields:
+      - execution_id
+      - task_id
+      - agent_name
+      - owned_stage
+      - started_at
+      - ended_at
+      - execution_outcome
+      - produced_artifacts
+      - next_expected_actor
+    outcomes:
+      - completed
+      - blocked
+      - handoff_emitted
+      - aborted
+
+rules:
+  tasks_messages_artifacts_persist: true
+  subagent_executions_do_not_persist: true
+  terminated_executions_are_never_resumed: true
+  free_form_reply_chains_are_not_workflow_state: true
+  dormant_subagents_forbidden: true
+
+handoff_policy:
+  cross_repo_handoff_owner: intake_mapper
+  when_non_handoff_stage_discovers_external_dependency:
+    set_task_status: handoff_required
+    attach_message_template: stage-message.md
+    next_expected_actor: intake_mapper
+    required_action: emit formal cross-repo-handoff artifact before closing local work

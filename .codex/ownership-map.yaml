@@ -1,0 +1,57 @@
+repo_name: Request-Service-API
+repo_role: backend request orchestration and API contract layer for VC-ecosystem integrations
+current_state: bootstrap_only
+
+local_ownership:
+  current_files:
+    - AGENTS.md
+    - README.md
+    - docs/plans/**
+    - .codex/**
+  future_paths:
+    "src/http/**": transport, validation, and response mapping
+    "src/orchestration/**": request lifecycle, retries, callbacks, and coordination logic
+    "src/integrations/**": outbound adapters and VC ecosystem clients
+    "src/domain/**": pure domain policies, state models, and invariants
+    "src/config/**": config and environment loading
+    "tests/**": contract, integration, and verification coverage
+
+sibling_repos:
+  IU-cert-university:
+    path: ../IU-cert-university
+    role: frontend and operator-facing consumer
+    owns:
+      - browser-visible flows
+      - UI behavior
+      - operator workflow screens
+    handoff_when:
+      - the requested change is UI-only
+      - browser workflow or operator interaction is the main objective
+
+  IU-VC-registry:
+    path: ../IU-VC-registry
+    role: authority for registry-owned metadata
+    owns:
+      - credential schemas
+      - registry contexts
+      - DID documents
+      - public metadata
+    handoff_when:
+      - the requested change affects registry authority or canonical schema data
+
+  waltid-identity:
+    path: ../waltid-identity
+    role: upstream protocol reference
+    owns:
+      - protocol implementation reference
+      - wallet and verifier reference behavior
+    handoff_when:
+      - the work is standards comparison or upstream behavior lookup
+    notes:
+      - use as reference by default, not as an IU-owned implementation target
+
+routing_rules:
+  - if the task is local API contract, orchestration, service integration, or callback handling, it belongs here
+  - if the task is frontend UX or operator flow, route to IU-cert-university
+  - if the task changes schemas, DID docs, contexts, or registry authority, route to IU-VC-registry
+  - if the task needs protocol-grounded source confirmation, consult waltid-identity as reference
