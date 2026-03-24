@@ -1,157 +1,201 @@
-# Request-Service-API Codex Setup Implementation Plan
+# Request-Service-API Codex SDLC Migration Implementation Plan
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Add a repo-local Codex agent setup that defines repository boundaries, controller-friendly subagents, and reusable task templates for future engineering work.
+**Goal:** Refactor the repository's Codex setup into a lightweight stage-based SDLC workflow with 4 core agents, persistent repo maps, reusable skills, explicit task/message/handoff lifecycle, and ephemeral subagent execution rules.
 
-**Architecture:** The repository keeps its own `AGENTS.md` and `.codex/` directory as the source of truth for local execution. A parent controller above this repo may route work into the repository, but once inside, repo-local instructions own boundaries, agent roles, and verification expectations.
+**Architecture:** The repository keeps a small repo-local control plane under `.codex/`. Durable workflow state lives in task and artifact templates, stage ownership lives in `AGENTS.md` plus `.codex/system-map.yaml`, and specialized procedures move into reusable skill documents. Subagents are stage-local executors only and are never resumed.
 
-**Tech Stack:** Markdown, TOML, repo-local agent/task scaffolding
+**Tech Stack:** Markdown, TOML, YAML, repo-local orchestration docs
 
 ---
 
-### Task 1: Add Repository-Level Agent Instructions
+### Task 1: Update The Design Record
 
 **Files:**
-- Create: `AGENTS.md`
-- Reference: `README.md`
-- Reference: `docs/plans/2026-03-24-request-service-api-codex-setup-design.md`
+- Modify: `docs/plans/2026-03-24-request-service-api-codex-setup-design.md`
+- Modify: `docs/plans/2026-03-24-request-service-api-codex-setup.md`
 
-**Step 1: Draft the repository role and current-state guidance**
+**Step 1: Rewrite the design doc**
 
-Write `AGENTS.md` so it:
+Replace the old specialized-agent design with:
 
-- defines the repo as the local owner for Request-Service-API engineering work
-- states the repo is currently bootstrap state and should not invent missing tooling
-- explains cross-repo relationships with `IU-cert-university`, `IU-VC-registry`, and `waltid-identity`
+- 4 stage agents only
+- explicit `task`, `message`, and `handoff artifact` definitions
+- explicit ephemeral `subagent execution` definition
+- persistent repo maps and reusable skills
 
-**Step 2: Add execution and boundary rules**
+**Step 2: Rewrite the implementation plan**
 
-Add rules that:
+Write a plan that covers:
 
-- keep future HTTP, orchestration, integration, and domain layers separated
-- forbid guessing cross-repo changes from this checkout
-- require repo-local instructions to take precedence once work is routed here
+- `AGENTS.md`
+- `.codex/config.toml`
+- `.codex/repo-map.md`
+- `.codex/system-map.yaml`
+- `.codex/ownership-map.yaml`
+- 4 agent TOMLs
+- 6 skill documents
+- 7 template files
+- deletion of old specialized agent/task files
 
-**Step 3: Validate the document**
+**Step 3: Validate docs**
 
-Run: `sed -n '1,220p' AGENTS.md`
-Expected: clear sections for role, current state, cross-repo map, boundaries, verification, and multiagent use
+Run: `sed -n '1,260p' docs/plans/2026-03-24-request-service-api-codex-setup-design.md`
+Expected: explicit task/message/handoff/execution lifecycle model
 
 **Step 4: Commit**
 
 ```bash
-git add AGENTS.md docs/plans/2026-03-24-request-service-api-codex-setup-design.md docs/plans/2026-03-24-request-service-api-codex-setup.md
-git commit -m "docs: add Request-Service-API agent design"
+git add docs/plans/2026-03-24-request-service-api-codex-setup-design.md docs/plans/2026-03-24-request-service-api-codex-setup.md
+git commit -m "docs: update codex SDLC migration design"
 ```
 
-### Task 2: Add Repo-Local Codex Agent Definitions
+### Task 2: Replace Root Workflow Instructions
 
 **Files:**
-- Create: `.codex/config.toml`
-- Create: `.codex/agents/repo_mapper.toml`
-- Create: `.codex/agents/request_flow_specialist.toml`
-- Create: `.codex/agents/api_contract_guard.toml`
-- Create: `.codex/agents/cross_repo_dependency_scout.toml`
-- Create: `.codex/agents/targeted_implementer.toml`
-- Create: `.codex/agents/verification_guard.toml`
+- Modify: `AGENTS.md`
 
-**Step 1: Add the base `.codex` config**
+**Step 1: Rewrite repository workflow rules**
 
-Write `.codex/config.toml` with conservative thread, depth, and runtime settings aligned with sibling repos.
+Make `AGENTS.md` define:
 
-**Step 2: Add read-only specialist agents**
+- the repo-local SDLC purpose
+- the stage model
+- the durable task model
+- the message model
+- the handoff artifact model
+- the ephemeral subagent execution model
 
-Create the read-only TOML files with:
+**Step 2: Add explicit anti-pattern rules**
 
-- a single narrow responsibility each
-- repo-specific guidance for bootstrap conditions
-- explicit instruction not to edit files
+State clearly:
 
-**Step 3: Add the implementation worker**
+- free-form reply chains are not the primary workflow record
+- subagent executions terminate after one stage outcome
+- terminated executions are never resumed
 
-Create `targeted_implementer.toml` for small, assigned edits only, with minimal verification rules and a rule to report missing tooling instead of inventing commands.
+**Step 3: Validate**
 
-**Step 4: Validate the agent tree**
+Run: `sed -n '1,260p' AGENTS.md`
+Expected: clear lifecycle and stage rules
 
-Run: `find .codex -maxdepth 3 -type f | sort`
-Expected: config file, six agent TOMLs, and the task-template files from Task 3
-
-**Step 5: Commit**
+**Step 4: Commit**
 
 ```bash
-git add .codex
-git commit -m "chore: add Request-Service-API codex agents"
+git add AGENTS.md
+git commit -m "docs: rewrite Request-Service-API agent workflow"
 ```
 
-### Task 3: Add Controller-Friendly Task Templates
+### Task 3: Replace The `.codex` Control Plane
 
 **Files:**
-- Create: `.codex/tasks/README.md`
-- Create: `.codex/tasks/repo-entry-template.md`
-- Create: `.codex/tasks/repo-implementation-template.md`
-- Create: `.codex/tasks/cross-repo-handoff-template.md`
-- Create: `.codex/tasks/verification-review-template.md`
+- Modify: `.codex/config.toml`
+- Create: `.codex/repo-map.md`
+- Create: `.codex/system-map.yaml`
+- Create: `.codex/ownership-map.yaml`
+- Delete: `.codex/agents/api_contract_guard.toml`
+- Delete: `.codex/agents/cross_repo_dependency_scout.toml`
+- Delete: `.codex/agents/repo_mapper.toml`
+- Delete: `.codex/agents/request_flow_specialist.toml`
+- Delete: `.codex/agents/targeted_implementer.toml`
+- Delete: `.codex/agents/verification_guard.toml`
+- Create: `.codex/agents/intake_mapper.toml`
+- Create: `.codex/agents/designer_guard.toml`
+- Create: `.codex/agents/implementer.toml`
+- Create: `.codex/agents/verifier.toml`
+- Delete: `.codex/tasks/README.md`
+- Delete: `.codex/tasks/cross-repo-handoff-template.md`
+- Delete: `.codex/tasks/repo-entry-template.md`
+- Delete: `.codex/tasks/repo-implementation-template.md`
+- Delete: `.codex/tasks/verification-review-template.md`
+- Create: `.codex/templates/task-envelope.md`
+- Create: `.codex/templates/scope-report.md`
+- Create: `.codex/templates/design-review.md`
+- Create: `.codex/templates/implementation-report.md`
+- Create: `.codex/templates/verification-report.md`
+- Create: `.codex/templates/cross-repo-handoff.md`
+- Create: `.codex/templates/stage-message.md`
+- Create: `.codex/skills/repo-bootstrap-scan.md`
+- Create: `.codex/skills/api-contract-review.md`
+- Create: `.codex/skills/request-lifecycle-review.md`
+- Create: `.codex/skills/callback-debug.md`
+- Create: `.codex/skills/cross-repo-handoff.md`
+- Create: `.codex/skills/minimal-verification.md`
 
-**Step 1: Add a task-template overview**
+**Step 1: Replace maps and agent definitions**
 
-Document when each template should be used and how a parent controller should hand work into this repo.
+Create the persistent maps and the 4 stage agent definitions.
 
-**Step 2: Add the repo-entry template**
-
-Include:
-
-- why this repo owns the task
-- in-scope and out-of-scope files
-- sibling-repo dependencies
-- local success criteria
-
-**Step 3: Add implementation and handoff templates**
+**Step 2: Replace task templates with lifecycle templates**
 
 Create templates for:
 
-- local implementation execution
-- explicit cross-repo dependency handoff
-- verification evidence capture
+- durable task record
+- intake scope report
+- stage message
+- design review output
+- implementation report
+- verification report
+- cross-repo handoff artifact
 
-**Step 4: Validate the templates**
+**Step 3: Add reusable skills**
 
-Run: `sed -n '1,200p' .codex/tasks/README.md`
-Expected: clear guidance for controller intake, local execution, handoff, and verification usage
+Add short deterministic skill documents with:
 
-**Step 5: Commit**
+- when to use
+- inputs required
+- investigation steps
+- expected outputs
+- stop conditions
+- escalation conditions
+
+**Step 4: Remove old files**
+
+Delete the specialized agent TOMLs and the old `.codex/tasks/*` layout.
+
+**Step 5: Validate**
+
+Run: `find .codex -maxdepth 3 -type f | sort`
+Expected: only the new control-plane files remain
+
+**Step 6: Commit**
 
 ```bash
-git add .codex/tasks
-git commit -m "docs: add Request-Service-API task templates"
+git add .codex
+git commit -m "chore: simplify codex SDLC control plane"
 ```
 
 ### Task 4: Structural Verification
 
 **Files:**
 - Verify: `AGENTS.md`
-- Verify: `.codex/config.toml`
-- Verify: `.codex/agents/*.toml`
-- Verify: `.codex/tasks/*.md`
+- Verify: `.codex/**`
+- Verify: `docs/plans/**`
 
-**Step 1: Check for whitespace and patch errors**
+**Step 1: Check patch correctness**
 
 Run: `git diff --check`
 Expected: no output
 
-**Step 2: Review the created structure**
+**Step 2: Check working tree**
+
+Run: `git status --short`
+Expected: clean after commit
+
+**Step 3: Review the final file set**
 
 Run: `find .codex -maxdepth 3 -type f | sort`
-Expected: only the intended config, agent, and task files appear
+Expected: 4 agent files, 6 skill files, 7 template files, 3 map/config files
 
-**Step 3: Review the root instructions**
+**Step 4: Review recent commits**
 
-Run: `sed -n '1,260p' AGENTS.md`
-Expected: repo-local boundaries and controller handoff guidance are explicit
+Run: `git log --oneline -3`
+Expected: design-update commit and migration commit visible
 
-**Step 4: Commit**
+**Step 5: Commit**
 
 ```bash
-git add AGENTS.md .codex docs/plans/2026-03-24-request-service-api-codex-setup-design.md docs/plans/2026-03-24-request-service-api-codex-setup.md
-git commit -m "chore: bootstrap Request-Service-API agent workspace"
+git add AGENTS.md .codex docs/plans
+git commit -m "docs: finalize codex SDLC migration"
 ```
