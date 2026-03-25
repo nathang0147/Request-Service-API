@@ -1,0 +1,28 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: request-service-api
+spec:
+  template:
+    spec:
+      containers:
+        - image: REGION-docker.pkg.dev/PROJECT_ID/request-service-api/request-service-api:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: PORT
+              value: "8080"
+            - name: DATABASE_URL
+              value: CHANGE_ME
+            - name: WALT_BASE_URL
+              value: CHANGE_ME
+            - name: WALT_API_KEY
+              value: CHANGE_ME
+            - name: CALLBACK_BASE_URL
+              value: CHANGE_ME
+            - name: LOG_LEVEL
+              value: info
+            - name: DEFAULT_PROVIDER
+              value: walt
+            - name: CALLBACK_AUTH_SECRET
+              value: CHANGE_ME
