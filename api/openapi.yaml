@@ -1,0 +1,233 @@
+openapi: 3.1.0
+info:
+  title: Request Service API
+  version: 0.1.0
+  description: HR-facing verification orchestration API for creating requests, polling status, and receiving verifier callbacks.
+servers:
+  - url: http://localhost:8080
+paths:
+  /healthz:
+    get:
+      summary: Health check
+      operationId: getHealthz
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: ok
+  /api/v1/verification-requests:
+    post:
+      summary: Create a verification request
+      operationId: createVerificationRequest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateVerificationRequest"
+      responses:
+        "201":
+          description: Verification request created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerificationRequestCreated"
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/verification-requests/{requestId}:
+    get:
+      summary: Get verification request status
+      operationId: getVerificationRequest
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Verification request status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerificationRequestStatus"
+        "404":
+          description: Request not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/callbacks/walt:
+    post:
+      summary: Receive a callback from the v1 walt verifier
+      operationId: receiveWaltCallback
+      parameters:
+        - name: X-Callback-Secret
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WaltCallbackPayload"
+      responses:
+        "202":
+          description: Callback accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CallbackAccepted"
+        "401":
+          description: Callback authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    CreateVerificationRequest:
+      type: object
+      required:
+        - businessRef
+        - candidateRef
+      properties:
+        businessRef:
+          type: string
+          example: job-123
+        candidateRef:
+          type: string
+          example: cand-456
+    VerificationSession:
+      type: object
+      properties:
+        qrCodeUrl:
+          type: string
+          format: uri
+        deepLink:
+          type: string
+        offerUrl:
+          type: string
+          format: uri
+        expiresAt:
+          type: string
+          format: date-time
+    VerificationRequestCreated:
+      type: object
+      required:
+        - requestId
+        - status
+        - verified
+        - session
+      properties:
+        requestId:
+          type: string
+        status:
+          type: string
+          enum:
+            - CREATED
+            - SESSION_CREATED
+            - PENDING
+            - VERIFIED
+            - FAILED
+            - EXPIRED
+        verified:
+          type: boolean
+        reasonCode:
+          type: string
+        session:
+          $ref: "#/components/schemas/VerificationSession"
+    VerificationRequestStatus:
+      type: object
+      required:
+        - requestId
+        - status
+        - verified
+      properties:
+        requestId:
+          type: string
+        status:
+          type: string
+          enum:
+            - CREATED
+            - SESSION_CREATED
+            - PENDING
+            - VERIFIED
+            - FAILED
+            - EXPIRED
+        verified:
+          type: boolean
+        reasonCode:
+          type: string
+        session:
+          $ref: "#/components/schemas/VerificationSession"
+    WaltCallbackPayload:
+      type: object
+      required:
+        - sessionId
+        - status
+        - verified
+      properties:
+        sessionId:
+          type: string
+        status:
+          type: string
+        verified:
+          type: boolean
+        reasonCode:
+          type: string
+        eventType:
+          type: string
+        payload:
+          type: object
+          additionalProperties: true
+    CallbackAccepted:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          example: accepted
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          required:
+            - code
+            - message
+          properties:
+            code:
+              type: string
+            message:
+              type: string

@@ -1,5 +1,5 @@
 repo_name: Request-Service-API
-repo_role: backend request orchestration and API contract layer for VC-ecosystem integrations
+repo_role: backend request orchestration and API contract layer for HR-facing VC verification integrations
 current_state: bootstrap_only
 
 local_ownership:
@@ -8,12 +8,28 @@ local_ownership:
     - README.md
     - docs/plans/**
     - .codex/**
+    - .codex/tests/acceptance-checklist.md
   future_paths:
-    "src/http/**": transport, validation, and response mapping
-    "src/orchestration/**": request lifecycle, retries, callbacks, and coordination logic
-    "src/integrations/**": outbound adapters and VC ecosystem clients
-    "src/domain/**": pure domain policies, state models, and invariants
-    "src/config/**": config and environment loading
+    "cmd/api/main.go": service entrypoint
+    "internal/verification/**": business-level verification request lifecycle and normalized status handling
+    "internal/callback/**": callback ingestion and normalization before domain updates
+    "internal/provider/**": provider resolution and adapter boundary
+    "internal/provider/walt/**": local v1 `walt` provider adapter implementation
+    "internal/persistence/postgres/**": PostgreSQL repositories and storage
+    "internal/platform/config/**": config and environment loading
+    "internal/platform/logger/**": structured logging
+    "internal/platform/middleware/**": HTTP middleware
+    "internal/platform/router/**": route wiring
+    "internal/shared/apierror/**": API error mapping
+    "internal/shared/util/**": shared helpers
+    "internal/shared/clock/**": clock abstraction
+    "db/migrations/**": schema migrations
+    "db/query/**": SQL definitions
+    "api/openapi.yaml": northbound contract
+    "deployments/**": container, compose, and Cloud Run assets
+    ".github/workflows/**": CI and deployment automation
+    "go.mod": Go module definition
+    "Makefile": developer task entrypoints if later introduced
     "tests/**": contract, integration, and verification coverage
 
 sibling_repos:
@@ -41,7 +57,7 @@ sibling_repos:
 
   waltid-identity:
     path: ../waltid-identity
-    role: upstream protocol reference
+    role: upstream protocol reference only
     owns:
       - protocol implementation reference
       - wallet and verifier reference behavior
@@ -49,9 +65,14 @@ sibling_repos:
       - the work is standards comparison or upstream behavior lookup
     notes:
       - use as reference by default, not as an IU-owned implementation target
+      - this repo owns the local v1 `walt` adapter implementation
 
 routing_rules:
   - if the task is local API contract, orchestration, service integration, or callback handling, it belongs here
   - if the task is frontend UX or operator flow, route to IU-cert-university
   - if the task changes schemas, DID docs, contexts, or registry authority, route to IU-VC-registry
   - if the task needs protocol-grounded source confirmation, consult waltid-identity as reference
+  - for v1, only the `walt` provider is supported
+  - keep the HR-facing API business-level and free of provider-specific details
+  - normalize callback paths before updating domain state
+  - provider DTOs must not cross into domain boundaries

@@ -190,13 +190,34 @@ Agents should not rely on free-form reply chains as the primary workflow.
 - Verification -> `verification-report.md`
 - Cross-Repo Handoff -> `cross-repo-handoff.md`
 
-Messages may be attached with `stage-message.md`, but messages do not replace task state or stage exit artifacts.
+Messages use `stage-message.md`; blocked stage exits must attach one, but messages do not replace task state or stage exit artifacts.
+
+## Lifecycle Rules
+
+Clean stage exits move work as follows:
+
+- Intake -> Repo Mapping, task status remains `new`
+- Repo Mapping -> Design Review, task status becomes `mapped`
+- Design Review -> Implementation, task status becomes `designed`
+- Implementation -> Verification, task status becomes `implemented`
+- Verification -> workflow completion, task status becomes `done`
+- Cross-Repo Handoff -> local workflow completion, task status becomes `closed`
+
+Lifecycle transition constraints:
+
+- only `intake_mapper` may advance work through Intake, Repo Mapping, and Cross-Repo Handoff
+- only `designer_guard` may advance work through Design Review
+- only `implementer` may advance work through Implementation
+- only `verifier` may advance work through Verification
+- active stage work may end early only as `blocked`, `handoff_required`, or `closed`
+- entering Implementation uses task status `implementing`
+- entering Verification uses task status `verifying`
 
 ## Cross-Repo Boundaries
 
 - `IU-cert-university` owns frontend and operator-facing application behavior.
 - `IU-VC-registry` owns registry contexts, schemas, DID documents, and public metadata.
-- `waltid-identity` is an upstream protocol reference, not the default implementation target for IU work.
+- `waltid-identity` is an upstream protocol reference only; it is not the IU implementation repo for the local v1 `walt` adapter.
 
 If this repo is blocked on another repo's authority, set the task state to `handoff_required`, package the handoff formally, and stop.
 
@@ -204,11 +225,26 @@ If this repo is blocked on another repo's authority, set the task state to `hand
 
 When code is added later, keep responsibilities separated:
 
-- `src/http/**`: transport, validation, response mapping
-- `src/orchestration/**`: request lifecycle, state transitions, retries, callback handling
-- `src/integrations/**`: external adapters and VC ecosystem clients
-- `src/domain/**`: pure domain logic and invariants
-- `src/config/**`: config and environment loading
+- `cmd/api/main.go`: service entrypoint
+- `internal/verification/**`: business-level verification request lifecycle and status handling
+- `internal/callback/**`: verifier callback ingestion and normalization before domain updates
+- `internal/provider/**`: provider resolution and adapter boundary
+- `internal/provider/walt/**`: local v1 `walt` provider adapter implementation in this repo
+- `internal/persistence/postgres/**`: PostgreSQL repositories and SQL-backed storage
+- `internal/platform/config/**`: config and environment loading
+- `internal/platform/logger/**`: structured logging setup
+- `internal/platform/middleware/**`: HTTP middleware
+- `internal/platform/router/**`: route wiring
+- `internal/shared/apierror/**`: API error mapping
+- `internal/shared/util/**`: shared helpers
+- `internal/shared/clock/**`: clock abstraction
+- `db/migrations/**`: schema migrations
+- `db/query/**`: SQL query definitions
+- `api/openapi.yaml`: northbound contract
+- `deployments/**`: container, compose, and Cloud Run assets
+- `.github/workflows/**`: CI and deploy automation
+- `go.mod`: Go module definition
+- `Makefile`: developer task entrypoints if later added
 - `tests/**`: contract, integration, and workflow verification
 
 These are target boundaries, not a claim that they already exist.
@@ -220,6 +256,11 @@ Current honest verification in this repository is structural:
 - `git diff --check`
 - `git status --short`
 - `find .codex -maxdepth 3 -type f | sort`
+- `find .codex/agents -maxdepth 1 -type f | sort`
+- `! find .codex -maxdepth 3 -print | sort | rg -q '\.codex/tasks'`
+- `rg -n 'stage_exit_artifacts:|blocked_stage_exits_require_stage_message: true|blocked stage exits must attach one|scope-report.md|task-envelope.md|design-review.md|implementation-report.md|verification-report.md|cross-repo-handoff.md|stage-message.md' AGENTS.md .codex/system-map.yaml .codex/agents`
+- `rg -n 'resume_allowed|terminated_executions_are_never_resumed|subagent_executions_do_not_persist|free_form_reply_chains_are_not_workflow_state' AGENTS.md .codex/system-map.yaml`
 - `sed -n '1,260p' AGENTS.md`
+- `sed -n '1,260p' .codex/system-map.yaml`
 
 If later code adds real tooling, use the smallest relevant real command set and report exactly what was and was not verified.

@@ -10,6 +10,12 @@ workflow:
     - Verification
     - Cross-Repo Handoff
 
+  core_agents:
+    - intake_mapper
+    - designer_guard
+    - implementer
+    - verifier
+
   stage_owners:
     Intake: intake_mapper
     Repo Mapping: intake_mapper
@@ -184,6 +190,9 @@ rules:
   terminated_executions_are_never_resumed: true
   free_form_reply_chains_are_not_workflow_state: true
   dormant_subagents_forbidden: true
+  blocked_stage_exits_require_stage_message: true
+  legacy_tasks_namespace_forbidden: true
+  old_specialized_agents_forbidden: true
 
 handoff_policy:
   cross_repo_handoff_owner: intake_mapper
