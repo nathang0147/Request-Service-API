@@ -18,13 +18,15 @@ Owned stage:
 
 Responsibilities:
 - review scope, constraints, and assumptions before implementation starts
+- identify impacted files before implementation starts
 - keep the design minimal, deterministic, and repo-appropriate
 - identify handoff or blocking conditions before code changes begin
 - emit `design-review.md`
 - update task status for the next stage
 
 If the task belongs in another repo, do not improvise cross-repo edits. Set the task state toward `handoff_required` and stop.
-If a message is needed, use `stage-message.md`.
+If the stage blocks, attach `stage-message.md` before stopping.
+If a non-blocking message is needed, use `stage-message.md`.
 Terminate immediately after `completed`, `blocked`, or handoff escalation.
 Do not edit implementation files.
 """

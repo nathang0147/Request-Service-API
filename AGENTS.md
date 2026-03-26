@@ -135,6 +135,7 @@ Hard rules:
 - subagent executions do not persist
 - terminated subagent executions are never resumed
 - if later work is needed, start a fresh invocation from persisted task state and artifacts
+- blocked stage exits must attach a `stage-message.md` message before terminating
 
 ## Core Subagents
 
@@ -152,6 +153,16 @@ These subagents are ephemeral stage executors. Each invocation must:
 - emit deterministic outputs
 - update task state or emit handoff state
 - terminate immediately after completion, block, or handoff emission
+
+For a local implementation task, the expected status progression is:
+
+- `new`
+- `mapped`
+- `designed`
+- `implementing`
+- `implemented`
+- `verifying`
+- `done`
 
 Do not keep dormant subagents alive.
 
@@ -178,6 +189,7 @@ Start with the persistent repo-native maps:
 
 Use repo-local reusable skills under `.codex/skills/`.
 Use structured templates under `.codex/templates/`.
+Do not reintroduce legacy `.codex/tasks/` workflow state.
 
 Agents should not rely on free-form reply chains as the primary workflow.
 
@@ -262,5 +274,10 @@ Current honest verification in this repository is structural:
 - `rg -n 'resume_allowed|terminated_executions_are_never_resumed|subagent_executions_do_not_persist|free_form_reply_chains_are_not_workflow_state' AGENTS.md .codex/system-map.yaml`
 - `sed -n '1,260p' AGENTS.md`
 - `sed -n '1,260p' .codex/system-map.yaml`
+- `find .codex/agents -maxdepth 1 -type f | sort`
+- `find .codex -maxdepth 3 -print | sort`
+- `rg -n "\.codex/tasks|targeted_implementer|specialized agent|specialized_agents" .codex AGENTS.md`
+- `rg -n "task-envelope.md|scope-report.md|design-review.md|implementation-report.md|verification-report.md|cross-repo-handoff.md|stage-message.md|free-form reply chains|reply chain" .codex AGENTS.md`
+- `rg -n "^  task:|^  message:|^  handoff_artifact:|resume_allowed: false|terminated_executions_are_never_resumed: true|You do not resume|do not persist" .codex AGENTS.md`
 
 If later code adds real tooling, use the smallest relevant real command set and report exactly what was and was not verified.

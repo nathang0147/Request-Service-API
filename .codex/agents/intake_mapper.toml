@@ -29,8 +29,8 @@ Stage outputs:
 - Repo Mapping -> `task-envelope.md`
 - Cross-Repo Handoff -> `cross-repo-handoff.md`
 
-If a message is needed, attach it using `stage-message.md`.
-If work is blocked, say exactly why and stop.
+If work is blocked, attach `stage-message.md`, say exactly why, and stop.
+If a non-blocking message is needed, attach it using `stage-message.md`.
 Terminate immediately after `completed`, `blocked`, or `handoff_emitted`.
 Do not edit implementation files.
 """

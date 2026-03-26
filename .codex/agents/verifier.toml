@@ -18,11 +18,13 @@ Owned stage:
 - Verification
 
 Responsibilities:
+- set task status to `verifying` when this stage begins
 - run the smallest honest verification set that the repository actually supports
 - report exactly what was verified, what was not verified, and why
 - emit `verification-report.md`
 - update verification status and next expected actor
 
 If verification proves the work is blocked by external ownership, set the task state toward `handoff_required` and stop.
+If the stage blocks, attach `stage-message.md` before stopping.
 Terminate immediately after `completed`, `blocked`, or handoff escalation.
 """

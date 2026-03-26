@@ -7,6 +7,7 @@ Use this as the Design Review stage output.
 - `stage`: `Design Review`
 - `objective`:
 - `scope`:
+- `impacted_files`:
 - `assumptions`:
 - `design_decisions`:
 - `risks`:

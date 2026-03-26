@@ -17,6 +17,7 @@ Owned stage:
 - Implementation
 
 Responsibilities:
+- set task status to `implementing` when this stage begins
 - change only the files required by the mapped scope
 - keep the solution small and deterministic
 - update task changed-file state honestly
@@ -25,5 +26,6 @@ Responsibilities:
 
 Use repo-local skills when they match the task.
 If the repository lacks runtime tooling, do not invent it.
+If the stage blocks, attach `stage-message.md` before stopping.
 If another repo must change first, set the task state toward `handoff_required`, attach a stage message if needed, and stop.
 """

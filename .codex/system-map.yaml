@@ -32,6 +32,20 @@ workflow:
     Verification: verification-report.md
     Cross-Repo Handoff: cross-repo-handoff.md
 
+  stage_entry_requirements:
+    Design Review:
+      required_task_status: mapped
+    Implementation:
+      required_task_status: designed
+    Verification:
+      required_task_status: implemented
+    Cross-Repo Handoff:
+      required_task_status: handoff_required
+
+  stage_active_status:
+    Implementation: implementing
+    Verification: verifying
+
   stage_exit_rules:
     Intake:
       next_stage: Repo Mapping
@@ -193,6 +207,15 @@ rules:
   blocked_stage_exits_require_stage_message: true
   legacy_tasks_namespace_forbidden: true
   old_specialized_agents_forbidden: true
+  blocked_stage_exits_require_stage_message: true
+  design_review_must_identify_impacted_files: true
+
+anti_regression_invariants:
+  legacy_task_namespace_forbidden: true
+  only_core_stage_agents_allowed: true
+  stage_outputs_must_use_templates: true
+  task_message_handoff_must_remain_distinct: true
+  resumed_execution_surfaces_forbidden: true
 
 handoff_policy:
   cross_repo_handoff_owner: intake_mapper
@@ -201,3 +224,7 @@ handoff_policy:
     attach_message_template: stage-message.md
     next_expected_actor: intake_mapper
     required_action: emit formal cross-repo-handoff artifact before closing local work
+
+blocking_policy:
+  attach_message_template: stage-message.md
+  required_action: emit blocker message before terminating the stage execution
