@@ -6,6 +6,7 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"strings"
 
 	chi "github.com/go-chi/chi/v5"
 
@@ -74,11 +75,15 @@ func (auth staticAuthenticator) Authenticate(request *http.Request) error {
 		return nil
 	}
 
-	if request.Header.Get(callbackSecretHeader) != auth.secret {
-		return errors.New("unauthorized")
+	if request.Header.Get(callbackSecretHeader) == auth.secret {
+		return nil
 	}
 
-	return nil
+	if token, ok := strings.CutPrefix(request.Header.Get("Authorization"), "Bearer "); ok && strings.TrimSpace(token) == auth.secret {
+		return nil
+	}
+
+	return errors.New("unauthorized")
 }
 
 func writeJSON(w http.ResponseWriter, status int, payload interface{}) {

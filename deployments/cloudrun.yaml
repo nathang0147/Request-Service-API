@@ -14,9 +14,13 @@ spec:
               value: "8080"
             - name: DATABASE_URL
               value: CHANGE_ME
-            - name: WALT_BASE_URL
+            - name: WALT_VERIFIER_BASE_URL
               value: CHANGE_ME
-            - name: WALT_API_KEY
+            - name: WALT_VERIFIER_MODE
+              value: legacy
+            - name: WALT_BEARER_TOKEN
+              value: CHANGE_ME
+            - name: WALT_VC_POLICY_WEBHOOK_URL
               value: CHANGE_ME
             - name: CALLBACK_BASE_URL
               value: CHANGE_ME

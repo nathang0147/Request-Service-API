@@ -139,7 +139,7 @@ Expected:
 
 Implement:
 
-- env-based config with `PORT`, `DATABASE_URL`, `WALT_BASE_URL`, `WALT_API_KEY`, `CALLBACK_BASE_URL`, `LOG_LEVEL`, `DEFAULT_PROVIDER`, `CALLBACK_AUTH_SECRET`
+- env-based config with `PORT`, `DATABASE_URL`, `WALT_VERIFIER_BASE_URL`, `WALT_BEARER_TOKEN`, `CALLBACK_BASE_URL`, `LOG_LEVEL`, `DEFAULT_PROVIDER`, `CALLBACK_AUTH_SECRET`
 - zap logger builder
 - chi router with health route placeholder
 - request ID and request logging middleware

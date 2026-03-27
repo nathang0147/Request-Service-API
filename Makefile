@@ -1,5 +1,5 @@
 GO ?= go
-GO_ENV := GOCACHE=$(CURDIR)/.gocache GOMODCACHE=$(CURDIR)/.gomodcache
+GO_ENV := GOCACHE="$(CURDIR)/.gocache" GOMODCACHE="$(CURDIR)/.gomodcache"
 BINARY := .bin/request-service-api
 COMPOSE := docker compose -f deployments/docker-compose.yml
 MIGRATE_DATABASE_URL ?= postgres://postgres:postgres@postgres:5432/request_service?sslmode=disable

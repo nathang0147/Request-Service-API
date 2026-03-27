@@ -6,14 +6,18 @@ services:
     environment:
       PORT: "8080"
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/request_service?sslmode=disable
-      WALT_BASE_URL: https://walt.example.com
-      WALT_API_KEY: local-dev-token
-      CALLBACK_BASE_URL: http://localhost:8080
+      WALT_VERIFIER_BASE_URL: http://host.docker.internal:7003
+      WALT_VERIFIER_MODE: legacy
+      WALT_BEARER_TOKEN: ""
+      WALT_VC_POLICY_WEBHOOK_URL: http://host.docker.internal:8787/api/verifier/policies/vc
+      CALLBACK_BASE_URL: http://host.docker.internal:8081
+      PUBLIC_BASE_URL: http://localhost:8081
+      PUBLIC_REDIRECT_URL_TEMPLATE: http://localhost:7102/success/$$id
       LOG_LEVEL: info
       DEFAULT_PROVIDER: walt
       CALLBACK_AUTH_SECRET: local-callback-secret
     ports:
-      - "8080:8080"
+      - "8081:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -27,7 +31,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d request_service"]
       interval: 10s

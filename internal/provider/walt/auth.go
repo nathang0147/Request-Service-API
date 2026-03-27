@@ -2,10 +2,10 @@ package walt
 
 import "net/http"
 
-func applyAPIKey(req *http.Request, apiKey string) {
-	if apiKey == "" {
+func applyBearerToken(req *http.Request, bearerToken string) {
+	if bearerToken == "" {
 		return
 	}
 
-	req.Header.Set("Authorization", "Bearer "+apiKey)
+	req.Header.Set("Authorization", "Bearer "+bearerToken)
 }

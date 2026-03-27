@@ -51,7 +51,17 @@ func run(ctx context.Context) error {
 	}
 	defer pool.Close()
 
-	waltClient := waltprovider.NewClient(cfg.WaltBaseURL, cfg.WaltAPIKey, http.DefaultClient)
+	waltClient := waltprovider.NewClient(
+		cfg.WaltVerifierBaseURL,
+		cfg.WaltVerifierMode,
+		cfg.WaltBearerToken,
+		cfg.WaltVCPolicyWebhookURL,
+		cfg.CallbackBaseURL,
+		cfg.PublicBaseURL,
+		cfg.PublicRedirectTemplate,
+		cfg.CallbackAuthSecret,
+		http.DefaultClient,
+	)
 	walt := waltprovider.New(waltClient)
 	resolver := providerresolver.NewResolver(walt)
 	verificationStore := postgres.NewVerificationStore(pool)

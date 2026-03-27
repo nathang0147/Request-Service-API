@@ -4,7 +4,7 @@ info:
   version: 0.1.0
   description: HR-facing verification orchestration API for creating requests, polling status, and receiving verifier callbacks.
 servers:
-  - url: http://localhost:8080
+  - url: http://localhost:8081
 paths:
   /healthz:
     get:
@@ -83,7 +83,12 @@ paths:
       parameters:
         - name: X-Callback-Secret
           in: header
-          required: true
+          required: false
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          required: false
           schema:
             type: string
       requestBody:
@@ -91,7 +96,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/WaltCallbackPayload"
+              $ref: "#/components/schemas/WaltStatusCallbackPayload"
       responses:
         "202":
           description: Callback accepted
@@ -188,24 +193,17 @@ components:
           type: string
         session:
           $ref: "#/components/schemas/VerificationSession"
-    WaltCallbackPayload:
+    WaltStatusCallbackPayload:
       type: object
       required:
-        - sessionId
-        - status
-        - verified
+        - id
+        - verificationResult
       properties:
-        sessionId:
+        id:
           type: string
-        status:
-          type: string
-        verified:
+        verificationResult:
           type: boolean
-        reasonCode:
-          type: string
-        eventType:
-          type: string
-        payload:
+        policyResults:
           type: object
           additionalProperties: true
     CallbackAccepted:

@@ -6,7 +6,9 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN make build
+ENV GOPROXY=off
+ENV GOSUMDB=off
+RUN mkdir -p .bin && go build -o .bin/request-service-api ./cmd/api
 
 FROM gcr.io/distroless/base-debian12
 

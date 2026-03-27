@@ -17,7 +17,7 @@ func New(client *Client) *Provider {
 }
 
 func (adapter *Provider) CreateSession(ctx context.Context, input verification.ProviderSessionInput) (verification.ProviderSession, error) {
-	response, rawResponse, err := adapter.client.CreateSession(ctx, toCreateSessionRequest(input))
+	response, rawResponse, err := adapter.client.CreateSession(ctx, toCreateSessionRequest(input, adapter.client.vcPolicyWebhookURL))
 	if err != nil {
 		return verification.ProviderSession{}, err
 	}
@@ -26,10 +26,15 @@ func (adapter *Provider) CreateSession(ctx context.Context, input verification.P
 }
 
 func (adapter *Provider) ParseCallback(_ context.Context, body []byte) (provider.CallbackEvent, error) {
-	var payload callbackPayload
-	if err := json.Unmarshal(body, &payload); err != nil {
+	var legacyPayload callbackPayload
+	if err := json.Unmarshal(body, &legacyPayload); err == nil && legacyPayload.SessionID != "" {
+		return toCallbackEvent(legacyPayload, body), nil
+	}
+
+	var statusPayload statusCallbackPayload
+	if err := json.Unmarshal(body, &statusPayload); err != nil {
 		return provider.CallbackEvent{}, err
 	}
 
-	return toCallbackEvent(payload, body), nil
+	return toStatusCallbackEvent(statusPayload, body), nil
 }

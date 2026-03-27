@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"log/slog"
 	"net/http"
 	"strings"
 
@@ -48,6 +49,7 @@ func (handler *Handler) handleCreateRequest(w http.ResponseWriter, r *http.Reque
 
 	response, err := handler.service.CreateRequest(r.Context(), body)
 	if err != nil {
+		slog.Error("create verification request failed", "error", err)
 		handler.writeServiceError(w, err)
 		return
 	}
@@ -64,6 +66,7 @@ func (handler *Handler) handleGetRequest(w http.ResponseWriter, r *http.Request)
 
 	response, err := handler.service.GetRequest(r.Context(), requestID)
 	if err != nil {
+		slog.Error("get verification request failed", "request_id", requestID, "error", err)
 		handler.writeServiceError(w, err)
 		return
 	}

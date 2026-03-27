@@ -7,42 +7,55 @@ import (
 )
 
 const (
-	defaultPort           = "8080"
-	defaultLogLevel       = "info"
-	defaultProvider       = "walt"
-	databaseURLEnv        = "DATABASE_URL"
-	waltBaseURLEnv        = "WALT_BASE_URL"
-	waltAPIKeyEnv         = "WALT_API_KEY"
-	callbackBaseURLEnv    = "CALLBACK_BASE_URL"
-	callbackAuthSecretEnv = "CALLBACK_AUTH_SECRET"
-	portEnv               = "PORT"
-	logLevelEnv           = "LOG_LEVEL"
-	defaultProviderEnv    = "DEFAULT_PROVIDER"
+	defaultPort             = "8080"
+	defaultLogLevel         = "info"
+	defaultProvider         = "walt"
+	defaultWaltVerifierMode = "legacy"
+	databaseURLEnv          = "DATABASE_URL"
+	waltVerifierBaseURLEnv  = "WALT_VERIFIER_BASE_URL"
+	waltVerifierModeEnv     = "WALT_VERIFIER_MODE"
+	waltBearerTokenEnv      = "WALT_BEARER_TOKEN"
+	waltVCPolicyWebhookEnv  = "WALT_VC_POLICY_WEBHOOK_URL"
+	callbackBaseURLEnv      = "CALLBACK_BASE_URL"
+	publicBaseURLEnv        = "PUBLIC_BASE_URL"
+	publicRedirectTemplate  = "PUBLIC_REDIRECT_URL_TEMPLATE"
+	callbackAuthSecretEnv   = "CALLBACK_AUTH_SECRET"
+	portEnv                 = "PORT"
+	logLevelEnv             = "LOG_LEVEL"
+	defaultProviderEnv      = "DEFAULT_PROVIDER"
 )
 
 type Config struct {
-	Port               string
-	DatabaseURL        string
-	WaltBaseURL        string
-	WaltAPIKey         string
-	CallbackBaseURL    string
-	LogLevel           string
-	DefaultProvider    string
-	CallbackAuthSecret string
+	Port                   string
+	DatabaseURL            string
+	WaltVerifierBaseURL    string
+	WaltVerifierMode       string
+	WaltBearerToken        string
+	WaltVCPolicyWebhookURL string
+	CallbackBaseURL        string
+	PublicBaseURL          string
+	PublicRedirectTemplate string
+	LogLevel               string
+	DefaultProvider        string
+	CallbackAuthSecret     string
 }
 
 func Load() (Config, error) {
 	var missing []string
 
 	cfg := Config{
-		Port:               envOrDefault(portEnv, defaultPort),
-		DatabaseURL:        requiredEnv(databaseURLEnv, &missing),
-		WaltBaseURL:        requiredEnv(waltBaseURLEnv, &missing),
-		WaltAPIKey:         requiredEnv(waltAPIKeyEnv, &missing),
-		CallbackBaseURL:    requiredEnv(callbackBaseURLEnv, &missing),
-		LogLevel:           envOrDefault(logLevelEnv, defaultLogLevel),
-		DefaultProvider:    envOrDefault(defaultProviderEnv, defaultProvider),
-		CallbackAuthSecret: requiredEnv(callbackAuthSecretEnv, &missing),
+		Port:                   envOrDefault(portEnv, defaultPort),
+		DatabaseURL:            requiredEnv(databaseURLEnv, &missing),
+		WaltVerifierBaseURL:    requiredEnv(waltVerifierBaseURLEnv, &missing),
+		WaltVerifierMode:       envOrDefault(waltVerifierModeEnv, defaultWaltVerifierMode),
+		WaltBearerToken:        envOrDefault(waltBearerTokenEnv, ""),
+		WaltVCPolicyWebhookURL: envOrDefault(waltVCPolicyWebhookEnv, ""),
+		CallbackBaseURL:        requiredEnv(callbackBaseURLEnv, &missing),
+		PublicBaseURL:          envOrDefault(publicBaseURLEnv, ""),
+		PublicRedirectTemplate: envOrDefault(publicRedirectTemplate, ""),
+		LogLevel:               envOrDefault(logLevelEnv, defaultLogLevel),
+		DefaultProvider:        envOrDefault(defaultProviderEnv, defaultProvider),
+		CallbackAuthSecret:     requiredEnv(callbackAuthSecretEnv, &missing),
 	}
 
 	if len(missing) > 0 {

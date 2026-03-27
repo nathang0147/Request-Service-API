@@ -48,6 +48,29 @@ func TestHandlerReturnsAcceptedResponse(t *testing.T) {
 	}
 }
 
+func TestHandlerAcceptsBearerAuthorization(t *testing.T) {
+	router := chi.NewRouter()
+	NewHandler(&stubCallbackService{
+		handleCallbackFunc: func(_ context.Context, body []byte) (Result, error) {
+			if string(body) != `{"id":"provider-session-123","verificationResult":true}` {
+				t.Fatalf("expected callback body to round-trip, got %q", string(body))
+			}
+
+			return Result{Status: "accepted"}, nil
+		},
+	}, staticAuthenticator{secret: "secret"}).RegisterRoutes(router)
+
+	req := httptest.NewRequest(http.MethodPost, "/api/v1/callbacks/walt", bytes.NewBufferString(`{"id":"provider-session-123","verificationResult":true}`))
+	req.Header.Set("Authorization", "Bearer secret")
+	rec := httptest.NewRecorder()
+
+	router.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusAccepted {
+		t.Fatalf("expected status %d, got %d", http.StatusAccepted, rec.Code)
+	}
+}
+
 func TestHandlerReturnsInternalErrorOnServiceFailure(t *testing.T) {
 	router := chi.NewRouter()
 	NewHandler(&stubCallbackService{
