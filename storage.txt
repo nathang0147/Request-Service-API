@@ -1,0 +1,456 @@
+AGENTS.md:## Repository Role
+AGENTS.md:- route work into this repository
+AGENTS.md:Once work enters this repository, repo-local workflow files under `.codex/` are authoritative.
+AGENTS.md:- This repository is still bootstrap-only.
+AGENTS.md:This repository uses a small stage-based workflow:
+AGENTS.md:- `internal/persistence/postgres/**`: PostgreSQL repositories and SQL-backed storage
+AGENTS.md:- `db/migrations/**`: schema migrations
+AGENTS.md:- `db/query/**`: SQL query definitions
+AGENTS.md:Current honest verification in this repository is structural:
+routes.txt:docs/plans/architecture_fixed.md:551:- spreading DB queries across handlers
+sqlc.yaml:  - engine: "postgresql"
+sqlc.yaml:      - "db/migrations/0001_init.up.sql"
+sqlc.yaml:      - "db/query/verification_requests.sql"
+sqlc.yaml:      - "db/query/verification_sessions.sql"
+sqlc.yaml:      - "db/query/verification_events.sql"
+sqlc.yaml:        out: "internal/persistence/postgres/sqlc"
+deployments/docker-compose.yml:      DATABASE_URL: postgres://postgres:postgres@postgres:5432/request_service?sslmode=disable
+deployments/docker-compose.yml:      postgres:
+deployments/docker-compose.yml:  postgres:
+deployments/docker-compose.yml:    image: postgres:16
+deployments/docker-compose.yml:      POSTGRES_DB: request_service
+deployments/docker-compose.yml:      POSTGRES_USER: postgres
+deployments/docker-compose.yml:      POSTGRES_PASSWORD: postgres
+deployments/docker-compose.yml:      test: ["CMD-SHELL", "pg_isready -U postgres -d request_service"]
+deployments/docker-compose.yml:        "-database=postgres://postgres:postgres@postgres:5432/request_service?sslmode=disable",
+deployments/docker-compose.yml:      - ../db/migrations:/migrations
+deployments/docker-compose.yml:      postgres:
+Makefile:MIGRATE_DATABASE_URL ?= postgres://postgres:postgres@postgres:5432/request_service?sslmode=disable
+Makefile:	$(COMPOSE) up -d postgres
+Makefile:	$(COMPOSE) up -d postgres
+structure.txt:db
+structure.txt:./db:
+structure.txt:./db/migrations:
+structure.txt:./db/query:
+structure.txt:postgres
+structure.txt:./internal/persistence/postgres:
+structure.txt:callback_repository_test.go
+structure.txt:callback_repository.go
+structure.txt:db.go
+structure.txt:verification_repository_test.go
+structure.txt:verification_repository.go
+structure.txt:./internal/persistence/postgres/sqlc:
+structure.txt:db.go
+structure.txt:repository.go
+deployments/Dockerfile:ENV GOSUMDB=off
+keywords.txt:sqlc.yaml:      - "db/query/verification_sessions.sql"
+keywords.txt:docs/architecture-overview.md:This repository is not the verifier itself, not the wallet, and not the policy engine.
+keywords.txt:db/query/verification_sessions.sql:-- name: CreateVerificationSession :one
+keywords.txt:db/query/verification_sessions.sql:INSERT INTO verification_sessions (
+keywords.txt:db/query/verification_sessions.sql:    provider_session_id,
+keywords.txt:db/query/verification_sessions.sql:-- name: GetVerificationSessionByProviderSessionID :one
+keywords.txt:db/query/verification_sessions.sql:FROM verification_sessions
+keywords.txt:db/query/verification_sessions.sql:WHERE provider_session_id = $1
+keywords.txt:db/query/verification_sessions.sql:-- name: GetLatestVerificationSessionByRequestID :one
+keywords.txt:db/query/verification_sessions.sql:FROM verification_sessions
+keywords.txt:db/query/verification_requests.sql:    candidate_ref,
+keywords.txt:internal/persistence/postgres/callback_store.go:func (store *CallbackStore) GetSessionByProviderSessionID(ctx context.Context, providerSessionID string) (callback.SessionRecord, error) {
+keywords.txt:internal/persistence/postgres/callback_store.go:	session, err := store.repository.GetSessionByProviderSessionID(ctx, providerSessionID)
+keywords.txt:internal/persistence/postgres/callback_store.go:		return callback.SessionRecord{}, err
+keywords.txt:internal/persistence/postgres/callback_store.go:	return callback.SessionRecord{
+keywords.txt:internal/persistence/postgres/callback_store.go:		VerificationRequestID: session.VerificationRequestID.String(),
+keywords.txt:internal/persistence/postgres/callback_store.go:		ProviderSessionID:     session.ProviderSessionID,
+keywords.txt:internal/persistence/postgres/callback_store.go:		Provider:              session.Provider,
+keywords.txt:docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- Create: `db/query/verification_sessions.sql`
+keywords.txt:docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:**Step 2: Run repository tests to verify failure**
+keywords.txt:internal/callback/service_test.go:	if repository.createdEvent.EventType != "SESSION_VERIFIED" {
+keywords.txt:internal/callback/service_test.go:		t.Fatalf("expected audit event SESSION_VERIFIED, got %q", repository.createdEvent.EventType)
+keywords.txt:internal/callback/service_test.go:func (repository *stubRepository) GetSessionByProviderSessionID(ctx context.Context, providerSessionID string) (SessionRecord, error) {
+keywords.txt:internal/callback/service_test.go:	return repository.getSessionByProviderSessionIDFunc(ctx, providerSessionID)
+keywords.txt:internal/persistence/postgres/callback_repository.go:func (repository *CallbackRepository) GetSessionByProviderSessionID(ctx context.Context, providerSessionID string) (sqlc.VerificationSession, error) {
+keywords.txt:internal/persistence/postgres/callback_repository.go:	return repository.queries.GetVerificationSessionByProviderSessionID(ctx, providerSessionID)
+keywords.txt:docs/plans/2026-03-25-request-service-bootstrap-design.md:2. PostgreSQL persistence for requests, sessions, and events
+keywords.txt:db/migrations/0001_init.up.sql:    candidate_ref TEXT NOT NULL,
+keywords.txt:db/migrations/0001_init.up.sql:        'SESSION_CREATED',
+keywords.txt:db/migrations/0001_init.up.sql:CREATE TABLE verification_sessions (
+keywords.txt:db/migrations/0001_init.up.sql:    provider_session_id TEXT NOT NULL UNIQUE,
+keywords.txt:db/migrations/0001_init.up.sql:CREATE INDEX verification_sessions_request_id_idx
+keywords.txt:db/migrations/0001_init.up.sql:    ON verification_sessions (verification_request_id);
+keywords.txt:internal/callback/service.go:	session, err := service.repository.GetSessionByProviderSessionID(ctx, event.ProviderSessionID)
+keywords.txt:docs/plans/architecture_fixed.md:This repository implements a **Request Service API** for verifiable credential verification orchestration.
+keywords.txt:docs/plans/architecture_fixed.md:- Persistent storage of requests, sessions, events
+keywords.txt:db/migrations/0001_init.down.sql:DROP INDEX IF EXISTS verification_sessions_request_id_idx;
+keywords.txt:db/migrations/0001_init.down.sql:DROP TABLE IF EXISTS verification_sessions;
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:// source: verification_sessions.sql
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:const createVerificationSession = `-- name: CreateVerificationSession :one
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:INSERT INTO verification_sessions (
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:    provider_session_id,
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:RETURNING id, verification_request_id, provider, provider_session_id, qr_code_url, deep_link, offer_url, expires_at, raw_create_response, created_at
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:type CreateVerificationSessionParams struct {
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:	ProviderSessionID     string             `json:"provider_session_id"`
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:func (q *Queries) CreateVerificationSession(ctx context.Context, arg CreateVerificationSessionParams) (VerificationSession, error) {
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:	row := q.db.QueryRow(ctx, createVerificationSession,
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:		arg.ProviderSessionID,
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:	var i VerificationSession
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:		&i.ProviderSessionID,
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:const getLatestVerificationSessionByRequestID = `-- name: GetLatestVerificationSessionByRequestID :one
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:SELECT id, verification_request_id, provider, provider_session_id, qr_code_url, deep_link, offer_url, expires_at, raw_create_response, created_at
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:FROM verification_sessions
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:func (q *Queries) GetLatestVerificationSessionByRequestID(ctx context.Context, verificationRequestID pgtype.UUID) (VerificationSession, error) {
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:	row := q.db.QueryRow(ctx, getLatestVerificationSessionByRequestID, verificationRequestID)
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:	var i VerificationSession
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:		&i.ProviderSessionID,
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:const getVerificationSessionByProviderSessionID = `-- name: GetVerificationSessionByProviderSessionID :one
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:SELECT id, verification_request_id, provider, provider_session_id, qr_code_url, deep_link, offer_url, expires_at, raw_create_response, created_at
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:FROM verification_sessions
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:WHERE provider_session_id = $1
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:func (q *Queries) GetVerificationSessionByProviderSessionID(ctx context.Context, providerSessionID string) (VerificationSession, error) {
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:	row := q.db.QueryRow(ctx, getVerificationSessionByProviderSessionID, providerSessionID)
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:	var i VerificationSession
+keywords.txt:internal/persistence/postgres/sqlc/verification_sessions.sql.go:		&i.ProviderSessionID,
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:		CandidateRef: "cand-456",
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:			createArgs.CandidateRef,
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:				createArgs.CandidateRef,
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:	mock.ExpectQuery("SELECT id, business_ref, candidate_ref, provider, status, verified, reason_code, created_at, updated_at FROM verification_requests").
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:				createArgs.CandidateRef,
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:func TestVerificationRepositoryCreateSessionAndLookupByProviderSessionID(t *testing.T) {
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:	sessionID := testUUID(3)
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:	createArgs := sqlc.CreateVerificationSessionParams{
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:		ProviderSessionID:     "provider-session-123",
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:		RawCreateResponse:     []byte(`{"session":"ok"}`),
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:	mock.ExpectQuery("INSERT INTO verification_sessions").
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:			createArgs.ProviderSessionID,
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:		WillReturnRows(sessionRows().
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:				sessionID,
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:				createArgs.ProviderSessionID,
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:	created, err := repo.CreateSession(context.Background(), createArgs)
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:		t.Fatalf("expected session creation to succeed, got error: %v", err)
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:	if created.ProviderSessionID != "provider-session-123" {
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:		t.Fatalf("expected provider session id provider-session-123, got %q", created.ProviderSessionID)
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:	mock.ExpectQuery("SELECT id, verification_request_id, provider, provider_session_id, qr_code_url, deep_link, offer_url, expires_at, raw_create_response, created_at FROM verification_sessions").
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:		WithArgs("provider-session-123").
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:		WillReturnRows(sessionRows().
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:				sessionID,
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:				createArgs.ProviderSessionID,
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:	fetched, err := repo.GetSessionByProviderSessionID(context.Background(), "provider-session-123")
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:		t.Fatalf("expected session lookup to succeed, got error: %v", err)
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:		"candidate_ref",
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:func sessionRows() *pgxmock.Rows {
+keywords.txt:internal/persistence/postgres/verification_repository_test.go:		"provider_session_id",
+keywords.txt:internal/persistence/postgres/verification_store.go:func (store *VerificationStore) CreateSession(ctx context.Context, session verification.VerificationSession) (verification.VerificationSession, error) {
+keywords.txt:internal/persistence/postgres/verification_store.go:	created, err := store.repository.CreateSession(ctx, toCreateSessionParams(session))
+keywords.txt:internal/persistence/postgres/verification_store.go:		return verification.VerificationSession{}, err
+keywords.txt:internal/persistence/postgres/verification_store.go:	return toDomainSession(created), nil
+keywords.txt:internal/persistence/postgres/verification_store.go:func (store *VerificationStore) GetLatestSessionByRequestID(ctx context.Context, requestID string) (verification.VerificationSession, error) {
+keywords.txt:internal/persistence/postgres/verification_store.go:		return verification.VerificationSession{}, err
+keywords.txt:internal/persistence/postgres/verification_store.go:	session, err := store.repository.GetLatestSessionByRequestID(ctx, id)
+keywords.txt:internal/persistence/postgres/verification_store.go:		return verification.VerificationSession{}, err
+keywords.txt:internal/persistence/postgres/verification_store.go:	return toDomainSession(session), nil
+keywords.txt:internal/persistence/postgres/mappers.go:		CandidateRef: request.CandidateRef,
+keywords.txt:internal/persistence/postgres/mappers.go:func toCreateSessionParams(session verification.VerificationSession) sqlc.CreateVerificationSessionParams {
+keywords.txt:internal/persistence/postgres/mappers.go:	return sqlc.CreateVerificationSessionParams{
+keywords.txt:internal/persistence/postgres/mappers.go:		VerificationRequestID: mustUUID(session.VerificationRequestID),
+keywords.txt:internal/persistence/postgres/mappers.go:		Provider:              session.Provider,
+keywords.txt:internal/persistence/postgres/mappers.go:		ProviderSessionID:     session.ProviderSessionID,
+keywords.txt:internal/persistence/postgres/mappers.go:		QrCodeUrl:             textValue(session.QRCodeURL),
+keywords.txt:internal/persistence/postgres/mappers.go:		DeepLink:              textValue(session.DeepLink),
+keywords.txt:internal/persistence/postgres/mappers.go:		OfferUrl:              textValue(session.OfferURL),
+keywords.txt:internal/persistence/postgres/mappers.go:		ExpiresAt:             timestampValue(session.ExpiresAt),
+keywords.txt:internal/persistence/postgres/mappers.go:		RawCreateResponse:     session.RawCreateResponse,
+keywords.txt:internal/persistence/postgres/mappers.go:		CandidateRef: request.CandidateRef,
+keywords.txt:internal/persistence/postgres/mappers.go:func toDomainSession(session sqlc.VerificationSession) verification.VerificationSession {
+keywords.txt:internal/persistence/postgres/mappers.go:	return verification.VerificationSession{
+keywords.txt:internal/persistence/postgres/mappers.go:		ID:                    session.ID.String(),
+keywords.txt:internal/persistence/postgres/mappers.go:		VerificationRequestID: session.VerificationRequestID.String(),
+keywords.txt:internal/persistence/postgres/mappers.go:		Provider:              session.Provider,
+keywords.txt:internal/persistence/postgres/mappers.go:		ProviderSessionID:     session.ProviderSessionID,
+keywords.txt:internal/persistence/postgres/mappers.go:		QRCodeURL:             session.QrCodeUrl.String,
+keywords.txt:internal/persistence/postgres/mappers.go:		DeepLink:              session.DeepLink.String,
+keywords.txt:internal/persistence/postgres/mappers.go:		OfferURL:              session.OfferUrl.String,
+keywords.txt:internal/persistence/postgres/mappers.go:		ExpiresAt:             session.ExpiresAt.Time,
+keywords.txt:internal/persistence/postgres/mappers.go:		RawCreateResponse:     session.RawCreateResponse,
+keywords.txt:internal/persistence/postgres/mappers.go:		CreatedAt:             session.CreatedAt.Time,
+keywords.txt:internal/verification/service_test.go:	if repository.createdSession.ProviderSessionID != "provider-session-123" {
+keywords.txt:internal/verification/service_test.go:		t.Fatalf("expected provider session to be persisted, got %q", repository.createdSession.ProviderSessionID)
+keywords.txt:internal/verification/service_test.go:	service := NewService("walt", repository, &stubSessionProvider{})
+keywords.txt:internal/verification/service_test.go:	if repository.updatedRequest.ReasonCode != ErrCodeProviderSessionCreateFailed {
+keywords.txt:internal/verification/service_test.go:		t.Fatalf("expected failure reason code %q, got %q", ErrCodeProviderSessionCreateFailed, repository.updatedRequest.ReasonCode)
+keywords.txt:internal/verification/service_test.go:func (repository *stubRepository) CreateSession(ctx context.Context, session VerificationSession) (VerificationSession, error) {
+keywords.txt:internal/verification/service_test.go:	repository.createdSession = session
+keywords.txt:internal/verification/service_test.go:	return repository.createSessionFunc(ctx, session)
+keywords.txt:internal/verification/service_test.go:func (repository *stubRepository) GetLatestSessionByRequestID(ctx context.Context, requestID string) (VerificationSession, error) {
+keywords.txt:internal/verification/service_test.go:	return repository.getLatestSessionByRequestIDFunc(ctx, requestID)
+keywords.txt:internal/persistence/postgres/verification_repository.go:func (repository *VerificationRepository) CreateSession(ctx context.Context, params sqlc.CreateVerificationSessionParams) (sqlc.VerificationSession, error) {
+keywords.txt:internal/persistence/postgres/verification_repository.go:	return repository.queries.CreateVerificationSession(ctx, params)
+keywords.txt:internal/persistence/postgres/verification_repository.go:func (repository *VerificationRepository) GetSessionByProviderSessionID(ctx context.Context, providerSessionID string) (sqlc.VerificationSession, error) {
+keywords.txt:internal/persistence/postgres/verification_repository.go:	return repository.queries.GetVerificationSessionByProviderSessionID(ctx, providerSessionID)
+keywords.txt:internal/persistence/postgres/verification_repository.go:func (repository *VerificationRepository) GetLatestSessionByRequestID(ctx context.Context, requestID pgtype.UUID) (sqlc.VerificationSession, error) {
+keywords.txt:internal/persistence/postgres/verification_repository.go:	return repository.queries.GetLatestVerificationSessionByRequestID(ctx, requestID)
+keywords.txt:internal/persistence/postgres/callback_repository_test.go:		EventType:             "SESSION_VERIFIED",
+keywords.txt:internal/persistence/postgres/callback_repository_test.go:	if created.EventType != "SESSION_VERIFIED" {
+keywords.txt:internal/persistence/postgres/callback_repository_test.go:		t.Fatalf("expected event type SESSION_VERIFIED, got %q", created.EventType)
+keywords.txt:internal/verification/service_e2e_test.go:	if repository.createdSession.ProviderSessionID != "provider-session-123" {
+keywords.txt:internal/verification/service_e2e_test.go:		t.Fatalf("expected persisted provider session id provider-session-123, got %q", repository.createdSession.ProviderSessionID)
+keywords.txt:internal/persistence/postgres/sqlc/verification_requests.sql.go:    candidate_ref,
+keywords.txt:internal/persistence/postgres/sqlc/verification_requests.sql.go:RETURNING id, business_ref, candidate_ref, provider, status, verified, reason_code, created_at, updated_at
+keywords.txt:internal/persistence/postgres/sqlc/verification_requests.sql.go:	CandidateRef string      `json:"candidate_ref"`
+keywords.txt:internal/persistence/postgres/sqlc/verification_requests.sql.go:		arg.CandidateRef,
+keywords.txt:internal/persistence/postgres/sqlc/verification_requests.sql.go:		&i.CandidateRef,
+keywords.txt:internal/persistence/postgres/sqlc/verification_requests.sql.go:SELECT id, business_ref, candidate_ref, provider, status, verified, reason_code, created_at, updated_at
+keywords.txt:internal/persistence/postgres/sqlc/verification_requests.sql.go:		&i.CandidateRef,
+keywords.txt:internal/persistence/postgres/sqlc/verification_requests.sql.go:RETURNING id, business_ref, candidate_ref, provider, status, verified, reason_code, created_at, updated_at
+keywords.txt:internal/persistence/postgres/sqlc/verification_requests.sql.go:		&i.CandidateRef,
+keywords.txt:internal/verification/service.go:func NewService(defaultProvider string, repository Repository, sessionProvider SessionProvider) *Service {
+keywords.txt:internal/verification/service.go:	session, err := service.repository.CreateSession(ctx, VerificationSession{
+keywords.txt:internal/verification/service.go:	session, err := service.repository.GetLatestSessionByRequestID(ctx, requestID)
+keywords.txt:internal/persistence/postgres/sqlc/models.go:	CandidateRef string             `json:"candidate_ref"`
+keywords.txt:internal/persistence/postgres/sqlc/models.go:type VerificationSession struct {
+keywords.txt:internal/persistence/postgres/sqlc/models.go:	ProviderSessionID     string             `json:"provider_session_id"`
+keywords.txt:internal/verification/repository.go:	CreateSession(context.Context, VerificationSession) (VerificationSession, error)
+keywords.txt:internal/verification/repository.go:	GetLatestSessionByRequestID(context.Context, string) (VerificationSession, error)
+keywords.txt:internal/verification/repository.go:type SessionProvider interface {
+keywords.txt:internal/verification/repository.go:	CreateSession(context.Context, ProviderSessionInput) (ProviderSession, error)
+keywords.txt:internal/verification/repository.go:	Resolve(context.Context, string) (SessionProvider, error)
+cmd/api/main.go:	"github.com/nathang0147/Request-Service-API/internal/persistence/postgres"
+cmd/api/main.go:	pool, err := postgres.Open(ctx, cfg.DatabaseURL)
+cmd/api/main.go:	verificationStore := postgres.NewVerificationStore(pool)
+cmd/api/main.go:	callbackStore := postgres.NewCallbackStore(pool)
+internal/platform/config/config_test.go:	t.Setenv("DATABASE_URL", "postgres://user:pass@localhost:5432/request_service")
+internal/callback/service_test.go:	repository := &stubRepository{
+internal/callback/service_test.go:	service := NewService(repository, providerAdapter)
+internal/callback/service_test.go:	if repository.updatedRequest.RequestID != "req-123" {
+internal/callback/service_test.go:		t.Fatalf("expected request id req-123 to be updated, got %q", repository.updatedRequest.RequestID)
+internal/callback/service_test.go:	if repository.updatedRequest.Status != verification.StatusVerified {
+internal/callback/service_test.go:		t.Fatalf("expected verified status to be persisted, got %q", repository.updatedRequest.Status)
+internal/callback/service_test.go:	if repository.createdEvent.EventType != "SESSION_VERIFIED" {
+internal/callback/service_test.go:		t.Fatalf("expected audit event SESSION_VERIFIED, got %q", repository.createdEvent.EventType)
+internal/callback/service_test.go:type stubRepository struct {
+internal/callback/service_test.go:func (repository *stubRepository) GetSessionByProviderSessionID(ctx context.Context, providerSessionID string) (SessionRecord, error) {
+internal/callback/service_test.go:	return repository.getSessionByProviderSessionIDFunc(ctx, providerSessionID)
+internal/callback/service_test.go:func (repository *stubRepository) UpdateRequestStatus(ctx context.Context, update RequestStatusUpdate) (RequestStatusUpdate, error) {
+internal/callback/service_test.go:	repository.updatedRequest = update
+internal/callback/service_test.go:	return repository.updateRequestStatusFunc(ctx, update)
+internal/callback/service_test.go:func (repository *stubRepository) CreateEvent(ctx context.Context, event EventRecord) (EventRecord, error) {
+internal/callback/service_test.go:	repository.createdEvent = event
+internal/callback/service_test.go:	return repository.createEventFunc(ctx, event)
+internal/callback/service.go:type Repository interface {
+internal/callback/service.go:	repository Repository
+internal/callback/service.go:func NewService(repository Repository, parser EventParser) *Service {
+internal/callback/service.go:		repository: repository,
+internal/callback/service.go:	session, err := service.repository.GetSessionByProviderSessionID(ctx, event.ProviderSessionID)
+internal/callback/service.go:	if _, err := service.repository.UpdateRequestStatus(ctx, RequestStatusUpdate{
+internal/callback/service.go:	if _, err := service.repository.CreateEvent(ctx, EventRecord{
+internal/persistence/postgres/callback_store.go:package postgres
+internal/persistence/postgres/callback_store.go:	"github.com/nathang0147/Request-Service-API/internal/persistence/postgres/sqlc"
+internal/persistence/postgres/callback_store.go:	repository *CallbackRepository
+internal/persistence/postgres/callback_store.go:func NewCallbackStore(db sqlc.DBTX) *CallbackStore {
+internal/persistence/postgres/callback_store.go:		repository: NewCallbackRepository(db),
+internal/persistence/postgres/callback_store.go:	session, err := store.repository.GetSessionByProviderSessionID(ctx, providerSessionID)
+internal/persistence/postgres/callback_store.go:	updated, err := store.repository.UpdateRequestStatus(ctx, toCallbackStatusParams(update))
+internal/persistence/postgres/callback_store.go:	created, err := store.repository.CreateEvent(ctx, toCreateEventParams(event))
+internal/persistence/postgres/callback_store.go:var _ callback.Repository = (*CallbackStore)(nil)
+internal/verification/repository.go:type Repository interface {
+README.md:This repository is in active bootstrap. The current runnable shell provides:
+README.md:When started through Docker Compose, the API is exposed on `http://localhost:8081` and PostgreSQL is published on `localhost:5433`. Internal container ports remain `8080` for the API and `5432` for PostgreSQL.
+README.md:Schema changes live in `db/migrations/` and are applied with `golang-migrate`.
+README.md:`make compose-up` runs the `postgres`, `migrate`, and `request-service-api` services from `deployments/docker-compose.yml`. The API waits for both PostgreSQL health and successful migration completion before starting, so you do not need to run `make migrate-up` first for normal local startup.
+go.sum:github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
+internal/verification/service.go:	repository      Repository
+internal/verification/service.go:func NewService(defaultProvider string, repository Repository, sessionProvider SessionProvider) *Service {
+internal/verification/service.go:		repository:      repository,
+internal/verification/service.go:func NewServiceWithResolver(defaultProvider string, repository Repository, resolver ProviderResolver) *Service {
+internal/verification/service.go:		repository:      repository,
+internal/verification/service.go:	request, err := service.repository.CreateRequest(ctx, VerificationRequest{
+internal/verification/service.go:		_, _ = service.repository.UpdateRequestStatus(ctx, request)
+internal/verification/service.go:	session, err := service.repository.CreateSession(ctx, VerificationSession{
+internal/verification/service.go:	updatedRequest, err := service.repository.UpdateRequestStatus(ctx, request)
+internal/verification/service.go:	request, err := service.repository.GetRequestByID(ctx, requestID)
+internal/verification/service.go:	session, err := service.repository.GetLatestSessionByRequestID(ctx, requestID)
+internal/persistence/postgres/callback_repository.go:package postgres
+internal/persistence/postgres/callback_repository.go:	"github.com/nathang0147/Request-Service-API/internal/persistence/postgres/sqlc"
+internal/persistence/postgres/callback_repository.go:type CallbackRepository struct {
+internal/persistence/postgres/callback_repository.go:func NewCallbackRepository(db sqlc.DBTX) *CallbackRepository {
+internal/persistence/postgres/callback_repository.go:	return &CallbackRepository{
+internal/persistence/postgres/callback_repository.go:		queries: sqlc.New(db),
+internal/persistence/postgres/callback_repository.go:func (repository *CallbackRepository) GetSessionByProviderSessionID(ctx context.Context, providerSessionID string) (sqlc.VerificationSession, error) {
+internal/persistence/postgres/callback_repository.go:	return repository.queries.GetVerificationSessionByProviderSessionID(ctx, providerSessionID)
+internal/persistence/postgres/callback_repository.go:func (repository *CallbackRepository) CreateEvent(ctx context.Context, params sqlc.CreateVerificationEventParams) (sqlc.VerificationEvent, error) {
+internal/persistence/postgres/callback_repository.go:	return repository.queries.CreateVerificationEvent(ctx, params)
+internal/persistence/postgres/callback_repository.go:func (repository *CallbackRepository) ListEventsByRequestID(ctx context.Context, requestID pgtype.UUID) ([]sqlc.VerificationEvent, error) {
+internal/persistence/postgres/callback_repository.go:	return repository.queries.ListVerificationEventsByRequestID(ctx, requestID)
+internal/persistence/postgres/callback_repository.go:func (repository *CallbackRepository) UpdateRequestStatus(ctx context.Context, params sqlc.UpdateVerificationRequestStatusParams) (sqlc.VerificationRequest, error) {
+internal/persistence/postgres/callback_repository.go:	return repository.queries.UpdateVerificationRequestStatus(ctx, params)
+internal/verification/service_e2e_test.go:	repository := &stubRepository{
+internal/verification/service_e2e_test.go:	service := NewServiceWithResolver("walt", repository, resolver)
+internal/verification/service_e2e_test.go:	if repository.createdSession.ProviderSessionID != "provider-session-123" {
+internal/verification/service_e2e_test.go:		t.Fatalf("expected persisted provider session id provider-session-123, got %q", repository.createdSession.ProviderSessionID)
+internal/verification/service_test.go:	repository := &stubRepository{
+internal/verification/service_test.go:	service := NewService("walt", repository, provider)
+internal/verification/service_test.go:	if repository.createdRequest.Status != StatusCreated {
+internal/verification/service_test.go:		t.Fatalf("expected initial status %q, got %q", StatusCreated, repository.createdRequest.Status)
+internal/verification/service_test.go:	if repository.createdRequest.Provider != "walt" {
+internal/verification/service_test.go:		t.Fatalf("expected provider walt, got %q", repository.createdRequest.Provider)
+internal/verification/service_test.go:	repository := &stubRepository{
+internal/verification/service_test.go:	service := NewService("walt", repository, provider)
+internal/verification/service_test.go:	if repository.createdSession.ProviderSessionID != "provider-session-123" {
+internal/verification/service_test.go:		t.Fatalf("expected provider session to be persisted, got %q", repository.createdSession.ProviderSessionID)
+internal/verification/service_test.go:	repository := &stubRepository{
+internal/verification/service_test.go:	service := NewService("walt", repository, &stubSessionProvider{})
+internal/verification/service_test.go:	repository := &stubRepository{
+internal/verification/service_test.go:	service := NewService("walt", repository, provider)
+internal/verification/service_test.go:	if repository.updatedRequest.Status != StatusFailed {
+internal/verification/service_test.go:		t.Fatalf("expected failed status to be persisted, got %q", repository.updatedRequest.Status)
+internal/verification/service_test.go:	if repository.updatedRequest.ReasonCode != ErrCodeProviderSessionCreateFailed {
+internal/verification/service_test.go:		t.Fatalf("expected failure reason code %q, got %q", ErrCodeProviderSessionCreateFailed, repository.updatedRequest.ReasonCode)
+internal/verification/service_test.go:type stubRepository struct {
+internal/verification/service_test.go:func (repository *stubRepository) CreateRequest(ctx context.Context, request VerificationRequest) (VerificationRequest, error) {
+internal/verification/service_test.go:	repository.createdRequest = request
+internal/verification/service_test.go:	return repository.createRequestFunc(ctx, request)
+internal/verification/service_test.go:func (repository *stubRepository) UpdateRequestStatus(ctx context.Context, request VerificationRequest) (VerificationRequest, error) {
+internal/verification/service_test.go:	repository.updatedRequest = request
+internal/verification/service_test.go:	return repository.updateRequestStatusFunc(ctx, request)
+internal/verification/service_test.go:func (repository *stubRepository) GetRequestByID(ctx context.Context, requestID string) (VerificationRequest, error) {
+internal/verification/service_test.go:	return repository.getRequestByIDFunc(ctx, requestID)
+internal/verification/service_test.go:func (repository *stubRepository) CreateSession(ctx context.Context, session VerificationSession) (VerificationSession, error) {
+internal/verification/service_test.go:	repository.createdSession = session
+internal/verification/service_test.go:	return repository.createSessionFunc(ctx, session)
+internal/verification/service_test.go:func (repository *stubRepository) GetLatestSessionByRequestID(ctx context.Context, requestID string) (VerificationSession, error) {
+internal/verification/service_test.go:	return repository.getLatestSessionByRequestIDFunc(ctx, requestID)
+docs/architecture-overview.md:This repository is not the verifier itself, not the wallet, and not the policy engine.
+docs/architecture-overview.md:## Repository Boundaries
+docs/architecture-overview.md:This repository owns:
+docs/architecture-overview.md:- one PostgreSQL database
+docs/architecture-overview.md:- `internal/persistence/postgres`
+docs/architecture-overview.md:  - PostgreSQL access and repository implementations
+docs/architecture-overview.md:- `db`
+docs/architecture-overview.md:- Cloud SQL for PostgreSQL
+docs/architecture-overview.md:Local development should use Docker Compose for the service and PostgreSQL.
+docs/architecture-overview.md:PostgreSQL should not be deployed inside Cloud Run for production.
+docs/architecture-overview.md:This repository is still in bootstrap. The architecture is defined, and the implementation work should follow the package boundaries and lifecycle described above.
+internal/persistence/postgres/callback_repository_test.go:package postgres
+internal/persistence/postgres/callback_repository_test.go:	"github.com/nathang0147/Request-Service-API/internal/persistence/postgres/sqlc"
+internal/persistence/postgres/callback_repository_test.go:func TestCallbackRepositoryCreateEvent(t *testing.T) {
+internal/persistence/postgres/callback_repository_test.go:	repo := NewCallbackRepository(mock)
+internal/persistence/postgres/callback_repository_test.go:func TestCallbackRepositoryUpdateRequestStatus(t *testing.T) {
+internal/persistence/postgres/callback_repository_test.go:	repo := NewCallbackRepository(mock)
+internal/persistence/postgres/verification_repository.go:package postgres
+internal/persistence/postgres/verification_repository.go:	"github.com/nathang0147/Request-Service-API/internal/persistence/postgres/sqlc"
+internal/persistence/postgres/verification_repository.go:type VerificationRepository struct {
+internal/persistence/postgres/verification_repository.go:func NewVerificationRepository(db sqlc.DBTX) *VerificationRepository {
+internal/persistence/postgres/verification_repository.go:	return &VerificationRepository{
+internal/persistence/postgres/verification_repository.go:		queries: sqlc.New(db),
+internal/persistence/postgres/verification_repository.go:func (repository *VerificationRepository) CreateRequest(ctx context.Context, params sqlc.CreateVerificationRequestParams) (sqlc.VerificationRequest, error) {
+internal/persistence/postgres/verification_repository.go:	return repository.queries.CreateVerificationRequest(ctx, params)
+internal/persistence/postgres/verification_repository.go:func (repository *VerificationRepository) GetRequestByID(ctx context.Context, id pgtype.UUID) (sqlc.VerificationRequest, error) {
+internal/persistence/postgres/verification_repository.go:	return repository.queries.GetVerificationRequestByID(ctx, id)
+internal/persistence/postgres/verification_repository.go:func (repository *VerificationRepository) UpdateRequestStatus(ctx context.Context, params sqlc.UpdateVerificationRequestStatusParams) (sqlc.VerificationRequest, error) {
+internal/persistence/postgres/verification_repository.go:	return repository.queries.UpdateVerificationRequestStatus(ctx, params)
+internal/persistence/postgres/verification_repository.go:func (repository *VerificationRepository) CreateSession(ctx context.Context, params sqlc.CreateVerificationSessionParams) (sqlc.VerificationSession, error) {
+internal/persistence/postgres/verification_repository.go:	return repository.queries.CreateVerificationSession(ctx, params)
+internal/persistence/postgres/verification_repository.go:func (repository *VerificationRepository) GetSessionByProviderSessionID(ctx context.Context, providerSessionID string) (sqlc.VerificationSession, error) {
+internal/persistence/postgres/verification_repository.go:	return repository.queries.GetVerificationSessionByProviderSessionID(ctx, providerSessionID)
+internal/persistence/postgres/verification_repository.go:func (repository *VerificationRepository) GetLatestSessionByRequestID(ctx context.Context, requestID pgtype.UUID) (sqlc.VerificationSession, error) {
+internal/persistence/postgres/verification_repository.go:	return repository.queries.GetLatestVerificationSessionByRequestID(ctx, requestID)
+internal/persistence/postgres/mappers.go:package postgres
+internal/persistence/postgres/mappers.go:	"github.com/nathang0147/Request-Service-API/internal/persistence/postgres/sqlc"
+internal/persistence/postgres/db.go:package postgres
+docs/plans/2026-03-24-request-service-api-codex-setup-design.md:4. The current six-agent layout is too granular for a bootstrap repository and creates coordination overhead.
+docs/plans/2026-03-24-request-service-api-codex-setup-design.md:The repository workflow is intentionally linear and low-complexity:
+docs/plans/2026-03-24-request-service-api-codex-setup-design.md:## Planned Repository Layout
+docs/plans/2026-03-24-request-service-api-codex-setup-design.md:This repository becomes a local SDLC execution engine. It should not depend on external orchestration frameworks, long-lived agent pools, or reply-chain reconstruction.
+docs/plans/2026-03-24-request-service-api-codex-setup-design.md:This repository is still bootstrap-stage with only minimal content committed. The SDLC model must therefore:
+docs/plans/2026-03-24-request-service-api-codex-setup-design.md:Because the repository is bootstrap-only, there is no broader runtime verification claim.
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:	row := q.db.QueryRow(ctx, createVerificationSession,
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:	row := q.db.QueryRow(ctx, getLatestVerificationSessionByRequestID, verificationRequestID)
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:	row := q.db.QueryRow(ctx, getVerificationSessionByProviderSessionID, providerSessionID)
+internal/persistence/postgres/sqlc/verification_requests.sql.go:	row := q.db.QueryRow(ctx, createVerificationRequest,
+internal/persistence/postgres/sqlc/verification_requests.sql.go:	row := q.db.QueryRow(ctx, getVerificationRequestByID, id)
+internal/persistence/postgres/sqlc/verification_requests.sql.go:	row := q.db.QueryRow(ctx, updateVerificationRequestStatus,
+internal/persistence/postgres/sqlc/db.go:type DBTX interface {
+internal/persistence/postgres/sqlc/db.go:func New(db DBTX) *Queries {
+internal/persistence/postgres/sqlc/db.go:	return &Queries{db: db}
+internal/persistence/postgres/sqlc/db.go:	db DBTX
+internal/persistence/postgres/sqlc/db.go:		db: tx,
+docs/plans/architecture_fixed.md:This repository implements a **Request Service API** for verifiable credential verification orchestration.
+docs/plans/architecture_fixed.md:- One PostgreSQL database
+docs/plans/architecture_fixed.md:- Persistent storage of requests, sessions, events
+docs/plans/architecture_fixed.md:- **Repository Pattern** for persistence abstraction
+docs/plans/architecture_fixed.md:- PostgreSQL
+docs/plans/architecture_fixed.md:│   │   ├── repository.go
+docs/plans/architecture_fixed.md:│   │   └── postgres/
+docs/plans/architecture_fixed.md:│   │       ├── db.go
+docs/plans/architecture_fixed.md:│   │       ├── verification_repository.go
+docs/plans/architecture_fixed.md:│   │       ├── callback_repository.go
+docs/plans/architecture_fixed.md:├── db/
+docs/plans/architecture_fixed.md:Use PostgreSQL with explicit SQL and `sqlc`.
+docs/plans/architecture_fixed.md:- unexpected internal/provider/db failures return 5xx with normalized message/code
+docs/plans/architecture_fixed.md:- log DB failures with context
+docs/plans/architecture_fixed.md:- postgres
+docs/plans/architecture_fixed.md:- spreading DB queries across handlers
+docs/plans/architecture_fixed.md:5. verification domain/service/repository
+docs/plans/architecture_fixed.md:The repository should be left in a state where:
+docs/plans/architecture_fixed.md:- DB integration exists
+docs/plans/architecture_fixed.md:When generating code for this repository:
+docs/plans/architecture_fixed.md:Build the repository from scratch according to this document.
+internal/persistence/postgres/sqlc/verification_events.sql.go:	row := q.db.QueryRow(ctx, createVerificationEvent,
+internal/persistence/postgres/sqlc/verification_events.sql.go:	rows, err := q.db.Query(ctx, listVerificationEventsByRequestID, verificationRequestID)
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:**Tech Stack:** Go, chi, PostgreSQL, pgx, sqlc, golang-migrate, zap, Docker, Docker Compose, GitHub Actions, Cloud Run
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- `internal/persistence/postgres/**`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- `db/migrations/**`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- `db/query/**`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- Create: `db/migrations/0001_init.up.sql`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- Create: `db/migrations/0001_init.down.sql`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- Create: `db/query/verification_requests.sql`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- Create: `db/query/verification_sessions.sql`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- Create: `db/query/verification_events.sql`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- JSONB storage for raw provider payloads
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:**Step 2: Add SQL queries for repository operations**
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:### Task 5: Add Postgres Integration
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- Create: `internal/persistence/postgres/db.go`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- Create: `internal/persistence/postgres/verification_repository.go`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- Create: `internal/persistence/postgres/callback_repository.go`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- Create: `internal/persistence/postgres/sqlc/` generated files
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- Test: `internal/persistence/postgres/*_test.go`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:**Step 1: Write failing repository tests**
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:**Step 2: Run repository tests to verify failure**
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:go test ./internal/persistence/postgres/... -v
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- repository tests fail before implementation
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:**Step 3: Implement DB wiring and repository methods**
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- explicit mapping between DB rows and domain models
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:**Step 4: Re-run repository tests**
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:go test ./internal/persistence/postgres/... -v
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- repository tests pass
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- Create: `internal/verification/repository.go`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- repository interfaces near the consumer
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:Re-use the existing service, repository, and provider boundaries. Avoid new abstractions unless a real duplication forces them.
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- Docker Compose with app + postgres
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:git add db sqlc.yaml internal/persistence
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:git commit -m "feat: add postgres persistence foundation"
+docs/plans/2026-03-25-request-service-bootstrap-design.md:The architecture should be imported into this repository in two layers.
+docs/plans/2026-03-25-request-service-bootstrap-design.md:internal/persistence/postgres/*
+docs/plans/2026-03-25-request-service-bootstrap-design.md:db/migrations/*
+docs/plans/2026-03-25-request-service-bootstrap-design.md:db/query/*
+docs/plans/2026-03-25-request-service-bootstrap-design.md:2. PostgreSQL persistence for requests, sessions, and events
+docs/plans/2026-03-25-request-service-bootstrap-design.md:4. repository/integration tests once DB wiring exists
+docs/plans/2026-03-25-request-service-bootstrap-design.md:3. add DB schema, migrations, and `sqlc`
+docs/plans/2026-03-25-request-service-bootstrap-design.md:4. implement verification domain/service/repository
+internal/persistence/postgres/verification_store.go:package postgres
+internal/persistence/postgres/verification_store.go:	"github.com/nathang0147/Request-Service-API/internal/persistence/postgres/sqlc"
+internal/persistence/postgres/verification_store.go:	repository *VerificationRepository
+internal/persistence/postgres/verification_store.go:func NewVerificationStore(db sqlc.DBTX) *VerificationStore {
+internal/persistence/postgres/verification_store.go:		repository: NewVerificationRepository(db),
+internal/persistence/postgres/verification_store.go:	created, err := store.repository.CreateRequest(ctx, toCreateRequestParams(request))
+internal/persistence/postgres/verification_store.go:	updated, err := store.repository.UpdateRequestStatus(ctx, toUpdateRequestStatusParams(request))
+internal/persistence/postgres/verification_store.go:	request, err := store.repository.GetRequestByID(ctx, id)
+internal/persistence/postgres/verification_store.go:	created, err := store.repository.CreateSession(ctx, toCreateSessionParams(session))
+internal/persistence/postgres/verification_store.go:	session, err := store.repository.GetLatestSessionByRequestID(ctx, id)
+internal/persistence/postgres/verification_store.go:var _ verification.Repository = (*VerificationStore)(nil)
+docs/plans/2026-03-24-request-service-api-codex-setup.md:**Goal:** Refactor the repository's Codex setup into a lightweight stage-based SDLC workflow with 4 core agents, persistent repo maps, reusable skills, explicit task/message/handoff lifecycle, and ephemeral subagent execution rules.
+docs/plans/2026-03-24-request-service-api-codex-setup.md:**Architecture:** The repository keeps a small repo-local control plane under `.codex/`. Durable workflow state lives in task and artifact templates, stage ownership lives in `AGENTS.md` plus `.codex/system-map.yaml`, and specialized procedures move into reusable skill documents. Subagents are stage-local executors only and are never resumed.
+docs/plans/2026-03-24-request-service-api-codex-setup.md:**Step 1: Rewrite repository workflow rules**
+internal/persistence/postgres/verification_repository_test.go:package postgres
+internal/persistence/postgres/verification_repository_test.go:	"github.com/nathang0147/Request-Service-API/internal/persistence/postgres/sqlc"
+internal/persistence/postgres/verification_repository_test.go:func TestVerificationRepositoryCreateAndGetRequest(t *testing.T) {
+internal/persistence/postgres/verification_repository_test.go:	repo := NewVerificationRepository(mock)
+internal/persistence/postgres/verification_repository_test.go:func TestVerificationRepositoryCreateSessionAndLookupByProviderSessionID(t *testing.T) {
+internal/persistence/postgres/verification_repository_test.go:	repo := NewVerificationRepository(mock)

@@ -1,0 +1,600 @@
+routes.txt:docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:330:**Step 2: Run handler tests to verify failure**
+README.md:Request Service API for HR-facing verification orchestration across the VC ecosystem.
+README.md:For local verifier integration, the request-service container defaults to `WALT_VERIFIER_MODE=legacy` with `WALT_VERIFIER_BASE_URL=http://host.docker.internal:7003`, which matches the older `waltid-identity` verifier surface that still emits `presentation_definition` flows for the current wallet UI. `WALT_BEARER_TOKEN` is optional. `WALT_VC_POLICY_WEBHOOK_URL` points the legacy verifier at the IU trust-policy webhook, defaulting locally to `http://host.docker.internal:8787/api/verifier/policies/vc`. If you later migrate the wallet/UI to DCQL, switch to `WALT_VERIFIER_MODE=verifier2` and point `WALT_VERIFIER_BASE_URL` at the verifier2 surface on port `7004`.
+README.md:- `PUBLIC_REDIRECT_URL_TEMPLATE` -> browser-visible success/error redirect target, with `$id` replaced by the verifier session id
+README.md:- in the host browser wallet UI, `http://localhost:7102/success/$id` gives the normal `waltid-identity` success page
+README.md:The `waltid-identity` verifier portal itself uses this same pattern, sending `successRedirectUri: ${window.location.origin}/success/$id` in [pages/verify/index.tsx](/Users/thanganguyen/Documents/10-19%20Repo/17%20Thesis/waltid-identity/waltid-applications/waltid-web-portal/pages/verify/index.tsx#L89).
+README.md:`response_uri` in the OpenID4VP request is not the success redirect target. It is only the verifier endpoint that receives the wallet submission.
+structure.txt:verification_sessions.sql
+structure.txt:verification_sessions.sql.go
+AGENTS.md:`Request-Service-API` is the repo-local SDLC execution engine for backend request orchestration, service-side integration logic, and API contracts that sit between IU frontend flows and the VC ecosystem.
+AGENTS.md:- `verifying`
+AGENTS.md:- `verifying`
+AGENTS.md:- entering Verification uses task status `verifying`
+AGENTS.md:- `IU-VC-registry` owns registry contexts, schemas, DID documents, and public metadata.
+go.sum:github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
+go.sum:go.uber.org/multierr v1.10.0 h1:S0h4aNzvfcFsC3dRF1jLoaov7oRaKqRGC/pUEJ2yvPQ=
+go.sum:gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
+api/openapi.yaml:        - candidateRef
+api/openapi.yaml:        candidateRef:
+api/openapi.yaml:    VerificationSession:
+api/openapi.yaml:        - session
+api/openapi.yaml:            - SESSION_CREATED
+api/openapi.yaml:        session:
+api/openapi.yaml:          $ref: "#/components/schemas/VerificationSession"
+api/openapi.yaml:            - SESSION_CREATED
+api/openapi.yaml:        session:
+api/openapi.yaml:          $ref: "#/components/schemas/VerificationSession"
+deployments/docker-compose.yml:      WALT_VC_POLICY_WEBHOOK_URL: http://host.docker.internal:8787/api/verifier/policies/vc
+sqlc.yaml:      - "db/query/verification_sessions.sql"
+deployments/cloudrun.yaml:            - name: WALT_VC_POLICY_WEBHOOK_URL
+docs/architecture-overview.md:`Request-Service-API` is the backend entrypoint for HR-driven verification flows across the VC ecosystem.
+docs/architecture-overview.md:Its job is to keep the HR application simple. The frontend should not need to know verifier-specific protocols, wallet interaction details, or provider-specific payload shapes.
+docs/architecture-overview.md:- creating and tracking a verifier session
+docs/architecture-overview.md:- persisting request, session, and audit state
+docs/architecture-overview.md:2. This service creates a provider session through `walt.id`.
+docs/architecture-overview.md:3. The wallet holder completes the verifier flow outside the HR app.
+docs/architecture-overview.md:This repository is not the verifier itself, not the wallet, and not the policy engine.
+docs/architecture-overview.md:- provider session lifecycle
+docs/architecture-overview.md:- persistence of requests, sessions, and audit events
+docs/architecture-overview.md:- `IU-VC-registry`: registry metadata, schemas, contexts, DID documents
+docs/architecture-overview.md:- wallet implementation
+docs/architecture-overview.md:- `CandidateRef`
+docs/architecture-overview.md:### VerificationSession
+docs/architecture-overview.md:The provider session linked to a verification request.
+docs/architecture-overview.md:- `ProviderSessionID`
+docs/architecture-overview.md:- `SESSION_CREATED`
+docs/architecture-overview.md:  - create a verification request and initialize provider session
+docs/architecture-overview.md:  - read normalized verification status and session details
+docs/architecture-overview.md:- `verification_sessions`
+docs/architecture-overview.md:- every provider session is stored
+cmd/api/main.go:		cfg.WaltVCPolicyWebhookURL,
+db/query/verification_sessions.sql:-- name: CreateVerificationSession :one
+db/query/verification_sessions.sql:INSERT INTO verification_sessions (
+db/query/verification_sessions.sql:    provider_session_id,
+db/query/verification_sessions.sql:-- name: GetVerificationSessionByProviderSessionID :one
+db/query/verification_sessions.sql:FROM verification_sessions
+db/query/verification_sessions.sql:WHERE provider_session_id = $1
+db/query/verification_sessions.sql:-- name: GetLatestVerificationSessionByRequestID :one
+db/query/verification_sessions.sql:FROM verification_sessions
+internal/provider/walt/dto.go:type createSessionRequest struct {
+internal/provider/walt/dto.go:	Legacy    *legacyCreateSessionRequest
+internal/provider/walt/dto.go:	Verifier2 *verifier2CreateSessionRequest
+internal/provider/walt/dto.go:type legacyCreateSessionRequest struct {
+internal/provider/walt/dto.go:	VPPolicies         []any                       `json:"vp_policies,omitempty"`
+internal/provider/walt/dto.go:	VCPolicies         []any                       `json:"vc_policies,omitempty"`
+internal/provider/walt/dto.go:	RequestCredentials []legacyRequestedCredential `json:"request_credentials"`
+internal/provider/walt/dto.go:type legacyRequestedCredential struct {
+internal/provider/walt/dto.go:type verifier2CreateSessionRequest struct {
+internal/provider/walt/dto.go:	CoreFlow verifier2CreateSessionCore `json:"core_flow"`
+internal/provider/walt/dto.go:type verifier2CreateSessionCore struct {
+internal/provider/walt/dto.go:	DCQLQuery verifier2CreateSessionDCQLQuery `json:"dcql_query"`
+internal/provider/walt/dto.go:type verifier2CreateSessionDCQLQuery struct {
+internal/provider/walt/dto.go:	Credentials []verifier2CreateSessionCredential `json:"credentials"`
+internal/provider/walt/dto.go:type verifier2CreateSessionCredential struct {
+internal/provider/walt/dto.go:	Meta   verifier2CreateSessionCredentialMeta `json:"meta"`
+internal/provider/walt/dto.go:	Claims []verifier2CreateSessionClaimQuery   `json:"claims"`
+internal/provider/walt/dto.go:type verifier2CreateSessionCredentialMeta struct {
+internal/provider/walt/dto.go:type verifier2CreateSessionClaimQuery struct {
+internal/provider/walt/dto.go:type createSessionResponse struct {
+internal/provider/walt/dto.go:	Verifier2 *verifier2CreateSessionResponse
+internal/provider/walt/dto.go:type verifier2CreateSessionResponse struct {
+internal/provider/walt/dto.go:	SessionID                        string `json:"sessionId"`
+internal/provider/walt/dto.go:	SessionID  string          `json:"sessionId"`
+internal/callback/handler_test.go:			if string(body) != `{"sessionId":"provider-session-123"}` {
+internal/callback/handler_test.go:	req := httptest.NewRequest(http.MethodPost, "/api/v1/callbacks/walt", bytes.NewBufferString(`{"sessionId":"provider-session-123"}`))
+internal/callback/handler_test.go:			if string(body) != `{"id":"provider-session-123","verificationResult":true}` {
+internal/callback/handler_test.go:	req := httptest.NewRequest(http.MethodPost, "/api/v1/callbacks/walt", bytes.NewBufferString(`{"id":"provider-session-123","verificationResult":true}`))
+internal/callback/handler_test.go:	req := httptest.NewRequest(http.MethodPost, "/api/v1/callbacks/walt", bytes.NewBufferString(`{"sessionId":"provider-session-123"}`))
+docs/plans/2026-03-24-request-service-api-codex-setup-design.md:- `verifying`
+internal/provider/walt/provider.go:func (adapter *Provider) CreateSession(ctx context.Context, input verification.ProviderSessionInput) (verification.ProviderSession, error) {
+internal/provider/walt/provider.go:	response, rawResponse, err := adapter.client.CreateSession(ctx, toCreateSessionRequest(input, adapter.client.vcPolicyWebhookURL))
+internal/provider/walt/provider.go:		return verification.ProviderSession{}, err
+internal/provider/walt/provider.go:	return toProviderSession(response, rawResponse), nil
+internal/provider/walt/provider.go:	if err := json.Unmarshal(body, &legacyPayload); err == nil && legacyPayload.SessionID != "" {
+internal/provider/walt/mapper.go:func toCreateSessionRequest(input verification.ProviderSessionInput, vcPolicyWebhookURL string) createSessionRequest {
+internal/provider/walt/mapper.go:	const credentialType = "UniversityDegree"
+internal/provider/walt/mapper.go:	vcPolicies := []any{"signature"}
+internal/provider/walt/mapper.go:	if vcPolicyWebhookURL != "" {
+internal/provider/walt/mapper.go:		vcPolicies = append(vcPolicies, map[string]string{
+internal/provider/walt/mapper.go:			"policy": "webhook",
+internal/provider/walt/mapper.go:			"args":   vcPolicyWebhookURL,
+internal/provider/walt/mapper.go:	return createSessionRequest{
+internal/provider/walt/mapper.go:		Legacy: &legacyCreateSessionRequest{
+internal/provider/walt/mapper.go:			VPPolicies: []any{
+internal/provider/walt/mapper.go:			VCPolicies: vcPolicies,
+internal/provider/walt/mapper.go:			RequestCredentials: []legacyRequestedCredential{
+internal/provider/walt/mapper.go:					Format: "jwt_vc_json",
+internal/provider/walt/mapper.go:					Type:   credentialType,
+internal/provider/walt/mapper.go:						ID: credentialType,
+internal/provider/walt/mapper.go:							"jwt_vc_json": {Alg: []string{"EdDSA"}},
+internal/provider/walt/mapper.go:									Path: []string{"$.vc.type"},
+internal/provider/walt/mapper.go:											Const: credentialType,
+internal/provider/walt/mapper.go:		Verifier2: &verifier2CreateSessionRequest{
+internal/provider/walt/mapper.go:			CoreFlow: verifier2CreateSessionCore{
+internal/provider/walt/mapper.go:				DCQLQuery: verifier2CreateSessionDCQLQuery{
+internal/provider/walt/mapper.go:					Credentials: []verifier2CreateSessionCredential{
+internal/provider/walt/mapper.go:							Format: "jwt_vc_json",
+internal/provider/walt/mapper.go:							Meta: verifier2CreateSessionCredentialMeta{
+internal/provider/walt/mapper.go:									{"VerifiableCredential", credentialType},
+internal/provider/walt/mapper.go:							Claims: []verifier2CreateSessionClaimQuery{
+internal/provider/walt/mapper.go:func toProviderSession(response createSessionResponse, raw []byte) verification.ProviderSession {
+internal/provider/walt/mapper.go:		providerSessionID := extractLegacyStateFromURL(response.LegacyURL)
+internal/provider/walt/mapper.go:		if providerSessionID == "" {
+internal/provider/walt/mapper.go:			providerSessionID = response.LegacyURL
+internal/provider/walt/mapper.go:		return verification.ProviderSession{
+internal/provider/walt/mapper.go:			ProviderSessionID: providerSessionID,
+internal/provider/walt/mapper.go:	return verification.ProviderSession{
+internal/provider/walt/mapper.go:		ProviderSessionID: response.Verifier2.SessionID,
+internal/provider/walt/mapper.go:		ProviderSessionID: payload.SessionID,
+internal/provider/walt/mapper.go:		ProviderSessionID: payload.ID,
+internal/provider/walt/mapper.go:		EventType:         "SESSION_PENDING",
+internal/provider/walt/mapper.go:		event.EventType = "SESSION_VERIFIED"
+internal/provider/walt/mapper.go:	event.EventType = "SESSION_FAILED"
+internal/provider/walt/mapper.go:		event.EventType = "SESSION_EXPIRED"
+internal/provider/walt/mapper.go:				return "CREDENTIAL_EXPIRED"
+db/query/verification_requests.sql:    candidate_ref,
+internal/persistence/postgres/callback_store.go:func (store *CallbackStore) GetSessionByProviderSessionID(ctx context.Context, providerSessionID string) (callback.SessionRecord, error) {
+internal/persistence/postgres/callback_store.go:	session, err := store.repository.GetSessionByProviderSessionID(ctx, providerSessionID)
+internal/persistence/postgres/callback_store.go:		return callback.SessionRecord{}, err
+internal/persistence/postgres/callback_store.go:	return callback.SessionRecord{
+internal/persistence/postgres/callback_store.go:		VerificationRequestID: session.VerificationRequestID.String(),
+internal/persistence/postgres/callback_store.go:		ProviderSessionID:     session.ProviderSessionID,
+internal/persistence/postgres/callback_store.go:		Provider:              session.Provider,
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:**Goal:** Bootstrap `Request-Service-API` into a runnable Go service that persists verification requests, creates `walt` verifier sessions, handles callbacks, exposes normalized HR-facing APIs, and is ready for Docker, CI, and Cloud Run.
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:**Step 2: Run tests to verify failure**
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- Create: `db/query/verification_sessions.sql`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- `verification_sessions`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- FK from sessions/events to requests
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- unique provider session ID
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- create session
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- get session by provider session ID
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- create session and look up by provider session ID
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:**Step 2: Run repository tests to verify failure**
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- create request persists request and session
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- service returns normalized session details to HR
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- provider failure maps to `PROVIDER_SESSION_CREATE_FAILED`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:**Step 2: Run service tests to verify failure**
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:**Step 2: Run handler tests to verify failure**
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- create session maps internal request to walt payload
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- provider response maps to normalized session output
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:**Step 2: Run provider tests to verify failure**
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:### Task 9: Wire The Create-Session Flow End-To-End
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- create provider session
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- persist request/session
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- return normalized `PENDING` response with QR/deep link/session expiry
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:**Step 2: Run flow test to verify failure**
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:- request/session state update
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:**Step 2: Run callback tests to verify failure**
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:**Step 4: Verify packaging**
+internal/provider/resolver.go:func (resolver *Resolver) Resolve(_ context.Context, _ string) (verification.SessionProvider, error) {
+internal/platform/config/config_test.go:func TestLoadReadsOptionalWaltVCPolicyWebhookURL(t *testing.T) {
+internal/platform/config/config_test.go:	t.Setenv("WALT_VC_POLICY_WEBHOOK_URL", "http://host.docker.internal:8787/api/verifier/policies/vc")
+internal/platform/config/config_test.go:		t.Fatalf("expected config to load with webhook url, got error: %v", err)
+internal/platform/config/config_test.go:	if cfg.WaltVCPolicyWebhookURL != "http://host.docker.internal:8787/api/verifier/policies/vc" {
+internal/platform/config/config_test.go:		t.Fatalf("expected webhook url to load, got %q", cfg.WaltVCPolicyWebhookURL)
+internal/callback/service_test.go:		getSessionByProviderSessionIDFunc: func(_ context.Context, providerSessionID string) (SessionRecord, error) {
+internal/callback/service_test.go:			if providerSessionID != "provider-session-123" {
+internal/callback/service_test.go:				t.Fatalf("expected provider session id provider-session-123, got %q", providerSessionID)
+internal/callback/service_test.go:			return SessionRecord{
+internal/callback/service_test.go:				ProviderSessionID:     providerSessionID,
+internal/callback/service_test.go:			ProviderSessionID: "provider-session-123",
+internal/callback/service_test.go:			EventType:         "SESSION_VERIFIED",
+internal/callback/service_test.go:	result, err := service.HandleCallback(context.Background(), []byte(`{"sessionId":"provider-session-123"}`))
+internal/callback/service_test.go:	if repository.createdEvent.EventType != "SESSION_VERIFIED" {
+internal/callback/service_test.go:		t.Fatalf("expected audit event SESSION_VERIFIED, got %q", repository.createdEvent.EventType)
+internal/callback/service_test.go:	getSessionByProviderSessionIDFunc func(context.Context, string) (SessionRecord, error)
+internal/callback/service_test.go:func (repository *stubRepository) GetSessionByProviderSessionID(ctx context.Context, providerSessionID string) (SessionRecord, error) {
+internal/callback/service_test.go:	return repository.getSessionByProviderSessionIDFunc(ctx, providerSessionID)
+internal/callback/service_test.go:func (adapter *stubProvider) CreateSession(context.Context, verification.ProviderSessionInput) (verification.ProviderSession, error) {
+internal/callback/service_test.go:	return verification.ProviderSession{}, nil
+internal/provider/walt/client.go:	vcPolicyWebhookURL        string
+internal/provider/walt/client.go:func NewClient(verifierBaseURL, mode, bearerToken, vcPolicyWebhookURL, callbackBaseURL, publicBaseURL, publicRedirectURLTemplate, callbackAuthSecret string, httpClient HTTPClient) *Client {
+internal/provider/walt/client.go:		vcPolicyWebhookURL:        strings.TrimSpace(vcPolicyWebhookURL),
+internal/provider/walt/client.go:func (client *Client) CreateSession(ctx context.Context, request createSessionRequest) (createSessionResponse, []byte, error) {
+internal/provider/walt/client.go:		return client.createVerifier2Session(ctx, request)
+internal/provider/walt/client.go:		return client.createLegacySession(ctx, request)
+internal/provider/walt/client.go:		return createSessionResponse{}, nil, fmt.Errorf("unsupported walt verifier mode %q", client.verifierMode)
+internal/provider/walt/client.go:func (client *Client) createLegacySession(ctx context.Context, request createSessionRequest) (createSessionResponse, []byte, error) {
+internal/provider/walt/client.go:		return createSessionResponse{}, nil, fmt.Errorf("missing legacy create session request")
+internal/provider/walt/client.go:		return createSessionResponse{}, nil, err
+internal/provider/walt/client.go:	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodPost, client.verifierBaseURL+"/openid4vc/verify", bytes.NewReader(body))
+internal/provider/walt/client.go:		return createSessionResponse{}, nil, err
+internal/provider/walt/client.go:		return createSessionResponse{}, nil, err
+internal/provider/walt/client.go:	return createSessionResponse{LegacyURL: strings.TrimSpace(string(rawResponse))}, rawResponse, nil
+internal/provider/walt/client.go:func (client *Client) createVerifier2Session(ctx context.Context, request createSessionRequest) (createSessionResponse, []byte, error) {
+internal/provider/walt/client.go:		return createSessionResponse{}, nil, fmt.Errorf("missing verifier2 create session request")
+internal/provider/walt/client.go:		return createSessionResponse{}, nil, err
+internal/provider/walt/client.go:	httpRequest, err := http.NewRequestWithContext(ctx, http.MethodPost, client.verifierBaseURL+"/verification-session/create", bytes.NewReader(body))
+internal/provider/walt/client.go:		return createSessionResponse{}, nil, err
+internal/provider/walt/client.go:		return createSessionResponse{}, nil, err
+internal/provider/walt/client.go:	var response verifier2CreateSessionResponse
+internal/provider/walt/client.go:		return createSessionResponse{}, rawResponse, err
+internal/provider/walt/client.go:	return createSessionResponse{Verifier2: &response}, rawResponse, nil
+internal/provider/walt/client.go:		return rawResponse, fmt.Errorf("walt create session returned status %d", httpResponse.StatusCode)
+internal/provider/walt/client.go:func deriveLegacyStateID(request *legacyCreateSessionRequest) string {
+internal/provider/walt/client.go:func (client *Client) requestStatusURL(request *legacyCreateSessionRequest) string {
+internal/persistence/postgres/callback_repository.go:func (repository *CallbackRepository) GetSessionByProviderSessionID(ctx context.Context, providerSessionID string) (sqlc.VerificationSession, error) {
+internal/persistence/postgres/callback_repository.go:	return repository.queries.GetVerificationSessionByProviderSessionID(ctx, providerSessionID)
+docs/plans/2026-03-25-request-service-bootstrap-design.md:The runtime target is a single Go service that sits in front of HR, owns verification request/session/event persistence, integrates only with `walt.id` in v1, and returns normalized status to HR.
+docs/plans/2026-03-25-request-service-bootstrap-design.md:  - `IU-VC-registry` owns schemas, DID docs, contexts, and registry metadata
+docs/plans/2026-03-25-request-service-bootstrap-design.md:2. PostgreSQL persistence for requests, sessions, and events
+docs/plans/2026-03-25-request-service-bootstrap-design.md:6. end-to-end create-session flow
+docs/plans/2026-03-25-request-service-bootstrap-design.md:  - fields: `ID`, `BusinessRef`, `CandidateRef`, `Provider`, `Status`, `Verified`, `ReasonCode`, `CreatedAt`, `UpdatedAt`
+docs/plans/2026-03-25-request-service-bootstrap-design.md:- `VerificationSession`
+docs/plans/2026-03-25-request-service-bootstrap-design.md:  - provider-facing session metadata
+docs/plans/2026-03-25-request-service-bootstrap-design.md:  - fields: `ID`, `VerificationRequestID`, `Provider`, `ProviderSessionID`, `QRCodeURL`, `DeepLink`, `OfferURL`, `ExpiresAt`, `RawCreateResponse`, `CreatedAt`
+docs/plans/2026-03-25-request-service-bootstrap-design.md:- `SESSION_CREATED`
+docs/plans/2026-03-25-request-service-bootstrap-design.md:- `verification_sessions`
+docs/plans/2026-03-25-request-service-bootstrap-design.md:- every provider session is persisted
+docs/plans/2026-03-25-request-service-bootstrap-design.md:5. end-to-end request/session/callback happy-path tests once core flow exists
+docs/plans/2026-03-25-request-service-bootstrap-design.md:- exact `walt.id` session-creation request/response contract
+docs/plans/2026-03-25-request-service-bootstrap-design.md:7. make create-session flow work end-to-end
+db/migrations/0001_init.up.sql:    candidate_ref TEXT NOT NULL,
+db/migrations/0001_init.up.sql:        'SESSION_CREATED',
+db/migrations/0001_init.up.sql:CREATE TABLE verification_sessions (
+db/migrations/0001_init.up.sql:    provider_session_id TEXT NOT NULL UNIQUE,
+db/migrations/0001_init.up.sql:CREATE INDEX verification_sessions_request_id_idx
+db/migrations/0001_init.up.sql:    ON verification_sessions (verification_request_id);
+internal/platform/config/config.go:	waltVCPolicyWebhookEnv  = "WALT_VC_POLICY_WEBHOOK_URL"
+internal/platform/config/config.go:	WaltVCPolicyWebhookURL string
+internal/platform/config/config.go:		WaltVCPolicyWebhookURL: envOrDefault(waltVCPolicyWebhookEnv, ""),
+internal/provider/resolver_test.go:func (provider *stubProvider) CreateSession(context.Context, verification.ProviderSessionInput) (verification.ProviderSession, error) {
+internal/provider/resolver_test.go:	return verification.ProviderSession{}, nil
+internal/callback/service.go:	GetSessionByProviderSessionID(context.Context, string) (SessionRecord, error)
+internal/callback/service.go:type SessionRecord struct {
+internal/callback/service.go:	ProviderSessionID     string
+internal/callback/service.go:	session, err := service.repository.GetSessionByProviderSessionID(ctx, event.ProviderSessionID)
+internal/callback/service.go:		RequestID:  session.VerificationRequestID,
+internal/callback/service.go:		RequestID: session.VerificationRequestID,
+docs/plans/architecture_fixed.md:This repository implements a **Request Service API** for verifiable credential verification orchestration.
+docs/plans/architecture_fixed.md:Its role is to act as the **front door** for an HR web application. The HR page must remain simple and must **not** need to know VC, verifier, protocol, or wallet details.
+docs/plans/architecture_fixed.md:- creating a verifier session through an external verifier ecosystem
+docs/plans/architecture_fixed.md:- returning frontend-friendly data such as QR/deep link/session status
+docs/plans/architecture_fixed.md:- wallet/user interacts with verifier session
+docs/plans/architecture_fixed.md:- Persistent storage of requests, sessions, events
+docs/plans/architecture_fixed.md:- wallet app
+docs/plans/architecture_fixed.md:- `CandidateRef`
+docs/plans/architecture_fixed.md:### `VerificationSession`
+docs/plans/architecture_fixed.md:Represents the provider session associated with a request.
+docs/plans/architecture_fixed.md:- `ProviderSessionID`
+docs/plans/architecture_fixed.md:- `SESSION_CREATED`
+docs/plans/architecture_fixed.md:Create a new verification request and initialize verifier session.
+docs/plans/architecture_fixed.md:  "candidateRef": "cand-456"
+docs/plans/architecture_fixed.md:  "session": {
+docs/plans/architecture_fixed.md:- update verification request/session state
+docs/plans/architecture_fixed.md:    CreateSession(ctx context.Context, input CreateSessionInput) (*CreateSessionOutput, error)
+docs/plans/architecture_fixed.md:    GetSessionStatus(ctx context.Context, providerSessionID string) (*ProviderStatusOutput, error)
+docs/plans/architecture_fixed.md:- `candidate_ref` TEXT
+docs/plans/architecture_fixed.md:#### `verification_sessions`
+docs/plans/architecture_fixed.md:- `provider_session_id` TEXT UNIQUE
+docs/plans/architecture_fixed.md:- every provider session must be stored
+docs/plans/architecture_fixed.md:- internal request -> provider `walt` create session payload
+docs/plans/architecture_fixed.md:- provider response -> internal `VerificationSession`
+docs/plans/architecture_fixed.md:- `PROVIDER_SESSION_CREATE_FAILED`
+docs/plans/architecture_fixed.md:- log provider session creation attempts
+docs/plans/architecture_fixed.md:- avoid logging secrets/tokens/raw credentials
+docs/plans/architecture_fixed.md:8. create session flow end-to-end
+docs/plans/architecture_fixed.md:- HR is treated as a simple client and should not need VC knowledge
+docs/plans/architecture_fixed.md:- Request Service creates verifier session
+docs/plans/architecture_fixed.md:- persistence is required for audit trail and session tracking
+db/migrations/0001_init.down.sql:DROP INDEX IF EXISTS verification_sessions_request_id_idx;
+db/migrations/0001_init.down.sql:DROP TABLE IF EXISTS verification_sessions;
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:// source: verification_sessions.sql
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:const createVerificationSession = `-- name: CreateVerificationSession :one
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:INSERT INTO verification_sessions (
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:    provider_session_id,
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:RETURNING id, verification_request_id, provider, provider_session_id, qr_code_url, deep_link, offer_url, expires_at, raw_create_response, created_at
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:type CreateVerificationSessionParams struct {
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:	ProviderSessionID     string             `json:"provider_session_id"`
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:func (q *Queries) CreateVerificationSession(ctx context.Context, arg CreateVerificationSessionParams) (VerificationSession, error) {
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:	row := q.db.QueryRow(ctx, createVerificationSession,
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:		arg.ProviderSessionID,
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:	var i VerificationSession
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:		&i.ProviderSessionID,
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:const getLatestVerificationSessionByRequestID = `-- name: GetLatestVerificationSessionByRequestID :one
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:SELECT id, verification_request_id, provider, provider_session_id, qr_code_url, deep_link, offer_url, expires_at, raw_create_response, created_at
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:FROM verification_sessions
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:func (q *Queries) GetLatestVerificationSessionByRequestID(ctx context.Context, verificationRequestID pgtype.UUID) (VerificationSession, error) {
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:	row := q.db.QueryRow(ctx, getLatestVerificationSessionByRequestID, verificationRequestID)
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:	var i VerificationSession
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:		&i.ProviderSessionID,
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:const getVerificationSessionByProviderSessionID = `-- name: GetVerificationSessionByProviderSessionID :one
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:SELECT id, verification_request_id, provider, provider_session_id, qr_code_url, deep_link, offer_url, expires_at, raw_create_response, created_at
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:FROM verification_sessions
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:WHERE provider_session_id = $1
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:func (q *Queries) GetVerificationSessionByProviderSessionID(ctx context.Context, providerSessionID string) (VerificationSession, error) {
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:	row := q.db.QueryRow(ctx, getVerificationSessionByProviderSessionID, providerSessionID)
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:	var i VerificationSession
+internal/persistence/postgres/sqlc/verification_sessions.sql.go:		&i.ProviderSessionID,
+internal/persistence/postgres/verification_repository_test.go:		CandidateRef: "cand-456",
+internal/persistence/postgres/verification_repository_test.go:			createArgs.CandidateRef,
+internal/persistence/postgres/verification_repository_test.go:				createArgs.CandidateRef,
+internal/persistence/postgres/verification_repository_test.go:	mock.ExpectQuery("SELECT id, business_ref, candidate_ref, provider, status, verified, reason_code, created_at, updated_at FROM verification_requests").
+internal/persistence/postgres/verification_repository_test.go:				createArgs.CandidateRef,
+internal/persistence/postgres/verification_repository_test.go:func TestVerificationRepositoryCreateSessionAndLookupByProviderSessionID(t *testing.T) {
+internal/persistence/postgres/verification_repository_test.go:	sessionID := testUUID(3)
+internal/persistence/postgres/verification_repository_test.go:	createArgs := sqlc.CreateVerificationSessionParams{
+internal/persistence/postgres/verification_repository_test.go:		ProviderSessionID:     "provider-session-123",
+internal/persistence/postgres/verification_repository_test.go:		RawCreateResponse:     []byte(`{"session":"ok"}`),
+internal/persistence/postgres/verification_repository_test.go:	mock.ExpectQuery("INSERT INTO verification_sessions").
+internal/persistence/postgres/verification_repository_test.go:			createArgs.ProviderSessionID,
+internal/persistence/postgres/verification_repository_test.go:		WillReturnRows(sessionRows().
+internal/persistence/postgres/verification_repository_test.go:				sessionID,
+internal/persistence/postgres/verification_repository_test.go:				createArgs.ProviderSessionID,
+internal/persistence/postgres/verification_repository_test.go:	created, err := repo.CreateSession(context.Background(), createArgs)
+internal/persistence/postgres/verification_repository_test.go:		t.Fatalf("expected session creation to succeed, got error: %v", err)
+internal/persistence/postgres/verification_repository_test.go:	if created.ProviderSessionID != "provider-session-123" {
+internal/persistence/postgres/verification_repository_test.go:		t.Fatalf("expected provider session id provider-session-123, got %q", created.ProviderSessionID)
+internal/persistence/postgres/verification_repository_test.go:	mock.ExpectQuery("SELECT id, verification_request_id, provider, provider_session_id, qr_code_url, deep_link, offer_url, expires_at, raw_create_response, created_at FROM verification_sessions").
+internal/persistence/postgres/verification_repository_test.go:		WithArgs("provider-session-123").
+internal/persistence/postgres/verification_repository_test.go:		WillReturnRows(sessionRows().
+internal/persistence/postgres/verification_repository_test.go:				sessionID,
+internal/persistence/postgres/verification_repository_test.go:				createArgs.ProviderSessionID,
+internal/persistence/postgres/verification_repository_test.go:	fetched, err := repo.GetSessionByProviderSessionID(context.Background(), "provider-session-123")
+internal/persistence/postgres/verification_repository_test.go:		t.Fatalf("expected session lookup to succeed, got error: %v", err)
+internal/persistence/postgres/verification_repository_test.go:		"candidate_ref",
+internal/persistence/postgres/verification_repository_test.go:func sessionRows() *pgxmock.Rows {
+internal/persistence/postgres/verification_repository_test.go:		"provider_session_id",
+internal/provider/walt/provider_test.go:func TestProviderCreateSessionMapsRequestAndResponse(t *testing.T) {
+internal/provider/walt/provider_test.go:	var capturedRequest legacyCreateSessionRequest
+internal/provider/walt/provider_test.go:		if request.URL.String() != "http://host.docker.internal:7003/openid4vc/verify" {
+internal/provider/walt/provider_test.go:			t.Fatalf("expected url %q, got %q", "http://host.docker.internal:7003/openid4vc/verify", request.URL.String())
+internal/provider/walt/provider_test.go:		expectedStatusURL := "https://wallet.example.com/success/req-123"
+internal/provider/walt/provider_test.go:			Body: io.NopCloser(strings.NewReader("openid4vp://authorize?response_type=vp_token&state=req-123&presentation_definition_uri=https%3A%2F%2Fverifier.example.com%2Fopenid4vc%2Fpd%2Freq-123")),
+internal/provider/walt/provider_test.go:		"http://host.docker.internal:8787/api/verifier/policies/vc",
+internal/provider/walt/provider_test.go:		"https://wallet.example.com/success/$id",
+internal/provider/walt/provider_test.go:	session, err := provider.CreateSession(context.Background(), verification.ProviderSessionInput{
+internal/provider/walt/provider_test.go:		CandidateRef: "cand-456",
+internal/provider/walt/provider_test.go:		t.Fatalf("expected create session to succeed, got error: %v", err)
+internal/provider/walt/provider_test.go:	if len(capturedRequest.RequestCredentials) != 1 {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected one request credential, got %+v", capturedRequest.RequestCredentials)
+internal/provider/walt/provider_test.go:	if capturedRequest.RequestCredentials[0].Type != "UniversityDegree" {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected UniversityDegree type, got %+v", capturedRequest.RequestCredentials)
+internal/provider/walt/provider_test.go:	if capturedRequest.RequestCredentials[0].Format != "jwt_vc_json" {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected jwt_vc_json format, got %+v", capturedRequest.RequestCredentials)
+internal/provider/walt/provider_test.go:	inputDescriptor := capturedRequest.RequestCredentials[0].InputDescriptor
+internal/provider/walt/provider_test.go:	if inputDescriptor.Format["jwt_vc_json"].Alg[0] != "EdDSA" {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected jwt_vc_json alg EdDSA, got %+v", inputDescriptor.Format)
+internal/provider/walt/provider_test.go:		t.Fatalf("expected array filter for vc.type, got %+v", inputDescriptor.Constraints.Fields[0].Filter)
+internal/provider/walt/provider_test.go:	if len(capturedRequest.VPPolicies) != 2 {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected two vp policies, got %+v", capturedRequest.VPPolicies)
+internal/provider/walt/provider_test.go:	if got := capturedRequest.VPPolicies[0]; got != "signature" {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected first vp policy signature, got %#v", got)
+internal/provider/walt/provider_test.go:	if got := capturedRequest.VPPolicies[1]; got != "presentation-definition" {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected second vp policy presentation-definition, got %#v", got)
+internal/provider/walt/provider_test.go:	if len(capturedRequest.VCPolicies) != 2 {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected two vc policies, got %+v", capturedRequest.VCPolicies)
+internal/provider/walt/provider_test.go:	if got := capturedRequest.VCPolicies[0]; got != "signature" {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected first vc policy signature, got %#v", got)
+internal/provider/walt/provider_test.go:	webhookPolicy, ok := capturedRequest.VCPolicies[1].(map[string]interface{})
+internal/provider/walt/provider_test.go:		t.Fatalf("expected webhook policy object, got %#v", capturedRequest.VCPolicies[1])
+internal/provider/walt/provider_test.go:	if webhookPolicy["policy"] != "webhook" {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected webhook policy name, got %#v", webhookPolicy)
+internal/provider/walt/provider_test.go:	if webhookPolicy["args"] != "http://host.docker.internal:8787/api/verifier/policies/vc" {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected webhook policy url, got %#v", webhookPolicy)
+internal/provider/walt/provider_test.go:	if session.QRCodeURL != "openid4vp://authorize?response_type=vp_token&state=req-123&presentation_definition_uri=https%3A%2F%2Fverifier.example.com%2Fopenid4vc%2Fpd%2Freq-123" {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected legacy presentation url to round-trip, got %q", session.QRCodeURL)
+internal/provider/walt/provider_test.go:	if session.DeepLink != session.QRCodeURL {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected deep link to mirror presentation url, got qr=%q deep=%q", session.QRCodeURL, session.DeepLink)
+internal/provider/walt/provider_test.go:	if session.OfferURL != session.QRCodeURL {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected offer url to mirror presentation url, got offer=%q qr=%q", session.OfferURL, session.QRCodeURL)
+internal/provider/walt/provider_test.go:	if session.ProviderSessionID != "req-123" {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected provider session id req-123, got %q", session.ProviderSessionID)
+internal/provider/walt/provider_test.go:func TestProviderCreateSessionOmitsAuthorizationHeaderWhenBearerTokenMissing(t *testing.T) {
+internal/provider/walt/provider_test.go:			Body: io.NopCloser(strings.NewReader("openid4vp://authorize?response_type=vp_token&state=req-123&presentation_definition_uri=https%3A%2F%2Fverifier.example.com%2Fopenid4vc%2Fpd%2Freq-123")),
+internal/provider/walt/provider_test.go:	_, err := provider.CreateSession(context.Background(), verification.ProviderSessionInput{
+internal/provider/walt/provider_test.go:		CandidateRef: "cand-456",
+internal/provider/walt/provider_test.go:		t.Fatalf("expected create session to succeed without bearer token, got error: %v", err)
+internal/provider/walt/provider_test.go:func TestProviderCreateSessionVerifier2ModeStillSupported(t *testing.T) {
+internal/provider/walt/provider_test.go:	var capturedRequest verifier2CreateSessionRequest
+internal/provider/walt/provider_test.go:		if request.URL.String() != "http://host.docker.internal:7004/verification-session/create" {
+internal/provider/walt/provider_test.go:				"sessionId": "provider-session-456",
+internal/provider/walt/provider_test.go:				"bootstrapAuthorizationRequestUrl": "openid4vp://authorize?client_id=verifier2&request_uri=https%3A%2F%2Fverifier.example.com%2Frequest",
+internal/provider/walt/provider_test.go:				"fullAuthorizationRequestUrl": "openid4vp://authorize?response_type=vp_token&client_id=verifier2"
+internal/provider/walt/provider_test.go:	session, err := provider.CreateSession(context.Background(), verification.ProviderSessionInput{
+internal/provider/walt/provider_test.go:		CandidateRef: "cand-456",
+internal/provider/walt/provider_test.go:		t.Fatalf("expected verifier2 create session to succeed, got error: %v", err)
+internal/provider/walt/provider_test.go:	if capturedRequest.CoreFlow.DCQLQuery.Credentials[0].ID != "req-456" {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected dcql credential id req-456, got %+v", capturedRequest.CoreFlow.DCQLQuery.Credentials)
+internal/provider/walt/provider_test.go:	if capturedRequest.CoreFlow.DCQLQuery.Credentials[0].Meta.TypeValues[0][1] != "UniversityDegree" {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected verifier2 type UniversityDegree, got %+v", capturedRequest.CoreFlow.DCQLQuery.Credentials[0].Meta.TypeValues)
+internal/provider/walt/provider_test.go:	if session.ProviderSessionID != "provider-session-456" {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected verifier2 provider session id provider-session-456, got %q", session.ProviderSessionID)
+internal/provider/walt/provider_test.go:		"id": "provider-session-123",
+internal/provider/walt/provider_test.go:							"policy": "webhook",
+internal/provider/walt/provider_test.go:	if event.ProviderSessionID != "provider-session-123" {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected provider session id provider-session-123, got %q", event.ProviderSessionID)
+internal/provider/walt/provider_test.go:	if event.EventType != "SESSION_VERIFIED" {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected SESSION_VERIFIED event type, got %q", event.EventType)
+internal/provider/walt/provider_test.go:		"id": "provider-session-456",
+internal/provider/walt/provider_test.go:							"policy": "webhook",
+internal/provider/walt/provider_test.go:							"error": "Issuer is not trusted by IU policy"
+internal/provider/walt/provider_test.go:	if event.ProviderSessionID != "provider-session-456" {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected provider session id provider-session-456, got %q", event.ProviderSessionID)
+internal/provider/walt/provider_test.go:	if event.ReasonCode != "POLICY_WEBHOOK_FAILED" {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected POLICY_WEBHOOK_FAILED reason code, got %q", event.ReasonCode)
+internal/provider/walt/provider_test.go:	if event.EventType != "SESSION_FAILED" {
+internal/provider/walt/provider_test.go:		t.Fatalf("expected SESSION_FAILED event type, got %q", event.EventType)
+internal/provider/provider.go:	ProviderSessionID string
+internal/provider/provider.go:	CreateSession(context.Context, verification.ProviderSessionInput) (verification.ProviderSession, error)
+docs/plans/2026-03-24-request-service-api-codex-setup.md:- Verify: `AGENTS.md`
+docs/plans/2026-03-24-request-service-api-codex-setup.md:- Verify: `.codex/**`
+docs/plans/2026-03-24-request-service-api-codex-setup.md:- Verify: `docs/plans/**`
+internal/persistence/postgres/verification_store.go:func (store *VerificationStore) CreateSession(ctx context.Context, session verification.VerificationSession) (verification.VerificationSession, error) {
+internal/persistence/postgres/verification_store.go:	created, err := store.repository.CreateSession(ctx, toCreateSessionParams(session))
+internal/persistence/postgres/verification_store.go:		return verification.VerificationSession{}, err
+internal/persistence/postgres/verification_store.go:	return toDomainSession(created), nil
+internal/persistence/postgres/verification_store.go:func (store *VerificationStore) GetLatestSessionByRequestID(ctx context.Context, requestID string) (verification.VerificationSession, error) {
+internal/persistence/postgres/verification_store.go:		return verification.VerificationSession{}, err
+internal/persistence/postgres/verification_store.go:	session, err := store.repository.GetLatestSessionByRequestID(ctx, id)
+internal/persistence/postgres/verification_store.go:		return verification.VerificationSession{}, err
+internal/persistence/postgres/verification_store.go:	return toDomainSession(session), nil
+internal/persistence/postgres/mappers.go:		CandidateRef: request.CandidateRef,
+internal/persistence/postgres/mappers.go:func toCreateSessionParams(session verification.VerificationSession) sqlc.CreateVerificationSessionParams {
+internal/persistence/postgres/mappers.go:	return sqlc.CreateVerificationSessionParams{
+internal/persistence/postgres/mappers.go:		VerificationRequestID: mustUUID(session.VerificationRequestID),
+internal/persistence/postgres/mappers.go:		Provider:              session.Provider,
+internal/persistence/postgres/mappers.go:		ProviderSessionID:     session.ProviderSessionID,
+internal/persistence/postgres/mappers.go:		QrCodeUrl:             textValue(session.QRCodeURL),
+internal/persistence/postgres/mappers.go:		DeepLink:              textValue(session.DeepLink),
+internal/persistence/postgres/mappers.go:		OfferUrl:              textValue(session.OfferURL),
+internal/persistence/postgres/mappers.go:		ExpiresAt:             timestampValue(session.ExpiresAt),
+internal/persistence/postgres/mappers.go:		RawCreateResponse:     session.RawCreateResponse,
+internal/persistence/postgres/mappers.go:		CandidateRef: request.CandidateRef,
+internal/persistence/postgres/mappers.go:func toDomainSession(session sqlc.VerificationSession) verification.VerificationSession {
+internal/persistence/postgres/mappers.go:	return verification.VerificationSession{
+internal/persistence/postgres/mappers.go:		ID:                    session.ID.String(),
+internal/persistence/postgres/mappers.go:		VerificationRequestID: session.VerificationRequestID.String(),
+internal/persistence/postgres/mappers.go:		Provider:              session.Provider,
+internal/persistence/postgres/mappers.go:		ProviderSessionID:     session.ProviderSessionID,
+internal/persistence/postgres/mappers.go:		QRCodeURL:             session.QrCodeUrl.String,
+internal/persistence/postgres/mappers.go:		DeepLink:              session.DeepLink.String,
+internal/persistence/postgres/mappers.go:		OfferURL:              session.OfferUrl.String,
+internal/persistence/postgres/mappers.go:		ExpiresAt:             session.ExpiresAt.Time,
+internal/persistence/postgres/mappers.go:		RawCreateResponse:     session.RawCreateResponse,
+internal/persistence/postgres/mappers.go:		CreatedAt:             session.CreatedAt.Time,
+internal/verification/errors.go:const ErrCodeProviderSessionCreateFailed = "PROVIDER_SESSION_CREATE_FAILED"
+internal/verification/service_test.go:		createSessionFunc: func(_ context.Context, session VerificationSession) (VerificationSession, error) {
+internal/verification/service_test.go:			return session, nil
+internal/verification/service_test.go:	provider := &stubSessionProvider{
+internal/verification/service_test.go:		createSessionResult: ProviderSession{
+internal/verification/service_test.go:			ProviderSessionID: "provider-session-123",
+internal/verification/service_test.go:		CandidateRef: "cand-456",
+internal/verification/service_test.go:func TestServiceCreateRequestPersistsSessionAndReturnsPendingResponse(t *testing.T) {
+internal/verification/service_test.go:		createSessionFunc: func(_ context.Context, session VerificationSession) (VerificationSession, error) {
+internal/verification/service_test.go:			session.ID = "sess-123"
+internal/verification/service_test.go:			session.CreatedAt = time.Date(2026, time.March, 25, 8, 0, 30, 0, time.UTC)
+internal/verification/service_test.go:			return session, nil
+internal/verification/service_test.go:	provider := &stubSessionProvider{
+internal/verification/service_test.go:		createSessionResult: ProviderSession{
+internal/verification/service_test.go:			ProviderSessionID: "provider-session-123",
+internal/verification/service_test.go:			RawCreateResponse: []byte(`{"session":"ok"}`),
+internal/verification/service_test.go:		CandidateRef: "cand-456",
+internal/verification/service_test.go:	if repository.createdSession.ProviderSessionID != "provider-session-123" {
+internal/verification/service_test.go:		t.Fatalf("expected provider session to be persisted, got %q", repository.createdSession.ProviderSessionID)
+internal/verification/service_test.go:	if response.Session.QRCodeURL != "https://example.com/qr" {
+internal/verification/service_test.go:		t.Fatalf("expected qr code url to round-trip, got %q", response.Session.QRCodeURL)
+internal/verification/service_test.go:				CandidateRef: "cand-456",
+internal/verification/service_test.go:		getLatestSessionByRequestIDFunc: func(_ context.Context, requestID string) (VerificationSession, error) {
+internal/verification/service_test.go:			return VerificationSession{
+internal/verification/service_test.go:				ProviderSessionID:     "provider-session-123",
+internal/verification/service_test.go:	service := NewService("walt", repository, &stubSessionProvider{})
+internal/verification/service_test.go:	provider := &stubSessionProvider{
+internal/verification/service_test.go:		createSessionErr: errors.New("upstream create session failed"),
+internal/verification/service_test.go:		CandidateRef: "cand-456",
+internal/verification/service_test.go:	if serviceError.Code != ErrCodeProviderSessionCreateFailed {
+internal/verification/service_test.go:		t.Fatalf("expected error code %q, got %q", ErrCodeProviderSessionCreateFailed, serviceError.Code)
+internal/verification/service_test.go:	if repository.updatedRequest.ReasonCode != ErrCodeProviderSessionCreateFailed {
+internal/verification/service_test.go:		t.Fatalf("expected failure reason code %q, got %q", ErrCodeProviderSessionCreateFailed, repository.updatedRequest.ReasonCode)
+internal/verification/service_test.go:	createdSession                  VerificationSession
+internal/verification/service_test.go:	createSessionFunc               func(context.Context, VerificationSession) (VerificationSession, error)
+internal/verification/service_test.go:	getLatestSessionByRequestIDFunc func(context.Context, string) (VerificationSession, error)
+internal/verification/service_test.go:func (repository *stubRepository) CreateSession(ctx context.Context, session VerificationSession) (VerificationSession, error) {
+internal/verification/service_test.go:	repository.createdSession = session
+internal/verification/service_test.go:	return repository.createSessionFunc(ctx, session)
+internal/verification/service_test.go:func (repository *stubRepository) GetLatestSessionByRequestID(ctx context.Context, requestID string) (VerificationSession, error) {
+internal/verification/service_test.go:	return repository.getLatestSessionByRequestIDFunc(ctx, requestID)
+internal/verification/service_test.go:type stubSessionProvider struct {
+internal/verification/service_test.go:	createSessionResult ProviderSession
+internal/verification/service_test.go:	createSessionErr    error
+internal/verification/service_test.go:func (provider *stubSessionProvider) CreateSession(_ context.Context, _ ProviderSessionInput) (ProviderSession, error) {
+internal/verification/service_test.go:	if provider.createSessionErr != nil {
+internal/verification/service_test.go:		return ProviderSession{}, provider.createSessionErr
+internal/verification/service_test.go:	return provider.createSessionResult, nil
+internal/verification/domain.go:	StatusSessionCreated Status = "SESSION_CREATED"
+internal/verification/domain.go:	CandidateRef string
+internal/verification/domain.go:type VerificationSession struct {
+internal/verification/domain.go:	ProviderSessionID     string
+internal/verification/domain.go:type ProviderSessionInput struct {
+internal/verification/domain.go:	CandidateRef string
+internal/verification/domain.go:type ProviderSession struct {
+internal/verification/domain.go:	ProviderSessionID string
+internal/persistence/postgres/verification_repository.go:func (repository *VerificationRepository) CreateSession(ctx context.Context, params sqlc.CreateVerificationSessionParams) (sqlc.VerificationSession, error) {
+internal/persistence/postgres/verification_repository.go:	return repository.queries.CreateVerificationSession(ctx, params)
+internal/persistence/postgres/verification_repository.go:func (repository *VerificationRepository) GetSessionByProviderSessionID(ctx context.Context, providerSessionID string) (sqlc.VerificationSession, error) {
+internal/persistence/postgres/verification_repository.go:	return repository.queries.GetVerificationSessionByProviderSessionID(ctx, providerSessionID)
+internal/persistence/postgres/verification_repository.go:func (repository *VerificationRepository) GetLatestSessionByRequestID(ctx context.Context, requestID pgtype.UUID) (sqlc.VerificationSession, error) {
+internal/persistence/postgres/verification_repository.go:	return repository.queries.GetLatestVerificationSessionByRequestID(ctx, requestID)
+internal/persistence/postgres/callback_repository_test.go:		EventType:             "SESSION_VERIFIED",
+internal/persistence/postgres/callback_repository_test.go:	if created.EventType != "SESSION_VERIFIED" {
+internal/persistence/postgres/callback_repository_test.go:		t.Fatalf("expected event type SESSION_VERIFIED, got %q", created.EventType)
+internal/verification/service_e2e_test.go:func TestServiceEndToEndCreateRequestUsesResolverAndReturnsPendingSession(t *testing.T) {
+internal/verification/service_e2e_test.go:		createSessionFunc: func(_ context.Context, session VerificationSession) (VerificationSession, error) {
+internal/verification/service_e2e_test.go:			return session, nil
+internal/verification/service_e2e_test.go:	provider := &stubSessionProvider{
+internal/verification/service_e2e_test.go:		createSessionResult: ProviderSession{
+internal/verification/service_e2e_test.go:			ProviderSessionID: "provider-session-123",
+internal/verification/service_e2e_test.go:		CandidateRef: "cand-456",
+internal/verification/service_e2e_test.go:	if repository.createdSession.ProviderSessionID != "provider-session-123" {
+internal/verification/service_e2e_test.go:		t.Fatalf("expected persisted provider session id provider-session-123, got %q", repository.createdSession.ProviderSessionID)
+internal/verification/service_e2e_test.go:	if response.Session.DeepLink != "openid://example" {
+internal/verification/service_e2e_test.go:		t.Fatalf("expected deep link to round-trip, got %q", response.Session.DeepLink)
+internal/verification/service_e2e_test.go:	provider          SessionProvider
+internal/verification/service_e2e_test.go:func (resolver *stubProviderResolver) Resolve(_ context.Context, provider string) (SessionProvider, error) {
+internal/persistence/postgres/sqlc/verification_requests.sql.go:    candidate_ref,
+internal/persistence/postgres/sqlc/verification_requests.sql.go:RETURNING id, business_ref, candidate_ref, provider, status, verified, reason_code, created_at, updated_at
+internal/persistence/postgres/sqlc/verification_requests.sql.go:	CandidateRef string      `json:"candidate_ref"`
+internal/persistence/postgres/sqlc/verification_requests.sql.go:		arg.CandidateRef,
+internal/persistence/postgres/sqlc/verification_requests.sql.go:		&i.CandidateRef,
+internal/persistence/postgres/sqlc/verification_requests.sql.go:SELECT id, business_ref, candidate_ref, provider, status, verified, reason_code, created_at, updated_at
+internal/persistence/postgres/sqlc/verification_requests.sql.go:		&i.CandidateRef,
+internal/persistence/postgres/sqlc/verification_requests.sql.go:RETURNING id, business_ref, candidate_ref, provider, status, verified, reason_code, created_at, updated_at
+internal/persistence/postgres/sqlc/verification_requests.sql.go:		&i.CandidateRef,
+internal/verification/service.go:	sessionProvider SessionProvider
+internal/verification/service.go:func NewService(defaultProvider string, repository Repository, sessionProvider SessionProvider) *Service {
+internal/verification/service.go:		sessionProvider: sessionProvider,
+internal/verification/service.go:		CandidateRef: input.CandidateRef,
+internal/verification/service.go:	sessionProvider := service.sessionProvider
+internal/verification/service.go:	if sessionProvider == nil && service.resolver != nil {
+internal/verification/service.go:		sessionProvider, err = service.resolver.Resolve(ctx, request.Provider)
+internal/verification/service.go:	if sessionProvider == nil {
+internal/verification/service.go:			Code: ErrCodeProviderSessionCreateFailed,
+internal/verification/service.go:	providerSession, err := sessionProvider.CreateSession(ctx, ProviderSessionInput{
+internal/verification/service.go:		CandidateRef: request.CandidateRef,
+internal/verification/service.go:		request.ReasonCode = ErrCodeProviderSessionCreateFailed
+internal/verification/service.go:			Code: ErrCodeProviderSessionCreateFailed,
+internal/verification/service.go:	session, err := service.repository.CreateSession(ctx, VerificationSession{
+internal/verification/service.go:		ProviderSessionID:     providerSession.ProviderSessionID,
+internal/verification/service.go:		QRCodeURL:             providerSession.QRCodeURL,
+internal/verification/service.go:		DeepLink:              providerSession.DeepLink,
+internal/verification/service.go:		OfferURL:              providerSession.OfferURL,
+internal/verification/service.go:		ExpiresAt:             providerSession.ExpiresAt,
+internal/verification/service.go:		RawCreateResponse:     providerSession.RawCreateResponse,
+internal/verification/service.go:	return toCreateRequestResponse(updatedRequest, session), nil
+internal/verification/service.go:	session, err := service.repository.GetLatestSessionByRequestID(ctx, requestID)
+internal/verification/service.go:	return toGetRequestResponse(request, &session), nil
+internal/verification/handler.go:	if strings.TrimSpace(body.BusinessRef) == "" || strings.TrimSpace(body.CandidateRef) == "" {
+internal/verification/handler.go:		apierror.Write(w, http.StatusBadRequest, "INVALID_REQUEST", "businessRef and candidateRef are required")
+internal/persistence/postgres/sqlc/models.go:	CandidateRef string             `json:"candidate_ref"`
+internal/persistence/postgres/sqlc/models.go:type VerificationSession struct {
+internal/persistence/postgres/sqlc/models.go:	ProviderSessionID     string             `json:"provider_session_id"`
+internal/verification/mapper.go:func toCreateRequestResponse(request VerificationRequest, session VerificationSession) CreateRequestResponse {
+internal/verification/mapper.go:		Session: SessionDetails{
+internal/verification/mapper.go:			QRCodeURL: session.QRCodeURL,
+internal/verification/mapper.go:			DeepLink:  session.DeepLink,
+internal/verification/mapper.go:			OfferURL:  session.OfferURL,
+internal/verification/mapper.go:			ExpiresAt: session.ExpiresAt,
+internal/verification/mapper.go:func toGetRequestResponse(request VerificationRequest, session *VerificationSession) GetRequestResponse {
+internal/verification/mapper.go:	if session != nil {
+internal/verification/mapper.go:		response.Session = &SessionDetails{
+internal/verification/mapper.go:			QRCodeURL: session.QRCodeURL,
+internal/verification/mapper.go:			DeepLink:  session.DeepLink,
+internal/verification/mapper.go:			OfferURL:  session.OfferURL,
+internal/verification/mapper.go:			ExpiresAt: session.ExpiresAt,
+internal/verification/dto.go:	CandidateRef string `json:"candidateRef"`
+internal/verification/dto.go:type SessionDetails struct {
+internal/verification/dto.go:	Session    SessionDetails `json:"session"`
+internal/verification/dto.go:	Session    *SessionDetails `json:"session,omitempty"`
+internal/verification/handler_test.go:			if input.BusinessRef != "job-123" || input.CandidateRef != "cand-456" {
+internal/verification/handler_test.go:				Session: SessionDetails{
+internal/verification/handler_test.go:	body := bytes.NewBufferString(`{"businessRef":"job-123","candidateRef":"cand-456"}`)
+internal/verification/handler_test.go:	if response.Session.QRCodeURL != "https://example.com/qr" {
+internal/verification/handler_test.go:		t.Fatalf("expected qr code url to round-trip, got %q", response.Session.QRCodeURL)
+internal/verification/handler_test.go:				Session: &SessionDetails{
+internal/verification/handler_test.go:	req := httptest.NewRequest(http.MethodPost, "/api/v1/verification-requests", bytes.NewBufferString(`{"businessRef":"","candidateRef":""}`))
+internal/verification/repository.go:	CreateSession(context.Context, VerificationSession) (VerificationSession, error)
+internal/verification/repository.go:	GetLatestSessionByRequestID(context.Context, string) (VerificationSession, error)
+internal/verification/repository.go:type SessionProvider interface {
+internal/verification/repository.go:	CreateSession(context.Context, ProviderSessionInput) (ProviderSession, error)
+internal/verification/repository.go:	Resolve(context.Context, string) (SessionProvider, error)

@@ -1,0 +1,106 @@
+AGENTS.md:249:- `internal/platform/router/**`: route wiring
+docs/architecture-overview.md:94:  - config, logging, middleware, router, and startup infrastructure
+structure.txt:96:router
+structure.txt:110:./internal/platform/router:
+structure.txt:111:router_test.go
+structure.txt:112:router.go
+cmd/api/main.go:17:	platformrouter "github.com/nathang0147/Request-Service-API/internal/platform/router"
+cmd/api/main.go:93:func newHandler(logger *zap.Logger, registrars ...platformrouter.RouteRegistrar) http.Handler {
+cmd/api/main.go:94:	return platformrouter.New(logger, registrars...)
+internal/platform/router/router.go:1:package router
+internal/platform/router/router.go:17:	router := chi.NewRouter()
+internal/platform/router/router.go:18:	router.Use(platformmiddleware.RequestID)
+internal/platform/router/router.go:19:	router.Use(platformmiddleware.Logging(logger))
+internal/platform/router/router.go:20:	router.Get("/healthz", func(w http.ResponseWriter, _ *http.Request) {
+internal/platform/router/router.go:27:			registrar.RegisterRoutes(router)
+internal/platform/router/router.go:31:	return router
+internal/callback/handler_test.go:15:	router := chi.NewRouter()
+internal/callback/handler_test.go:16:	NewHandler(&stubCallbackService{}, rejectingAuthenticator{}).RegisterRoutes(router)
+internal/callback/handler_test.go:21:	router.ServeHTTP(rec, req)
+internal/callback/handler_test.go:29:	router := chi.NewRouter()
+internal/callback/handler_test.go:38:	}, staticAuthenticator{secret: "secret"}).RegisterRoutes(router)
+internal/callback/handler_test.go:44:	router.ServeHTTP(rec, req)
+internal/callback/handler_test.go:52:	router := chi.NewRouter()
+internal/callback/handler_test.go:61:	}, staticAuthenticator{secret: "secret"}).RegisterRoutes(router)
+internal/callback/handler_test.go:67:	router.ServeHTTP(rec, req)
+internal/callback/handler_test.go:75:	router := chi.NewRouter()
+internal/callback/handler_test.go:80:	}, staticAuthenticator{secret: "secret"}).RegisterRoutes(router)
+internal/callback/handler_test.go:86:	router.ServeHTTP(rec, req)
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:88:- build router
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:112:- Create: `internal/platform/router/router.go`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:123:- router construction
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:144:- chi router with health route placeholder
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:318:- Modify: `internal/platform/router/router.go`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:470:- Modify: `internal/platform/router/router.go`
+internal/callback/handler.go:38:func (handler *Handler) RegisterRoutes(router chi.Router) {
+internal/callback/handler.go:39:	router.Post("/api/v1/callbacks/walt", handler.handleWaltCallback)
+internal/platform/router/router_test.go:1:package router
+docs/plans/2026-03-25-request-service-bootstrap-design.md:55:internal/platform/router/*
+docs/plans/architecture_fixed.md:87:- chi router
+docs/plans/architecture_fixed.md:148:│   │   └── router/
+docs/plans/architecture_fixed.md:558:2. config + logger + router
+internal/verification/handler_test.go:37:	router := chi.NewRouter()
+internal/verification/handler_test.go:38:	NewHandler(service).RegisterRoutes(router)
+internal/verification/handler_test.go:44:	router.ServeHTTP(rec, req)
+internal/verification/handler_test.go:82:	router := chi.NewRouter()
+internal/verification/handler_test.go:83:	NewHandler(service).RegisterRoutes(router)
+internal/verification/handler_test.go:88:	router.ServeHTTP(rec, req)
+internal/verification/handler_test.go:105:	router := chi.NewRouter()
+internal/verification/handler_test.go:106:	NewHandler(&stubRequestService{}).RegisterRoutes(router)
+internal/verification/handler_test.go:111:	router.ServeHTTP(rec, req)
+internal/verification/handler_test.go:119:	router := chi.NewRouter()
+internal/verification/handler_test.go:120:	NewHandler(&stubRequestService{}).RegisterRoutes(router)
+internal/verification/handler_test.go:125:	router.ServeHTTP(rec, req)
+internal/verification/handler_test.go:142:	router := chi.NewRouter()
+internal/verification/handler_test.go:143:	NewHandler(service).RegisterRoutes(router)
+internal/verification/handler_test.go:148:	router.ServeHTTP(rec, req)
+internal/verification/handler_test.go:162:	router := chi.NewRouter()
+internal/verification/handler_test.go:163:	NewHandler(service).RegisterRoutes(router)
+internal/verification/handler_test.go:168:	router.ServeHTTP(rec, req)
+internal/verification/handler.go:31:func (handler *Handler) RegisterRoutes(router chi.Router) {
+internal/verification/handler.go:32:	router.Route("/api/v1/verification-requests", func(router chi.Router) {
+internal/verification/handler.go:33:		router.Post("/", handler.handleCreateRequest)
+internal/verification/handler.go:34:		router.Get("/{requestID}", handler.handleGetRequest)
+docs/architecture-overview.md:84:  - verification request lifecycle, business orchestration, northbound API handlers
+structure.txt:65:handler_test.go
+structure.txt:66:handler.go
+structure.txt:142:handler_test.go
+structure.txt:143:handler.go
+cmd/api/main.go:97:func newServer(port string, handler http.Handler) *http.Server {
+cmd/api/main.go:100:		Handler:           handler,
+docs/plans/2026-03-25-request-service-bootstrap-design.md:164:3. focused unit tests for domain, mappers, handlers, and provider boundaries
+docs/plans/architecture_fixed.md:120:│   │   ├── handler.go
+docs/plans/architecture_fixed.md:126:│   │   ├── handler.go
+docs/plans/architecture_fixed.md:539:- keep handler thin
+docs/plans/architecture_fixed.md:551:- spreading DB queries across handlers
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:316:- Create: `internal/verification/handler.go`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:317:- Test: `internal/verification/handler_test.go`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:320:**Step 1: Write failing handler tests**
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:330:**Step 2: Run handler tests to verify failure**
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:340:- handler tests fail before routes/handlers exist
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:342:**Step 3: Implement minimal handlers**
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:346:- handlers remain thin
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:351:**Step 4: Re-run handler tests**
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:361:- handler tests pass
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:465:- Create: `internal/callback/handler.go`
+docs/plans/2026-03-25-request-service-bootstrap-implementation-plan.md:469:- Test: `internal/callback/handler_test.go`
+internal/platform/middleware/request_id_test.go:10:	handler := RequestID(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+internal/platform/middleware/request_id_test.go:26:	handler.ServeHTTP(rec, req)
+internal/platform/middleware/request_id_test.go:38:	handler := RequestID(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+internal/platform/middleware/request_id_test.go:50:	handler.ServeHTTP(rec, req)
+internal/callback/handler.go:38:func (handler *Handler) RegisterRoutes(router chi.Router) {
+internal/callback/handler.go:39:	router.Post("/api/v1/callbacks/walt", handler.handleWaltCallback)
+internal/callback/handler.go:42:func (handler *Handler) handleWaltCallback(w http.ResponseWriter, r *http.Request) {
+internal/callback/handler.go:43:	if handler.authenticator != nil {
+internal/callback/handler.go:44:		if err := handler.authenticator.Authenticate(r); err != nil {
+internal/callback/handler.go:56:	result, err := handler.service.HandleCallback(r.Context(), body)
+internal/verification/handler.go:31:func (handler *Handler) RegisterRoutes(router chi.Router) {
+internal/verification/handler.go:33:		router.Post("/", handler.handleCreateRequest)
+internal/verification/handler.go:34:		router.Get("/{requestID}", handler.handleGetRequest)
+internal/verification/handler.go:38:func (handler *Handler) handleCreateRequest(w http.ResponseWriter, r *http.Request) {
+internal/verification/handler.go:50:	response, err := handler.service.CreateRequest(r.Context(), body)
+internal/verification/handler.go:53:		handler.writeServiceError(w, err)
+internal/verification/handler.go:60:func (handler *Handler) handleGetRequest(w http.ResponseWriter, r *http.Request) {
+internal/verification/handler.go:67:	response, err := handler.service.GetRequest(r.Context(), requestID)
+internal/verification/handler.go:70:		handler.writeServiceError(w, err)
+internal/verification/handler.go:77:func (handler *Handler) writeServiceError(w http.ResponseWriter, err error) {
