@@ -3,8 +3,9 @@ package verification
 import "time"
 
 type CreateRequestInput struct {
-	BusinessRef  string `json:"businessRef"`
-	CandidateRef string `json:"candidateRef"`
+	BusinessRef     string   `json:"businessRef"`
+	CandidateRef    string   `json:"candidateRef"`
+	CredentialTypes []string `json:"credentialTypes,omitempty"`
 }
 
 type SessionDetails struct {

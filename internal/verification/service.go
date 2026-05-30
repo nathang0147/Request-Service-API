@@ -52,10 +52,11 @@ func (service *Service) CreateRequest(ctx context.Context, input CreateRequestIn
 	}
 
 	providerSession, err := sessionProvider.CreateSession(ctx, ProviderSessionInput{
-		RequestID:    request.ID,
-		BusinessRef:  request.BusinessRef,
-		CandidateRef: request.CandidateRef,
-		Provider:     request.Provider,
+		RequestID:       request.ID,
+		BusinessRef:     request.BusinessRef,
+		CandidateRef:    request.CandidateRef,
+		Provider:        request.Provider,
+		CredentialTypes: input.CredentialTypes,
 	})
 	if err != nil {
 		request.Status = StatusFailed

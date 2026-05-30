@@ -162,6 +162,55 @@ func TestProviderCreateSessionMapsRequestAndResponse(t *testing.T) {
 	}
 }
 
+func TestProviderCreateSessionMapsRequestedCredentialTypes(t *testing.T) {
+	var capturedRequest legacyCreateSessionRequest
+	httpClient := roundTripClient(func(request *http.Request) (*http.Response, error) {
+		if err := json.NewDecoder(request.Body).Decode(&capturedRequest); err != nil {
+			t.Fatalf("expected valid walt request body, got error: %v", err)
+		}
+
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header: http.Header{
+				"Content-Type": []string{"text/plain; charset=UTF-8"},
+			},
+			Body: io.NopCloser(strings.NewReader("openid4vp://authorize?response_type=vp_token&state=req-123")),
+		}, nil
+	})
+
+	client := NewClient("http://host.docker.internal:7003", "legacy", "", "", "", "", "", "", httpClient)
+	provider := New(client)
+
+	_, err := provider.CreateSession(context.Background(), verification.ProviderSessionInput{
+		RequestID:        "req-123",
+		BusinessRef:      "job-123",
+		CandidateRef:     "cand-456",
+		Provider:         "walt",
+		CredentialTypes:  []string{"DiplomaCredential", "TranscriptCredential"},
+	})
+	if err != nil {
+		t.Fatalf("expected create session to succeed, got error: %v", err)
+	}
+
+	if len(capturedRequest.RequestCredentials) != 2 {
+		t.Fatalf("expected two request credentials, got %+v", capturedRequest.RequestCredentials)
+	}
+
+	for index, expectedType := range []string{"DiplomaCredential", "TranscriptCredential"} {
+		credential := capturedRequest.RequestCredentials[index]
+		if credential.Type != expectedType {
+			t.Fatalf("expected credential %d type %q, got %+v", index, expectedType, credential)
+		}
+		if credential.InputDescriptor.ID != expectedType {
+			t.Fatalf("expected descriptor %d id %q, got %+v", index, expectedType, credential.InputDescriptor)
+		}
+		field := credential.InputDescriptor.Constraints.Fields[0]
+		if field.Filter.Contains == nil || field.Filter.Contains.Const != expectedType {
+			t.Fatalf("expected descriptor %d to filter type %q, got %+v", index, expectedType, field.Filter)
+		}
+	}
+}
+
 func TestProviderCreateSessionOmitsAuthorizationHeaderWhenBearerTokenMissing(t *testing.T) {
 	httpClient := roundTripClient(func(request *http.Request) (*http.Response, error) {
 		if got := request.Header.Get("Authorization"); got != "" {

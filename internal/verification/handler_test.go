@@ -20,6 +20,10 @@ func TestHandlerCreateRequest(t *testing.T) {
 				t.Fatalf("expected normalized create input, got %+v", input)
 			}
 
+			if len(input.CredentialTypes) != 2 || input.CredentialTypes[0] != "DiplomaCredential" || input.CredentialTypes[1] != "TranscriptCredential" {
+				t.Fatalf("expected credential types to decode, got %+v", input.CredentialTypes)
+			}
+
 			return CreateRequestResponse{
 				RequestID: "req-123",
 				Status:    StatusPending,
@@ -37,7 +41,7 @@ func TestHandlerCreateRequest(t *testing.T) {
 	router := chi.NewRouter()
 	NewHandler(service).RegisterRoutes(router)
 
-	body := bytes.NewBufferString(`{"businessRef":"job-123","candidateRef":"cand-456"}`)
+	body := bytes.NewBufferString(`{"businessRef":"job-123","candidateRef":"cand-456","credentialTypes":["DiplomaCredential","TranscriptCredential"]}`)
 	req := httptest.NewRequest(http.MethodPost, "/api/v1/verification-requests", body)
 	rec := httptest.NewRecorder()
 

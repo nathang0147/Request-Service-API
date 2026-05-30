@@ -39,10 +39,11 @@ type VerificationSession struct {
 }
 
 type ProviderSessionInput struct {
-	RequestID    string
-	BusinessRef  string
-	CandidateRef string
-	Provider     string
+	RequestID        string
+	BusinessRef      string
+	CandidateRef     string
+	Provider         string
+	CredentialTypes  []string
 }
 
 type ProviderSession struct {

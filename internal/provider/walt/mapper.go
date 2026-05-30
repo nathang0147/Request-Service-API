@@ -9,7 +9,7 @@ import (
 )
 
 func toCreateSessionRequest(input verification.ProviderSessionInput, vcPolicyWebhookURL string) createSessionRequest {
-	const credentialType = "UniversityDegree"
+	credentialTypes := normalizeCredentialTypes(input.CredentialTypes)
 
 	vcPolicies := []any{"signature"}
 	if vcPolicyWebhookURL != "" {
@@ -27,55 +27,106 @@ func toCreateSessionRequest(input verification.ProviderSessionInput, vcPolicyWeb
 				"presentation-definition",
 			},
 			VCPolicies: vcPolicies,
-			RequestCredentials: []legacyRequestedCredential{
-				{
-					Format: "jwt_vc_json",
-					Type:   credentialType,
-					InputDescriptor: legacyInputDescriptor{
-						ID: credentialType,
-						Format: map[string]legacyAlgSpec{
-							"jwt_vc_json": {Alg: []string{"EdDSA"}},
-						},
-						Constraints: legacyConstraints{
-							Fields: []legacyField{
-								{
-									Path: []string{"$.vc.type"},
-									Filter: legacyFieldFilter{
-										Type: "array",
-										Contains: &legacyFieldConst{
-											Const: credentialType,
-										},
-									},
-								},
-							},
-							LimitDisclosure: "required",
-						},
-					},
-				},
-			},
+			RequestCredentials: toLegacyRequestedCredentials(credentialTypes),
 		},
 		Verifier2: &verifier2CreateSessionRequest{
 			FlowType: "cross_device",
 			CoreFlow: verifier2CreateSessionCore{
 				DCQLQuery: verifier2CreateSessionDCQLQuery{
-					Credentials: []verifier2CreateSessionCredential{
-						{
-							ID:     input.RequestID,
-							Format: "jwt_vc_json",
-							Meta: verifier2CreateSessionCredentialMeta{
-								TypeValues: [][]string{
-									{"VerifiableCredential", credentialType},
-								},
-							},
-							Claims: []verifier2CreateSessionClaimQuery{
-								{Path: []string{"name"}},
-							},
-						},
-					},
+					Credentials: toVerifier2Credentials(input.RequestID, credentialTypes),
 				},
 			},
 		},
 	}
+}
+
+func normalizeCredentialTypes(types []string) []string {
+	seen := make(map[string]bool, len(types))
+	credentialTypes := make([]string, 0, len(types))
+
+	for _, credentialType := range types {
+		credentialType = strings.TrimSpace(credentialType)
+		if credentialType == "" || seen[credentialType] {
+			continue
+		}
+
+		seen[credentialType] = true
+		credentialTypes = append(credentialTypes, credentialType)
+	}
+
+	if len(credentialTypes) == 0 {
+		return []string{"UniversityDegree"}
+	}
+
+	return credentialTypes
+}
+
+func toLegacyRequestedCredentials(credentialTypes []string) []legacyRequestedCredential {
+	requestedCredentials := make([]legacyRequestedCredential, 0, len(credentialTypes))
+
+	for _, credentialType := range credentialTypes {
+		requestedCredentials = append(requestedCredentials, legacyRequestedCredential{
+			Format: "jwt_vc_json",
+			Type:   credentialType,
+			InputDescriptor: legacyInputDescriptor{
+				ID: credentialType,
+				Format: map[string]legacyAlgSpec{
+					"jwt_vc_json": {Alg: []string{"EdDSA"}},
+				},
+				Constraints: legacyConstraints{
+					Fields: []legacyField{
+						{
+							Path: []string{"$.vc.type"},
+							Filter: legacyFieldFilter{
+								Type: "array",
+								Contains: &legacyFieldConst{
+									Const: credentialType,
+								},
+							},
+						},
+					},
+					LimitDisclosure: "required",
+				},
+			},
+		})
+	}
+
+	return requestedCredentials
+}
+
+func toVerifier2Credentials(requestID string, credentialTypes []string) []verifier2CreateSessionCredential {
+	credentials := make([]verifier2CreateSessionCredential, 0, len(credentialTypes))
+
+	for index, credentialType := range credentialTypes {
+		credentialID := requestID
+		if len(credentialTypes) > 1 {
+			credentialID = credentialType
+		}
+		if strings.TrimSpace(credentialID) == "" {
+			credentialID = credentialType
+		}
+		if strings.TrimSpace(credentialID) == "" {
+			credentialID = "credential"
+		}
+		if index > 0 && credentialID == credentials[index-1].ID {
+			credentialID = credentialID + "-" + credentialType
+		}
+
+		credentials = append(credentials, verifier2CreateSessionCredential{
+			ID:     credentialID,
+			Format: "jwt_vc_json",
+			Meta: verifier2CreateSessionCredentialMeta{
+				TypeValues: [][]string{
+					{"VerifiableCredential", credentialType},
+				},
+			},
+			Claims: []verifier2CreateSessionClaimQuery{
+				{Path: []string{"name"}},
+			},
+		})
+	}
+
+	return credentials
 }
 
 func toProviderSession(response createSessionResponse, raw []byte) verification.ProviderSession {

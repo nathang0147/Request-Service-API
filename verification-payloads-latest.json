@@ -1,0 +1,709 @@
+[
+    {
+        "events": [
+            {
+                "id": "46be0966-1089-445f-bec6-278f5ae15c5e",
+                "source": "walt_callback",
+                "payload": {
+                    "id": "c9461e65-fd0a-460d-be84-54aabe8c3aea",
+                    "policyResults": {
+                        "time": "PT1.389418334S",
+                        "results": [
+                            {
+                                "credential": "VerifiablePresentation",
+                                "policyResults": [
+                                    {
+                                        "policy": "signature",
+                                        "result": {
+                                            "vp": {
+                                                "id": "P9XIzElSvxnQ",
+                                                "type": [
+                                                    "VerifiablePresentation"
+                                                ],
+                                                "holder": "did:jwk:eyJrdHkiOiJFQyIsImNydiI6IlAtMjU2Iiwia2lkIjoiMDFhVlg1b2FtRkZpR0RSTW5SZlI5VWZaWUxDdzZoQ1lsTmhLbHU5bnp1ayIsIngiOiJhSTNzU3ZHNWlNSW1NR01OSDZkNS1wdXNfVTI5VUl6Ykt2UU5qdUdYWENzIiwieSI6ImNIOFdQUXFyWXQzd3Y3SjBkMTRMRDlFdzZScVBwckFreUFmVmp3ZUlFY1EifQ",
+                                                "@context": [
+                                                    "https://www.w3.org/2018/credentials/v1"
+                                                ],
+                                                "verifiableCredential": [
+                                                    "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImRpZDp3ZWI6aW5mcmEtdmMtcmVnaXN0cnktd2ViLTkxMTM2ODA0MjAzNy5hc2lhLWVhc3QyLnJ1bi5hcHA6aXNzdWVyczpwcmluY2lwbGUja2V5LTEifQ.eyJpc3MiOiJkaWQ6d2ViOmluZnJhLXZjLXJlZ2lzdHJ5LXdlYi05MTEzNjgwNDIwMzcuYXNpYS1lYXN0Mi5ydW4uYXBwOmlzc3VlcnM6cHJpbmNpcGxlIiwic3ViIjoiZGlkOmV4YW1wbGU6c3R1ZGVudDEiLCJpYXQiOjE3NzcxOTI2MTYsIm5iZiI6MTc3NzE5MjYxNiwianRpIjoidXJuOnV1aWQ6ZXhhbXBsZS1kZWdyZWUtMSIsInZjIjp7IkBjb250ZXh0IjpbImh0dHBzOi8vd3d3LnczLm9yZy8yMDE4L2NyZWRlbnRpYWxzL3YxIl0sInR5cGUiOlsiVmVyaWZpYWJsZUNyZWRlbnRpYWwiLCJVbml2ZXJzaXR5RGVncmVlIiwiRWR1Y2F0aW9uYWxPY2N1cGF0aW9uYWxDcmVkZW50aWFsIiwiVk5FZHVEZWdyZWVDcmVkZW50aWFsIiwiSVVTbWFydENlcnRDcmVkZW50aWFsIl0sImNyZWRlbnRpYWxTdWJqZWN0Ijp7ImlkIjoiZGlkOmV4YW1wbGU6c3R1ZGVudDEiLCJkZWdyZWUiOnsidHlwZSI6IkJhY2hlbG9yRGVncmVlIiwibmFtZSI6IkJTYyBpbiBDb21wdXRlciBTY2llbmNlIn0sIml1OmNvbXBvbmVudHMiOlt7Im5hbWUiOiJkaXBsb21hIiwibWFuZGF0b3J5Ijp0cnVlLCJjb21wb25lbnRUeXBlIjoiZGVncmVlQ2VydGlmaWNhdGUiLCJjb21wb25lbnRIYXNoIjoiMHg5MWZkYjRiOGJkZjJiOTI4OTRlZDM5YjFlYWI3NjE4MDFkYzk5ZTM4YjNlM2QyMjQxN2RjMzVmZmU1N2E3YWM2In0seyJuYW1lIjoidHJhbnNjcmlwdCIsIm1hbmRhdG9yeSI6ZmFsc2UsImNvbXBvbmVudFR5cGUiOiJhY2FkZW1pY1RyYW5zY3JpcHQiLCJjb21wb25lbnRIYXNoIjoiMHg4NjdkNDc1NzI2YzU0ZTMxZmRmMzA2NWE0NjJiMzBkZDBmMDkyMTA1ZmE0ZjUyY2U5NzM3NjY0MTY4MjZhYjE1In1dfSwiZXZpZGVuY2UiOlt7InR5cGUiOlsiSVVTbWFydENlcnRNZXJrbGVSZWNlaXB0Il0sImNoYWluSWQiOiJlaXAxNTU6MTExNTUxMTEiLCJjb250cmFjdEFkZHJlc3MiOiIweGVEMWNlRWY2MkY4OTY0MGVDNzVjZkM5MDRiMzYwMmE4OUNlRDYzNjEiLCJtZXJrbGVSb290IjoiMHg0ZjJmN2JlNDhkODc2ZjZiZTlkOTMxYWVjMDkzN2E5ZGJjYTQ3OTQ1NDk5OWRmMzAyZDZkNDU1MjVlOTBkMzJjIiwiYW5jaG9yVHgiOiIweDRhMzlmNDc5NzA3NmExOTIwNjY4YWNjODZjYjc1YjBmNTM0OWMyNWRmYWRmYmU2OTRlODMyMWI2ZWQ5NDYyMzMiLCJkZXBsb3ltZW50VHgiOiIweDdkNmFkOGYxOTBjYzNkN2YxZjA3YjRlNTIwY2MzZDVjNjExNGZkYmRhYzUzMjMzNzNjNGM1YWE5M2E1MDdmOWIiLCJsZWFmRW5jb2RpbmciOiJjcmVkZW50aWFsSUR8fGNvbXBvbmVudFR5cGV8fGNvbnRlbnQiLCJtZXJrbGVUcmVlU3BlYyI6eyJsZWFmSGFzaEFsZyI6InNoYTI1NiIsIm5vZGVIYXNoQWxnIjoia2VjY2FrMjU2Iiwic29ydFBhaXJzIjp0cnVlLCJzb3J0TGVhdmVzIjp0cnVlfSwiY29tcG9uZW50c1Byb29mcyI6W3sibmFtZSI6ImRpcGxvbWEiLCJtYW5kYXRvcnkiOnRydWUsImhhc2giOiIweDkxZmRiNGI4YmRmMmI5Mjg5NGVkMzliMWVhYjc2MTgwMWRjOTllMzhiM2UzZDIyNDE3ZGMzNWZmZTU3YTdhYzYiLCJwcm9vZiI6WyIweDIyMGFiZTM0NzIyMGNiYWMzODU1NGQ0MmI4ZDBhMWUyNGQyZWZmYjk1YTIyYmI5YTRlZmY4OGYyZmE2ZjkyMWYiLCIweGI5MzY3NmZhZWRmYjJhMzA1YWI5ODZjNmVjNmFhNjZkNDBjYzhiMTc2ZjgwNTA5NWMxZmE2Yzg2ZTIxYzIyYWUiLCIweGRkYjY2MjgzMjhiMGRiMDlkY2RmYTc0MmE2OWY2YThlOGNmMDcxMGVlZWFlNmY2MjM0NThkY2VlZTNhMmQ0OTciXX0seyJuYW1lIjoidHJhbnNjcmlwdCIsIm1hbmRhdG9yeSI6ZmFsc2UsImhhc2giOiIweDg2N2Q0NzU3MjZjNTRlMzFmZGYzMDY1YTQ2MmIzMGRkMGYwOTIxMDVmYTRmNTJjZTk3Mzc2NjQxNjgyNmFiMTUiLCJwcm9vZiI6WyIweGQ5YjI3OWY4NDM1ZTQwMzJkMGQ4M2M5MDg2OTg3NmYyYzRmZjEzMjYwODdlMzY0N2M2Mjk1MmU4MWFlZDE0ODgiLCIweGE1NjQxYzAyMjkyNzFkMTFlY2Y5ZjA3MjRkMzNlYTc5Njk0NWJiZDRhZDc3MzgxMjZhNzRkMjBlYzRkY2Y1OTgiLCIweDllMTE3NGE2ODM3NzRkMDllODEzNzQwMDE5MjkyMzFjNzg4ZTM3YTM0YWMyMzA2OTg3MDEwYTA5YjM4ZTVmNzgiXX1dfV0sIml1X21lcmtsZV9yZWNlaXB0Ijp7InR5cGUiOiJJVVNtYXJ0Q2VydE1lcmtsZVJlY2VpcHQiLCJjaGFpbklkIjoiZWlwMTU1OjExMTU1MTExIiwiY29udHJhY3RBZGRyZXNzIjoiMHhlRDFjZUVmNjJGODk2NDBlQzc1Y2ZDOTA0YjM2MDJhODlDZUQ2MzYxIiwibWVya2xlUm9vdCI6IjB4NGYyZjdiZTQ4ZDg3NmY2YmU5ZDkzMWFlYzA5MzdhOWRiY2E0Nzk0NTQ5OTlkZjMwMmQ2ZDQ1NTI1ZTkwZDMyYyIsImFuY2hvclR4IjoiMHg0YTM5ZjQ3OTcwNzZhMTkyMDY2OGFjYzg2Y2I3NWIwZjUzNDljMjVkZmFkZmJlNjk0ZTgzMjFiNmVkOTQ2MjMzIiwiZGVwbG95bWVudFR4IjoiMHg3ZDZhZDhmMTkwY2MzZDdmMWYwN2I0ZTUyMGNjM2Q1YzYxMTRmZGJkYWM1MzIzMzczYzRjNWFhOTNhNTA3ZjliIiwibGVhZkVuY29kaW5nIjoiY3JlZGVudGlhbElEfHxjb21wb25lbnRUeXBlfHxjb250ZW50IiwibWVya2xlVHJlZVNwZWMiOnsibGVhZkhhc2hBbGciOiJzaGEyNTYiLCJub2RlSGFzaEFsZyI6ImtlY2NhazI1NiIsInNvcnRQYWlycyI6dHJ1ZSwic29ydExlYXZlcyI6dHJ1ZX0sImNvbXBvbmVudHNQcm9vZnMiOlt7Im5hbWUiOiJkaXBsb21hIiwibWFuZGF0b3J5Ijp0cnVlLCJoYXNoIjoiMHg5MWZkYjRiOGJkZjJiOTI4OTRlZDM5YjFlYWI3NjE4MDFkYzk5ZTM4YjNlM2QyMjQxN2RjMzVmZmU1N2E3YWM2IiwicHJvb2YiOlsiMHgyMjBhYmUzNDcyMjBjYmFjMzg1NTRkNDJiOGQwYTFlMjRkMmVmZmI5NWEyMmJiOWE0ZWZmODhmMmZhNmY5MjFmIiwiMHhiOTM2NzZmYWVkZmIyYTMwNWFiOTg2YzZlYzZhYTY2ZDQwY2M4YjE3NmY4MDUwOTVjMWZhNmM4NmUyMWMyMmFlIiwiMHhkZGI2NjI4MzI4YjBkYjA5ZGNkZmE3NDJhNjlmNmE4ZThjZjA3MTBlZWVhZTZmNjIzNDU4ZGNlZWUzYTJkNDk3Il19LHsibmFtZSI6InRyYW5zY3JpcHQiLCJtYW5kYXRvcnkiOmZhbHNlLCJoYXNoIjoiMHg4NjdkNDc1NzI2YzU0ZTMxZmRmMzA2NWE0NjJiMzBkZDBmMDkyMTA1ZmE0ZjUyY2U5NzM3NjY0MTY4MjZhYjE1IiwicHJvb2YiOlsiMHhkOWIyNzlmODQzNWU0MDMyZDBkODNjOTA4Njk4NzZmMmM0ZmYxMzI2MDg3ZTM2NDdjNjI5NTJlODFhZWQxNDg4IiwiMHhhNTY0MWMwMjI5MjcxZDExZWNmOWYwNzI0ZDMzZWE3OTY5NDViYmQ0YWQ3NzM4MTI2YTc0ZDIwZWM0ZGNmNTk4IiwiMHg5ZTExNzRhNjgzNzc0ZDA5ZTgxMzc0MDAxOTI5MjMxYzc4OGUzN2EzNGFjMjMwNjk4NzAxMGEwOWIzOGU1Zjc4Il19XX19fQ.V7PMUnIpB4sxdVU5JlQuwmVMxmx8OqwFQ-4ViSP1RO3hPUPiK9F0KP7Sn7I6F4yUHgRVKRG3avXhlworfyDxZg"
+                                                ]
+                                            },
+                                            "aud": "http://host.docker.internal:7003/openid4vc/verify",
+                                            "iat": 1777263906,
+                                            "iss": "did:jwk:eyJrdHkiOiJFQyIsImNydiI6IlAtMjU2Iiwia2lkIjoiMDFhVlg1b2FtRkZpR0RSTW5SZlI5VWZaWUxDdzZoQ1lsTmhLbHU5bnp1ayIsIngiOiJhSTNzU3ZHNWlNSW1NR01OSDZkNS1wdXNfVTI5VUl6Ykt2UU5qdUdYWENzIiwieSI6ImNIOFdQUXFyWXQzd3Y3SjBkMTRMRDlFdzZScVBwckFreUFmVmp3ZUlFY1EifQ",
+                                            "jti": "P9XIzElSvxnQ",
+                                            "nbf": 1777263846,
+                                            "sub": "did:jwk:eyJrdHkiOiJFQyIsImNydiI6IlAtMjU2Iiwia2lkIjoiMDFhVlg1b2FtRkZpR0RSTW5SZlI5VWZaWUxDdzZoQ1lsTmhLbHU5bnp1ayIsIngiOiJhSTNzU3ZHNWlNSW1NR01OSDZkNS1wdXNfVTI5VUl6Ykt2UU5qdUdYWENzIiwieSI6ImNIOFdQUXFyWXQzd3Y3SjBkMTRMRDlFdzZScVBwckFreUFmVmp3ZUlFY1EifQ",
+                                            "nonce": "35db444a-2768-445d-b513-8038c7828b4b"
+                                        },
+                                        "is_success": true,
+                                        "description": "Checks a JWT credential by verifying its cryptographic signature using the key referenced by the DID in `iss`."
+                                    },
+                                    {
+                                        "policy": "presentation-definition",
+                                        "result": [
+                                            "IUSmartCertCredential"
+                                        ],
+                                        "is_success": true,
+                                        "description": "Verifies a Verifiable Presentation against a Presentation Definition, including relational constraints."
+                                    }
+                                ]
+                            },
+                            {
+                                "credential": "IUSmartCertCredential",
+                                "policyResults": [
+                                    {
+                                        "policy": "signature",
+                                        "result": {
+                                            "vc": {
+                                                "type": [
+                                                    "VerifiableCredential",
+                                                    "UniversityDegree",
+                                                    "EducationalOccupationalCredential",
+                                                    "VNEduDegreeCredential",
+                                                    "IUSmartCertCredential"
+                                                ],
+                                                "@context": [
+                                                    "https://www.w3.org/2018/credentials/v1"
+                                                ],
+                                                "evidence": [
+                                                    {
+                                                        "type": [
+                                                            "IUSmartCertMerkleReceipt"
+                                                        ],
+                                                        "chainId": "eip155:11155111",
+                                                        "anchorTx": "0x4a39f4797076a1920668acc86cb75b0f5349c25dfadfbe694e8321b6ed946233",
+                                                        "merkleRoot": "0x4f2f7be48d876f6be9d931aec0937a9dbca479454999df302d6d45525e90d32c",
+                                                        "deploymentTx": "0x7d6ad8f190cc3d7f1f07b4e520cc3d5c6114fdbdac5323373c4c5aa93a507f9b",
+                                                        "leafEncoding": "credentialID||componentType||content",
+                                                        "merkleTreeSpec": {
+                                                            "sortPairs": true,
+                                                            "sortLeaves": true,
+                                                            "leafHashAlg": "sha256",
+                                                            "nodeHashAlg": "keccak256"
+                                                        },
+                                                        "contractAddress": "0xeD1ceEf62F89640eC75cfC904b3602a89CeD6361",
+                                                        "componentsProofs": [
+                                                            {
+                                                                "hash": "0x91fdb4b8bdf2b92894ed39b1eab761801dc99e38b3e3d22417dc35ffe57a7ac6",
+                                                                "name": "diploma",
+                                                                "proof": [
+                                                                    "0x220abe347220cbac38554d42b8d0a1e24d2effb95a22bb9a4eff88f2fa6f921f",
+                                                                    "0xb93676faedfb2a305ab986c6ec6aa66d40cc8b176f805095c1fa6c86e21c22ae",
+                                                                    "0xddb6628328b0db09dcdfa742a69f6a8e8cf0710eeeae6f623458dceee3a2d497"
+                                                                ],
+                                                                "mandatory": true
+                                                            },
+                                                            {
+                                                                "hash": "0x867d475726c54e31fdf3065a462b30dd0f092105fa4f52ce973766416826ab15",
+                                                                "name": "transcript",
+                                                                "proof": [
+                                                                    "0xd9b279f8435e4032d0d83c90869876f2c4ff1326087e3647c62952e81aed1488",
+                                                                    "0xa5641c0229271d11ecf9f0724d33ea796945bbd4ad7738126a74d20ec4dcf598",
+                                                                    "0x9e1174a683774d09e81374001929231c788e37a34ac2306987010a09b38e5f78"
+                                                                ],
+                                                                "mandatory": false
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "credentialSubject": {
+                                                    "id": "did:example:student1",
+                                                    "degree": {
+                                                        "name": "BSc in Computer Science",
+                                                        "type": "BachelorDegree"
+                                                    },
+                                                    "iu:components": [
+                                                        {
+                                                            "name": "diploma",
+                                                            "mandatory": true,
+                                                            "componentHash": "0x91fdb4b8bdf2b92894ed39b1eab761801dc99e38b3e3d22417dc35ffe57a7ac6",
+                                                            "componentType": "degreeCertificate"
+                                                        },
+                                                        {
+                                                            "name": "transcript",
+                                                            "mandatory": false,
+                                                            "componentHash": "0x867d475726c54e31fdf3065a462b30dd0f092105fa4f52ce973766416826ab15",
+                                                            "componentType": "academicTranscript"
+                                                        }
+                                                    ]
+                                                },
+                                                "iu_merkle_receipt": {
+                                                    "type": "IUSmartCertMerkleReceipt",
+                                                    "chainId": "eip155:11155111",
+                                                    "anchorTx": "0x4a39f4797076a1920668acc86cb75b0f5349c25dfadfbe694e8321b6ed946233",
+                                                    "merkleRoot": "0x4f2f7be48d876f6be9d931aec0937a9dbca479454999df302d6d45525e90d32c",
+                                                    "deploymentTx": "0x7d6ad8f190cc3d7f1f07b4e520cc3d5c6114fdbdac5323373c4c5aa93a507f9b",
+                                                    "leafEncoding": "credentialID||componentType||content",
+                                                    "merkleTreeSpec": {
+                                                        "sortPairs": true,
+                                                        "sortLeaves": true,
+                                                        "leafHashAlg": "sha256",
+                                                        "nodeHashAlg": "keccak256"
+                                                    },
+                                                    "contractAddress": "0xeD1ceEf62F89640eC75cfC904b3602a89CeD6361",
+                                                    "componentsProofs": [
+                                                        {
+                                                            "hash": "0x91fdb4b8bdf2b92894ed39b1eab761801dc99e38b3e3d22417dc35ffe57a7ac6",
+                                                            "name": "diploma",
+                                                            "proof": [
+                                                                "0x220abe347220cbac38554d42b8d0a1e24d2effb95a22bb9a4eff88f2fa6f921f",
+                                                                "0xb93676faedfb2a305ab986c6ec6aa66d40cc8b176f805095c1fa6c86e21c22ae",
+                                                                "0xddb6628328b0db09dcdfa742a69f6a8e8cf0710eeeae6f623458dceee3a2d497"
+                                                            ],
+                                                            "mandatory": true
+                                                        },
+                                                        {
+                                                            "hash": "0x867d475726c54e31fdf3065a462b30dd0f092105fa4f52ce973766416826ab15",
+                                                            "name": "transcript",
+                                                            "proof": [
+                                                                "0xd9b279f8435e4032d0d83c90869876f2c4ff1326087e3647c62952e81aed1488",
+                                                                "0xa5641c0229271d11ecf9f0724d33ea796945bbd4ad7738126a74d20ec4dcf598",
+                                                                "0x9e1174a683774d09e81374001929231c788e37a34ac2306987010a09b38e5f78"
+                                                            ],
+                                                            "mandatory": false
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            "iat": 1777192616,
+                                            "iss": "did:web:infra-vc-registry-web-911368042037.asia-east2.run.app:issuers:principle",
+                                            "jti": "urn:uuid:example-degree-1",
+                                            "nbf": 1777192616,
+                                            "sub": "did:example:student1"
+                                        },
+                                        "is_success": true,
+                                        "description": "Checks a JWT credential by verifying its cryptographic signature using the key referenced by the DID in `iss`."
+                                    },
+                                    {
+                                        "args": "http://host.docker.internal:8787/api/verifier/policies/vc",
+                                        "error": {
+                                            "type": "WebhookPolicyException",
+                                            "response": {
+                                                "checks": {
+                                                    "chain": "passed",
+                                                    "merkle": "passed",
+                                                    "revocation": "revoked",
+                                                    "issuerTrust": "trusted"
+                                                },
+                                                "reason": "revoke test",
+                                                "decision": "reject"
+                                            }
+                                        },
+                                        "policy": "webhook",
+                                        "is_success": false,
+                                        "description": "Sends the credential data to an webhook URL as HTTP POST, and returns the verified status based on the webhooks set status code (success = 200 - 299)."
+                                    }
+                                ]
+                            }
+                        ],
+                        "policiesRun": 4
+                    },
+                    "tokenResponse": {
+                        "error": null,
+                        "scope": null,
+                        "state": "c9461e65-fd0a-460d-be84-54aabe8c3aea",
+                        "c_nonce": null,
+                        "id_token": null,
+                        "interval": null,
+                        "vp_token": "eyJraWQiOiJkaWQ6andrOmV5SnJkSGtpT2lKRlF5SXNJbU55ZGlJNklsQXRNalUySWl3aWEybGtJam9pTURGaFZsZzFiMkZ0UmtacFIwUlNUVzVTWmxJNVZXWmFXVXhEZHpab1ExbHNUbWhMYkhVNWJucDFheUlzSW5naU9pSmhTVE56VTNaSE5XbE5TVzFOUjAxT1NEWmtOUzF3ZFhOZlZUSTVWVWw2WWt0MlVVNXFkVWRZV0VOeklpd2llU0k2SW1OSU9GZFFVWEZ5V1hRemQzWTNTakJrTVRSTVJEbEZkelpTY1ZCd2NrRnJlVUZtVm1wM1pVbEZZMUVpZlEjMCIsInR5cCI6IkpXVCIsImFsZyI6IkVTMjU2In0.eyJzdWIiOiJkaWQ6andrOmV5SnJkSGtpT2lKRlF5SXNJbU55ZGlJNklsQXRNalUySWl3aWEybGtJam9pTURGaFZsZzFiMkZ0UmtacFIwUlNUVzVTWmxJNVZXWmFXVXhEZHpab1ExbHNUbWhMYkhVNWJucDFheUlzSW5naU9pSmhTVE56VTNaSE5XbE5TVzFOUjAxT1NEWmtOUzF3ZFhOZlZUSTVWVWw2WWt0MlVVNXFkVWRZV0VOeklpd2llU0k2SW1OSU9GZFFVWEZ5V1hRemQzWTNTakJrTVRSTVJEbEZkelpTY1ZCd2NrRnJlVUZtVm1wM1pVbEZZMUVpZlEiLCJuYmYiOjE3NzcyNjM4NDYsImlhdCI6MTc3NzI2MzkwNiwianRpIjoiUDlYSXpFbFN2eG5RIiwiaXNzIjoiZGlkOmp3azpleUpyZEhraU9pSkZReUlzSW1OeWRpSTZJbEF0TWpVMklpd2lhMmxrSWpvaU1ERmhWbGcxYjJGdFJrWnBSMFJTVFc1U1psSTVWV1phV1V4RGR6Wm9RMWxzVG1oTGJIVTVibnAxYXlJc0luZ2lPaUpoU1ROelUzWkhOV2xOU1cxTlIwMU9TRFprTlMxd2RYTmZWVEk1VlVsNllrdDJVVTVxZFVkWVdFTnpJaXdpZVNJNkltTklPRmRRVVhGeVdYUXpkM1kzU2pCa01UUk1SRGxGZHpaU2NWQndja0ZyZVVGbVZtcDNaVWxGWTFFaWZRIiwibm9uY2UiOiIzNWRiNDQ0YS0yNzY4LTQ0NWQtYjUxMy04MDM4Yzc4MjhiNGIiLCJhdWQiOiJodHRwOi8vaG9zdC5kb2NrZXIuaW50ZXJuYWw6NzAwMy9vcGVuaWQ0dmMvdmVyaWZ5IiwidnAiOnsiQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiXSwidHlwZSI6WyJWZXJpZmlhYmxlUHJlc2VudGF0aW9uIl0sImlkIjoiUDlYSXpFbFN2eG5RIiwiaG9sZGVyIjoiZGlkOmp3azpleUpyZEhraU9pSkZReUlzSW1OeWRpSTZJbEF0TWpVMklpd2lhMmxrSWpvaU1ERmhWbGcxYjJGdFJrWnBSMFJTVFc1U1psSTVWV1phV1V4RGR6Wm9RMWxzVG1oTGJIVTVibnAxYXlJc0luZ2lPaUpoU1ROelUzWkhOV2xOU1cxTlIwMU9TRFprTlMxd2RYTmZWVEk1VlVsNllrdDJVVTVxZFVkWVdFTnpJaXdpZVNJNkltTklPRmRRVVhGeVdYUXpkM1kzU2pCa01UUk1SRGxGZHpaU2NWQndja0ZyZVVGbVZtcDNaVWxGWTFFaWZRIiwidmVyaWZpYWJsZUNyZWRlbnRpYWwiOlsiZXlKaGJHY2lPaUpGVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0lzSW10cFpDSTZJbVJwWkRwM1pXSTZhVzVtY21FdGRtTXRjbVZuYVhOMGNua3RkMlZpTFRreE1UTTJPREEwTWpBek55NWhjMmxoTFdWaGMzUXlMbkoxYmk1aGNIQTZhWE56ZFdWeWN6cHdjbWx1WTJsd2JHVWphMlY1TFRFaWZRLmV5SnBjM01pT2lKa2FXUTZkMlZpT21sdVpuSmhMWFpqTFhKbFoybHpkSEo1TFhkbFlpMDVNVEV6Tmpnd05ESXdNemN1WVhOcFlTMWxZWE4wTWk1eWRXNHVZWEJ3T21semMzVmxjbk02Y0hKcGJtTnBjR3hsSWl3aWMzVmlJam9pWkdsa09tVjRZVzF3YkdVNmMzUjFaR1Z1ZERFaUxDSnBZWFFpT2pFM056Y3hPVEkyTVRZc0ltNWlaaUk2TVRjM056RTVNall4Tml3aWFuUnBJam9pZFhKdU9uVjFhV1E2WlhoaGJYQnNaUzFrWldkeVpXVXRNU0lzSW5aaklqcDdJa0JqYjI1MFpYaDBJanBiSW1oMGRIQnpPaTh2ZDNkM0xuY3pMbTl5Wnk4eU1ERTRMMk55WldSbGJuUnBZV3h6TDNZeElsMHNJblI1Y0dVaU9sc2lWbVZ5YVdacFlXSnNaVU55WldSbGJuUnBZV3dpTENKVmJtbDJaWEp6YVhSNVJHVm5jbVZsSWl3aVJXUjFZMkYwYVc5dVlXeFBZMk4xY0dGMGFXOXVZV3hEY21Wa1pXNTBhV0ZzSWl3aVZrNUZaSFZFWldkeVpXVkRjbVZrWlc1MGFXRnNJaXdpU1ZWVGJXRnlkRU5sY25SRGNtVmtaVzUwYVdGc0lsMHNJbU55WldSbGJuUnBZV3hUZFdKcVpXTjBJanA3SW1sa0lqb2laR2xrT21WNFlXMXdiR1U2YzNSMVpHVnVkREVpTENKa1pXZHlaV1VpT25zaWRIbHdaU0k2SWtKaFkyaGxiRzl5UkdWbmNtVmxJaXdpYm1GdFpTSTZJa0pUWXlCcGJpQkRiMjF3ZFhSbGNpQlRZMmxsYm1ObEluMHNJbWwxT21OdmJYQnZibVZ1ZEhNaU9sdDdJbTVoYldVaU9pSmthWEJzYjIxaElpd2liV0Z1WkdGMGIzSjVJanAwY25WbExDSmpiMjF3YjI1bGJuUlVlWEJsSWpvaVpHVm5jbVZsUTJWeWRHbG1hV05oZEdVaUxDSmpiMjF3YjI1bGJuUklZWE5vSWpvaU1IZzVNV1prWWpSaU9HSmtaakppT1RJNE9UUmxaRE01WWpGbFlXSTNOakU0TURGa1l6azVaVE00WWpObE0yUXlNalF4TjJSak16Vm1abVUxTjJFM1lXTTJJbjBzZXlKdVlXMWxJam9pZEhKaGJuTmpjbWx3ZENJc0ltMWhibVJoZEc5eWVTSTZabUZzYzJVc0ltTnZiWEJ2Ym1WdWRGUjVjR1VpT2lKaFkyRmtaVzFwWTFSeVlXNXpZM0pwY0hRaUxDSmpiMjF3YjI1bGJuUklZWE5vSWpvaU1IZzROamRrTkRjMU56STJZelUwWlRNeFptUm1NekEyTldFME5qSmlNekJrWkRCbU1Ea3lNVEExWm1FMFpqVXlZMlU1TnpNM05qWTBNVFk0TWpaaFlqRTFJbjFkZlN3aVpYWnBaR1Z1WTJVaU9sdDdJblI1Y0dVaU9sc2lTVlZUYldGeWRFTmxjblJOWlhKcmJHVlNaV05sYVhCMElsMHNJbU5vWVdsdVNXUWlPaUpsYVhBeE5UVTZNVEV4TlRVeE1URWlMQ0pqYjI1MGNtRmpkRUZrWkhKbGMzTWlPaUl3ZUdWRU1XTmxSV1kyTWtZNE9UWTBNR1ZETnpWalprTTVNRFJpTXpZd01tRTRPVU5sUkRZek5qRWlMQ0p0WlhKcmJHVlNiMjkwSWpvaU1IZzBaakptTjJKbE5EaGtPRGMyWmpaaVpUbGtPVE14WVdWak1Ea3pOMkU1WkdKallUUTNPVFExTkRrNU9XUm1NekF5WkRaa05EVTFNalZsT1RCa016SmpJaXdpWVc1amFHOXlWSGdpT2lJd2VEUmhNemxtTkRjNU56QTNObUV4T1RJd05qWTRZV05qT0RaallqYzFZakJtTlRNME9XTXlOV1JtWVdSbVltVTJPVFJsT0RNeU1XSTJaV1E1TkRZeU16TWlMQ0prWlhCc2IzbHRaVzUwVkhnaU9pSXdlRGRrTm1Ga09HWXhPVEJqWXpOa04yWXhaakEzWWpSbE5USXdZMk16WkRWak5qRXhOR1prWW1SaFl6VXpNak16TnpOak5HTTFZV0U1TTJFMU1EZG1PV0lpTENKc1pXRm1SVzVqYjJScGJtY2lPaUpqY21Wa1pXNTBhV0ZzU1VSOGZHTnZiWEJ2Ym1WdWRGUjVjR1Y4ZkdOdmJuUmxiblFpTENKdFpYSnJiR1ZVY21WbFUzQmxZeUk2ZXlKc1pXRm1TR0Z6YUVGc1p5STZJbk5vWVRJMU5pSXNJbTV2WkdWSVlYTm9RV3huSWpvaWEyVmpZMkZyTWpVMklpd2ljMjl5ZEZCaGFYSnpJanAwY25WbExDSnpiM0owVEdWaGRtVnpJanAwY25WbGZTd2lZMjl0Y0c5dVpXNTBjMUJ5YjI5bWN5STZXM3NpYm1GdFpTSTZJbVJwY0d4dmJXRWlMQ0p0WVc1a1lYUnZjbmtpT25SeWRXVXNJbWhoYzJnaU9pSXdlRGt4Wm1SaU5HSTRZbVJtTW1JNU1qZzVOR1ZrTXpsaU1XVmhZamMyTVRnd01XUmpPVGxsTXpoaU0yVXpaREl5TkRFM1pHTXpOV1ptWlRVM1lUZGhZellpTENKd2NtOXZaaUk2V3lJd2VESXlNR0ZpWlRNME56SXlNR05pWVdNek9EVTFOR1EwTW1JNFpEQmhNV1V5TkdReVpXWm1ZamsxWVRJeVltSTVZVFJsWm1ZNE9HWXlabUUyWmpreU1XWWlMQ0l3ZUdJNU16WTNObVpoWldSbVlqSmhNekExWVdJNU9EWmpObVZqTm1GaE5qWmtOREJqWXpoaU1UYzJaamd3TlRBNU5XTXhabUUyWXpnMlpUSXhZekl5WVdVaUxDSXdlR1JrWWpZMk1qZ3pNamhpTUdSaU1EbGtZMlJtWVRjME1tRTJPV1kyWVRobE9HTm1NRGN4TUdWbFpXRmxObVkyTWpNME5UaGtZMlZsWlROaE1tUTBPVGNpWFgwc2V5SnVZVzFsSWpvaWRISmhibk5qY21sd2RDSXNJbTFoYm1SaGRHOXllU0k2Wm1Gc2MyVXNJbWhoYzJnaU9pSXdlRGcyTjJRME56VTNNalpqTlRSbE16Rm1aR1l6TURZMVlUUTJNbUl6TUdSa01HWXdPVEl4TURWbVlUUm1OVEpqWlRrM016YzJOalF4TmpneU5tRmlNVFVpTENKd2NtOXZaaUk2V3lJd2VHUTVZakkzT1dZNE5ETTFaVFF3TXpKa01HUTRNMk01TURnMk9UZzNObVl5WXpSbVpqRXpNall3T0RkbE16WTBOMk0yTWprMU1tVTRNV0ZsWkRFME9EZ2lMQ0l3ZUdFMU5qUXhZekF5TWpreU56RmtNVEZsWTJZNVpqQTNNalJrTXpObFlUYzVOamswTldKaVpEUmhaRGMzTXpneE1qWmhOelJrTWpCbFl6UmtZMlkxT1RnaUxDSXdlRGxsTVRFM05HRTJPRE0zTnpSa01EbGxPREV6TnpRd01ERTVNamt5TXpGak56ZzRaVE0zWVRNMFlXTXlNekEyT1RnM01ERXdZVEE1WWpNNFpUVm1OemdpWFgxZGZWMHNJbWwxWDIxbGNtdHNaVjl5WldObGFYQjBJanA3SW5SNWNHVWlPaUpKVlZOdFlYSjBRMlZ5ZEUxbGNtdHNaVkpsWTJWcGNIUWlMQ0pqYUdGcGJrbGtJam9pWldsd01UVTFPakV4TVRVMU1URXhJaXdpWTI5dWRISmhZM1JCWkdSeVpYTnpJam9pTUhobFJERmpaVVZtTmpKR09EazJOREJsUXpjMVkyWkRPVEEwWWpNMk1ESmhPRGxEWlVRMk16WXhJaXdpYldWeWEyeGxVbTl2ZENJNklqQjROR1l5WmpkaVpUUTRaRGczTm1ZMlltVTVaRGt6TVdGbFl6QTVNemRoT1dSaVkyRTBOemswTlRRNU9UbGtaak13TW1RMlpEUTFOVEkxWlRrd1pETXlZeUlzSW1GdVkyaHZjbFI0SWpvaU1IZzBZVE01WmpRM09UY3dOelpoTVRreU1EWTJPR0ZqWXpnMlkySTNOV0l3WmpVek5EbGpNalZrWm1Ga1ptSmxOamswWlRnek1qRmlObVZrT1RRMk1qTXpJaXdpWkdWd2JHOTViV1Z1ZEZSNElqb2lNSGczWkRaaFpEaG1NVGt3WTJNelpEZG1NV1l3TjJJMFpUVXlNR05qTTJRMVl6WXhNVFJtWkdKa1lXTTFNekl6TXpjell6UmpOV0ZoT1ROaE5UQTNaamxpSWl3aWJHVmhaa1Z1WTI5a2FXNW5Jam9pWTNKbFpHVnVkR2xoYkVsRWZIeGpiMjF3YjI1bGJuUlVlWEJsZkh4amIyNTBaVzUwSWl3aWJXVnlhMnhsVkhKbFpWTndaV01pT25zaWJHVmhaa2hoYzJoQmJHY2lPaUp6YUdFeU5UWWlMQ0p1YjJSbFNHRnphRUZzWnlJNkltdGxZMk5oYXpJMU5pSXNJbk52Y25SUVlXbHljeUk2ZEhKMVpTd2ljMjl5ZEV4bFlYWmxjeUk2ZEhKMVpYMHNJbU52YlhCdmJtVnVkSE5RY205dlpuTWlPbHQ3SW01aGJXVWlPaUprYVhCc2IyMWhJaXdpYldGdVpHRjBiM0o1SWpwMGNuVmxMQ0pvWVhOb0lqb2lNSGc1TVdaa1lqUmlPR0prWmpKaU9USTRPVFJsWkRNNVlqRmxZV0kzTmpFNE1ERmtZems1WlRNNFlqTmxNMlF5TWpReE4yUmpNelZtWm1VMU4yRTNZV00ySWl3aWNISnZiMllpT2xzaU1IZ3lNakJoWW1Vek5EY3lNakJqWW1Gak16ZzFOVFJrTkRKaU9HUXdZVEZsTWpSa01tVm1abUk1TldFeU1tSmlPV0UwWldabU9EaG1NbVpoTm1ZNU1qRm1JaXdpTUhoaU9UTTJOelptWVdWa1ptSXlZVE13TldGaU9UZzJZelpsWXpaaFlUWTJaRFF3WTJNNFlqRTNObVk0TURVd09UVmpNV1poTm1NNE5tVXlNV015TW1GbElpd2lNSGhrWkdJMk5qSTRNekk0WWpCa1lqQTVaR05rWm1FM05ESmhOamxtTm1FNFpUaGpaakEzTVRCbFpXVmhaVFptTmpJek5EVTRaR05sWldVellUSmtORGszSWwxOUxIc2libUZ0WlNJNkluUnlZVzV6WTNKcGNIUWlMQ0p0WVc1a1lYUnZjbmtpT21aaGJITmxMQ0pvWVhOb0lqb2lNSGc0Tmpka05EYzFOekkyWXpVMFpUTXhabVJtTXpBMk5XRTBOakppTXpCa1pEQm1NRGt5TVRBMVptRTBaalV5WTJVNU56TTNOalkwTVRZNE1qWmhZakUxSWl3aWNISnZiMllpT2xzaU1IaGtPV0l5TnpsbU9EUXpOV1UwTURNeVpEQmtPRE5qT1RBNE5qazROelptTW1NMFptWXhNekkyTURnM1pUTTJORGRqTmpJNU5USmxPREZoWldReE5EZzRJaXdpTUhoaE5UWTBNV013TWpJNU1qY3haREV4WldObU9XWXdOekkwWkRNelpXRTNPVFk1TkRWaVltUTBZV1EzTnpNNE1USTJZVGMwWkRJd1pXTTBaR05tTlRrNElpd2lNSGc1WlRFeE56UmhOamd6TnpjMFpEQTVaVGd4TXpjME1EQXhPVEk1TWpNeFl6YzRPR1V6TjJFek5HRmpNak13TmprNE56QXhNR0V3T1dJek9HVTFaamM0SWwxOVhYMTlmUS5WN1BNVW5JcEI0c3hkVlU1SmxRdXdtVk14bXg4T3F3RlEtNFZpU1AxUk8zaFBVUGlLOUYwS1A3U243STZGNHlVSGdSVktSRzNhdlhobHdvcmZ5RHhaZyJdfX0.uYHIbQH8JTnTjkGGx2waYFIH1RGmxthT7xSLndOuiUMriIRX8tQYJcMfnHjvor4W5_nPJ5AxfKsbZCHE4RhzWg",
+                        "error_uri": null,
+                        "expires_in": null,
+                        "token_type": null,
+                        "access_token": null,
+                        "refresh_token": null,
+                        "error_description": null,
+                        "c_nonce_expires_in": null,
+                        "authorization_pending": null,
+                        "presentation_submission": {
+                            "id": "P9XIzElSvxnQ",
+                            "definition_id": "P9XIzElSvxnQ",
+                            "descriptor_map": [
+                                {
+                                    "id": "UniversityDegree",
+                                    "path": "$",
+                                    "format": "jwt_vp",
+                                    "path_nested": {
+                                        "id": null,
+                                        "path": "$.vp.verifiableCredential[0]",
+                                        "format": "jwt_vc",
+                                        "path_nested": null
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "verificationResult": false,
+                    "presentationDefinition": {
+                        "id": "P9XIzElSvxnQ",
+                        "name": null,
+                        "format": null,
+                        "purpose": null,
+                        "input_descriptors": [
+                            {
+                                "id": "UniversityDegree",
+                                "name": null,
+                                "group": null,
+                                "format": {
+                                    "jwt_vc_json": {
+                                        "alg": [
+                                            "EdDSA"
+                                        ],
+                                        "proof_type": null
+                                    }
+                                },
+                                "schema": null,
+                                "purpose": null,
+                                "constraints": {
+                                    "fields": [
+                                        {
+                                            "id": null,
+                                            "name": null,
+                                            "path": [
+                                                "$.vc.type"
+                                            ],
+                                            "filter": {
+                                                "type": "array",
+                                                "contains": {
+                                                    "const": "UniversityDegree"
+                                                }
+                                            },
+                                            "purpose": null,
+                                            "optional": null,
+                                            "intent_to_retain": null
+                                        }
+                                    ],
+                                    "limit_disclosure": "required"
+                                }
+                            }
+                        ],
+                        "submission_requirements": null
+                    }
+                },
+                "created_at": "2026-04-27T04:25:08.024634+00:00",
+                "event_type": "SESSION_FAILED",
+                "verification_request_id": "c9461e65-fd0a-460d-be84-54aabe8c3aea"
+            }
+        ],
+        "request": {
+            "id": "c9461e65-fd0a-460d-be84-54aabe8c3aea",
+            "status": "FAILED",
+            "provider": "walt",
+            "verified": false,
+            "created_at": "2026-04-27T04:24:53.143667+00:00",
+            "updated_at": "2026-04-27T04:25:08.023329+00:00",
+            "reason_code": "POLICY_WEBHOOK_FAILED",
+            "business_ref": "chapter-5-demo-revoke-result",
+            "candidate_ref": "student-demo-001"
+        },
+        "session": {
+            "id": "c08e73a6-001a-44aa-a410-2d9e90c6da62",
+            "provider": "walt",
+            "deep_link": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=c9461e65-fd0a-460d-be84-54aabe8c3aea&presentation_definition_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fpd%2Fc9461e65-fd0a-460d-be84-54aabe8c3aea&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=35db444a-2768-445d-b513-8038c7828b4b&response_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify%2Fc9461e65-fd0a-460d-be84-54aabe8c3aea",
+            "offer_url": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=c9461e65-fd0a-460d-be84-54aabe8c3aea&presentation_definition_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fpd%2Fc9461e65-fd0a-460d-be84-54aabe8c3aea&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=35db444a-2768-445d-b513-8038c7828b4b&response_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify%2Fc9461e65-fd0a-460d-be84-54aabe8c3aea",
+            "created_at": "2026-04-27T04:24:53.191514+00:00",
+            "expires_at": null,
+            "qr_code_url": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=c9461e65-fd0a-460d-be84-54aabe8c3aea&presentation_definition_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fpd%2Fc9461e65-fd0a-460d-be84-54aabe8c3aea&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=35db444a-2768-445d-b513-8038c7828b4b&response_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify%2Fc9461e65-fd0a-460d-be84-54aabe8c3aea",
+            "provider_session_id": "c9461e65-fd0a-460d-be84-54aabe8c3aea",
+            "raw_create_response": {
+                "presentationUrl": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=c9461e65-fd0a-460d-be84-54aabe8c3aea&presentation_definition_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fpd%2Fc9461e65-fd0a-460d-be84-54aabe8c3aea&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=35db444a-2768-445d-b513-8038c7828b4b&response_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify%2Fc9461e65-fd0a-460d-be84-54aabe8c3aea"
+            },
+            "verification_request_id": "c9461e65-fd0a-460d-be84-54aabe8c3aea"
+        }
+    },
+    {
+        "events": [
+            {
+                "id": "09e7e188-f040-4d85-aa48-048d76f53449",
+                "source": "walt_callback",
+                "payload": {
+                    "id": "8a77aa58-2a85-4c49-93be-e6df9c455770",
+                    "policyResults": {
+                        "time": "PT2.049663043S",
+                        "results": [
+                            {
+                                "credential": "VerifiablePresentation",
+                                "policyResults": [
+                                    {
+                                        "policy": "signature",
+                                        "result": {
+                                            "vp": {
+                                                "id": "D2GotxcK0HU7",
+                                                "type": [
+                                                    "VerifiablePresentation"
+                                                ],
+                                                "holder": "did:jwk:eyJrdHkiOiJFQyIsImNydiI6IlAtMjU2Iiwia2lkIjoiMDFhVlg1b2FtRkZpR0RSTW5SZlI5VWZaWUxDdzZoQ1lsTmhLbHU5bnp1ayIsIngiOiJhSTNzU3ZHNWlNSW1NR01OSDZkNS1wdXNfVTI5VUl6Ykt2UU5qdUdYWENzIiwieSI6ImNIOFdQUXFyWXQzd3Y3SjBkMTRMRDlFdzZScVBwckFreUFmVmp3ZUlFY1EifQ",
+                                                "@context": [
+                                                    "https://www.w3.org/2018/credentials/v1"
+                                                ],
+                                                "verifiableCredential": [
+                                                    "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImRpZDp3ZWI6aW5mcmEtdmMtcmVnaXN0cnktd2ViLTkxMTM2ODA0MjAzNy5hc2lhLWVhc3QyLnJ1bi5hcHA6aXNzdWVyczpwcmluY2lwbGUja2V5LTEifQ.eyJpc3MiOiJkaWQ6d2ViOmluZnJhLXZjLXJlZ2lzdHJ5LXdlYi05MTEzNjgwNDIwMzcuYXNpYS1lYXN0Mi5ydW4uYXBwOmlzc3VlcnM6cHJpbmNpcGxlIiwic3ViIjoiZGlkOmV4YW1wbGU6c3R1ZGVudDEiLCJpYXQiOjE3NzcxOTI2MTYsIm5iZiI6MTc3NzE5MjYxNiwianRpIjoidXJuOnV1aWQ6ZXhhbXBsZS1kZWdyZWUtMSIsInZjIjp7IkBjb250ZXh0IjpbImh0dHBzOi8vd3d3LnczLm9yZy8yMDE4L2NyZWRlbnRpYWxzL3YxIl0sInR5cGUiOlsiVmVyaWZpYWJsZUNyZWRlbnRpYWwiLCJVbml2ZXJzaXR5RGVncmVlIiwiRWR1Y2F0aW9uYWxPY2N1cGF0aW9uYWxDcmVkZW50aWFsIiwiVk5FZHVEZWdyZWVDcmVkZW50aWFsIiwiSVVTbWFydENlcnRDcmVkZW50aWFsIl0sImNyZWRlbnRpYWxTdWJqZWN0Ijp7ImlkIjoiZGlkOmV4YW1wbGU6c3R1ZGVudDEiLCJkZWdyZWUiOnsidHlwZSI6IkJhY2hlbG9yRGVncmVlIiwibmFtZSI6IkJTYyBpbiBDb21wdXRlciBTY2llbmNlIn0sIml1OmNvbXBvbmVudHMiOlt7Im5hbWUiOiJkaXBsb21hIiwibWFuZGF0b3J5Ijp0cnVlLCJjb21wb25lbnRUeXBlIjoiZGVncmVlQ2VydGlmaWNhdGUiLCJjb21wb25lbnRIYXNoIjoiMHg5MWZkYjRiOGJkZjJiOTI4OTRlZDM5YjFlYWI3NjE4MDFkYzk5ZTM4YjNlM2QyMjQxN2RjMzVmZmU1N2E3YWM2In0seyJuYW1lIjoidHJhbnNjcmlwdCIsIm1hbmRhdG9yeSI6ZmFsc2UsImNvbXBvbmVudFR5cGUiOiJhY2FkZW1pY1RyYW5zY3JpcHQiLCJjb21wb25lbnRIYXNoIjoiMHg4NjdkNDc1NzI2YzU0ZTMxZmRmMzA2NWE0NjJiMzBkZDBmMDkyMTA1ZmE0ZjUyY2U5NzM3NjY0MTY4MjZhYjE1In1dfSwiZXZpZGVuY2UiOlt7InR5cGUiOlsiSVVTbWFydENlcnRNZXJrbGVSZWNlaXB0Il0sImNoYWluSWQiOiJlaXAxNTU6MTExNTUxMTEiLCJjb250cmFjdEFkZHJlc3MiOiIweGVEMWNlRWY2MkY4OTY0MGVDNzVjZkM5MDRiMzYwMmE4OUNlRDYzNjEiLCJtZXJrbGVSb290IjoiMHg0ZjJmN2JlNDhkODc2ZjZiZTlkOTMxYWVjMDkzN2E5ZGJjYTQ3OTQ1NDk5OWRmMzAyZDZkNDU1MjVlOTBkMzJjIiwiYW5jaG9yVHgiOiIweDRhMzlmNDc5NzA3NmExOTIwNjY4YWNjODZjYjc1YjBmNTM0OWMyNWRmYWRmYmU2OTRlODMyMWI2ZWQ5NDYyMzMiLCJkZXBsb3ltZW50VHgiOiIweDdkNmFkOGYxOTBjYzNkN2YxZjA3YjRlNTIwY2MzZDVjNjExNGZkYmRhYzUzMjMzNzNjNGM1YWE5M2E1MDdmOWIiLCJsZWFmRW5jb2RpbmciOiJjcmVkZW50aWFsSUR8fGNvbXBvbmVudFR5cGV8fGNvbnRlbnQiLCJtZXJrbGVUcmVlU3BlYyI6eyJsZWFmSGFzaEFsZyI6InNoYTI1NiIsIm5vZGVIYXNoQWxnIjoia2VjY2FrMjU2Iiwic29ydFBhaXJzIjp0cnVlLCJzb3J0TGVhdmVzIjp0cnVlfSwiY29tcG9uZW50c1Byb29mcyI6W3sibmFtZSI6ImRpcGxvbWEiLCJtYW5kYXRvcnkiOnRydWUsImhhc2giOiIweDkxZmRiNGI4YmRmMmI5Mjg5NGVkMzliMWVhYjc2MTgwMWRjOTllMzhiM2UzZDIyNDE3ZGMzNWZmZTU3YTdhYzYiLCJwcm9vZiI6WyIweDIyMGFiZTM0NzIyMGNiYWMzODU1NGQ0MmI4ZDBhMWUyNGQyZWZmYjk1YTIyYmI5YTRlZmY4OGYyZmE2ZjkyMWYiLCIweGI5MzY3NmZhZWRmYjJhMzA1YWI5ODZjNmVjNmFhNjZkNDBjYzhiMTc2ZjgwNTA5NWMxZmE2Yzg2ZTIxYzIyYWUiLCIweGRkYjY2MjgzMjhiMGRiMDlkY2RmYTc0MmE2OWY2YThlOGNmMDcxMGVlZWFlNmY2MjM0NThkY2VlZTNhMmQ0OTciXX0seyJuYW1lIjoidHJhbnNjcmlwdCIsIm1hbmRhdG9yeSI6ZmFsc2UsImhhc2giOiIweDg2N2Q0NzU3MjZjNTRlMzFmZGYzMDY1YTQ2MmIzMGRkMGYwOTIxMDVmYTRmNTJjZTk3Mzc2NjQxNjgyNmFiMTUiLCJwcm9vZiI6WyIweGQ5YjI3OWY4NDM1ZTQwMzJkMGQ4M2M5MDg2OTg3NmYyYzRmZjEzMjYwODdlMzY0N2M2Mjk1MmU4MWFlZDE0ODgiLCIweGE1NjQxYzAyMjkyNzFkMTFlY2Y5ZjA3MjRkMzNlYTc5Njk0NWJiZDRhZDc3MzgxMjZhNzRkMjBlYzRkY2Y1OTgiLCIweDllMTE3NGE2ODM3NzRkMDllODEzNzQwMDE5MjkyMzFjNzg4ZTM3YTM0YWMyMzA2OTg3MDEwYTA5YjM4ZTVmNzgiXX1dfV0sIml1X21lcmtsZV9yZWNlaXB0Ijp7InR5cGUiOiJJVVNtYXJ0Q2VydE1lcmtsZVJlY2VpcHQiLCJjaGFpbklkIjoiZWlwMTU1OjExMTU1MTExIiwiY29udHJhY3RBZGRyZXNzIjoiMHhlRDFjZUVmNjJGODk2NDBlQzc1Y2ZDOTA0YjM2MDJhODlDZUQ2MzYxIiwibWVya2xlUm9vdCI6IjB4NGYyZjdiZTQ4ZDg3NmY2YmU5ZDkzMWFlYzA5MzdhOWRiY2E0Nzk0NTQ5OTlkZjMwMmQ2ZDQ1NTI1ZTkwZDMyYyIsImFuY2hvclR4IjoiMHg0YTM5ZjQ3OTcwNzZhMTkyMDY2OGFjYzg2Y2I3NWIwZjUzNDljMjVkZmFkZmJlNjk0ZTgzMjFiNmVkOTQ2MjMzIiwiZGVwbG95bWVudFR4IjoiMHg3ZDZhZDhmMTkwY2MzZDdmMWYwN2I0ZTUyMGNjM2Q1YzYxMTRmZGJkYWM1MzIzMzczYzRjNWFhOTNhNTA3ZjliIiwibGVhZkVuY29kaW5nIjoiY3JlZGVudGlhbElEfHxjb21wb25lbnRUeXBlfHxjb250ZW50IiwibWVya2xlVHJlZVNwZWMiOnsibGVhZkhhc2hBbGciOiJzaGEyNTYiLCJub2RlSGFzaEFsZyI6ImtlY2NhazI1NiIsInNvcnRQYWlycyI6dHJ1ZSwic29ydExlYXZlcyI6dHJ1ZX0sImNvbXBvbmVudHNQcm9vZnMiOlt7Im5hbWUiOiJkaXBsb21hIiwibWFuZGF0b3J5Ijp0cnVlLCJoYXNoIjoiMHg5MWZkYjRiOGJkZjJiOTI4OTRlZDM5YjFlYWI3NjE4MDFkYzk5ZTM4YjNlM2QyMjQxN2RjMzVmZmU1N2E3YWM2IiwicHJvb2YiOlsiMHgyMjBhYmUzNDcyMjBjYmFjMzg1NTRkNDJiOGQwYTFlMjRkMmVmZmI5NWEyMmJiOWE0ZWZmODhmMmZhNmY5MjFmIiwiMHhiOTM2NzZmYWVkZmIyYTMwNWFiOTg2YzZlYzZhYTY2ZDQwY2M4YjE3NmY4MDUwOTVjMWZhNmM4NmUyMWMyMmFlIiwiMHhkZGI2NjI4MzI4YjBkYjA5ZGNkZmE3NDJhNjlmNmE4ZThjZjA3MTBlZWVhZTZmNjIzNDU4ZGNlZWUzYTJkNDk3Il19LHsibmFtZSI6InRyYW5zY3JpcHQiLCJtYW5kYXRvcnkiOmZhbHNlLCJoYXNoIjoiMHg4NjdkNDc1NzI2YzU0ZTMxZmRmMzA2NWE0NjJiMzBkZDBmMDkyMTA1ZmE0ZjUyY2U5NzM3NjY0MTY4MjZhYjE1IiwicHJvb2YiOlsiMHhkOWIyNzlmODQzNWU0MDMyZDBkODNjOTA4Njk4NzZmMmM0ZmYxMzI2MDg3ZTM2NDdjNjI5NTJlODFhZWQxNDg4IiwiMHhhNTY0MWMwMjI5MjcxZDExZWNmOWYwNzI0ZDMzZWE3OTY5NDViYmQ0YWQ3NzM4MTI2YTc0ZDIwZWM0ZGNmNTk4IiwiMHg5ZTExNzRhNjgzNzc0ZDA5ZTgxMzc0MDAxOTI5MjMxYzc4OGUzN2EzNGFjMjMwNjk4NzAxMGEwOWIzOGU1Zjc4Il19XX19fQ.V7PMUnIpB4sxdVU5JlQuwmVMxmx8OqwFQ-4ViSP1RO3hPUPiK9F0KP7Sn7I6F4yUHgRVKRG3avXhlworfyDxZg"
+                                                ]
+                                            },
+                                            "aud": "http://host.docker.internal:7003/openid4vc/verify",
+                                            "iat": 1777258960,
+                                            "iss": "did:jwk:eyJrdHkiOiJFQyIsImNydiI6IlAtMjU2Iiwia2lkIjoiMDFhVlg1b2FtRkZpR0RSTW5SZlI5VWZaWUxDdzZoQ1lsTmhLbHU5bnp1ayIsIngiOiJhSTNzU3ZHNWlNSW1NR01OSDZkNS1wdXNfVTI5VUl6Ykt2UU5qdUdYWENzIiwieSI6ImNIOFdQUXFyWXQzd3Y3SjBkMTRMRDlFdzZScVBwckFreUFmVmp3ZUlFY1EifQ",
+                                            "jti": "D2GotxcK0HU7",
+                                            "nbf": 1777258900,
+                                            "sub": "did:jwk:eyJrdHkiOiJFQyIsImNydiI6IlAtMjU2Iiwia2lkIjoiMDFhVlg1b2FtRkZpR0RSTW5SZlI5VWZaWUxDdzZoQ1lsTmhLbHU5bnp1ayIsIngiOiJhSTNzU3ZHNWlNSW1NR01OSDZkNS1wdXNfVTI5VUl6Ykt2UU5qdUdYWENzIiwieSI6ImNIOFdQUXFyWXQzd3Y3SjBkMTRMRDlFdzZScVBwckFreUFmVmp3ZUlFY1EifQ",
+                                            "nonce": "86b639dc-698b-48fb-aa97-2a66942241af"
+                                        },
+                                        "is_success": true,
+                                        "description": "Checks a JWT credential by verifying its cryptographic signature using the key referenced by the DID in `iss`."
+                                    },
+                                    {
+                                        "policy": "presentation-definition",
+                                        "result": [
+                                            "IUSmartCertCredential"
+                                        ],
+                                        "is_success": true,
+                                        "description": "Verifies a Verifiable Presentation against a Presentation Definition, including relational constraints."
+                                    }
+                                ]
+                            },
+                            {
+                                "credential": "IUSmartCertCredential",
+                                "policyResults": [
+                                    {
+                                        "policy": "signature",
+                                        "result": {
+                                            "vc": {
+                                                "type": [
+                                                    "VerifiableCredential",
+                                                    "UniversityDegree",
+                                                    "EducationalOccupationalCredential",
+                                                    "VNEduDegreeCredential",
+                                                    "IUSmartCertCredential"
+                                                ],
+                                                "@context": [
+                                                    "https://www.w3.org/2018/credentials/v1"
+                                                ],
+                                                "evidence": [
+                                                    {
+                                                        "type": [
+                                                            "IUSmartCertMerkleReceipt"
+                                                        ],
+                                                        "chainId": "eip155:11155111",
+                                                        "anchorTx": "0x4a39f4797076a1920668acc86cb75b0f5349c25dfadfbe694e8321b6ed946233",
+                                                        "merkleRoot": "0x4f2f7be48d876f6be9d931aec0937a9dbca479454999df302d6d45525e90d32c",
+                                                        "deploymentTx": "0x7d6ad8f190cc3d7f1f07b4e520cc3d5c6114fdbdac5323373c4c5aa93a507f9b",
+                                                        "leafEncoding": "credentialID||componentType||content",
+                                                        "merkleTreeSpec": {
+                                                            "sortPairs": true,
+                                                            "sortLeaves": true,
+                                                            "leafHashAlg": "sha256",
+                                                            "nodeHashAlg": "keccak256"
+                                                        },
+                                                        "contractAddress": "0xeD1ceEf62F89640eC75cfC904b3602a89CeD6361",
+                                                        "componentsProofs": [
+                                                            {
+                                                                "hash": "0x91fdb4b8bdf2b92894ed39b1eab761801dc99e38b3e3d22417dc35ffe57a7ac6",
+                                                                "name": "diploma",
+                                                                "proof": [
+                                                                    "0x220abe347220cbac38554d42b8d0a1e24d2effb95a22bb9a4eff88f2fa6f921f",
+                                                                    "0xb93676faedfb2a305ab986c6ec6aa66d40cc8b176f805095c1fa6c86e21c22ae",
+                                                                    "0xddb6628328b0db09dcdfa742a69f6a8e8cf0710eeeae6f623458dceee3a2d497"
+                                                                ],
+                                                                "mandatory": true
+                                                            },
+                                                            {
+                                                                "hash": "0x867d475726c54e31fdf3065a462b30dd0f092105fa4f52ce973766416826ab15",
+                                                                "name": "transcript",
+                                                                "proof": [
+                                                                    "0xd9b279f8435e4032d0d83c90869876f2c4ff1326087e3647c62952e81aed1488",
+                                                                    "0xa5641c0229271d11ecf9f0724d33ea796945bbd4ad7738126a74d20ec4dcf598",
+                                                                    "0x9e1174a683774d09e81374001929231c788e37a34ac2306987010a09b38e5f78"
+                                                                ],
+                                                                "mandatory": false
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "credentialSubject": {
+                                                    "id": "did:example:student1",
+                                                    "degree": {
+                                                        "name": "BSc in Computer Science",
+                                                        "type": "BachelorDegree"
+                                                    },
+                                                    "iu:components": [
+                                                        {
+                                                            "name": "diploma",
+                                                            "mandatory": true,
+                                                            "componentHash": "0x91fdb4b8bdf2b92894ed39b1eab761801dc99e38b3e3d22417dc35ffe57a7ac6",
+                                                            "componentType": "degreeCertificate"
+                                                        },
+                                                        {
+                                                            "name": "transcript",
+                                                            "mandatory": false,
+                                                            "componentHash": "0x867d475726c54e31fdf3065a462b30dd0f092105fa4f52ce973766416826ab15",
+                                                            "componentType": "academicTranscript"
+                                                        }
+                                                    ]
+                                                },
+                                                "iu_merkle_receipt": {
+                                                    "type": "IUSmartCertMerkleReceipt",
+                                                    "chainId": "eip155:11155111",
+                                                    "anchorTx": "0x4a39f4797076a1920668acc86cb75b0f5349c25dfadfbe694e8321b6ed946233",
+                                                    "merkleRoot": "0x4f2f7be48d876f6be9d931aec0937a9dbca479454999df302d6d45525e90d32c",
+                                                    "deploymentTx": "0x7d6ad8f190cc3d7f1f07b4e520cc3d5c6114fdbdac5323373c4c5aa93a507f9b",
+                                                    "leafEncoding": "credentialID||componentType||content",
+                                                    "merkleTreeSpec": {
+                                                        "sortPairs": true,
+                                                        "sortLeaves": true,
+                                                        "leafHashAlg": "sha256",
+                                                        "nodeHashAlg": "keccak256"
+                                                    },
+                                                    "contractAddress": "0xeD1ceEf62F89640eC75cfC904b3602a89CeD6361",
+                                                    "componentsProofs": [
+                                                        {
+                                                            "hash": "0x91fdb4b8bdf2b92894ed39b1eab761801dc99e38b3e3d22417dc35ffe57a7ac6",
+                                                            "name": "diploma",
+                                                            "proof": [
+                                                                "0x220abe347220cbac38554d42b8d0a1e24d2effb95a22bb9a4eff88f2fa6f921f",
+                                                                "0xb93676faedfb2a305ab986c6ec6aa66d40cc8b176f805095c1fa6c86e21c22ae",
+                                                                "0xddb6628328b0db09dcdfa742a69f6a8e8cf0710eeeae6f623458dceee3a2d497"
+                                                            ],
+                                                            "mandatory": true
+                                                        },
+                                                        {
+                                                            "hash": "0x867d475726c54e31fdf3065a462b30dd0f092105fa4f52ce973766416826ab15",
+                                                            "name": "transcript",
+                                                            "proof": [
+                                                                "0xd9b279f8435e4032d0d83c90869876f2c4ff1326087e3647c62952e81aed1488",
+                                                                "0xa5641c0229271d11ecf9f0724d33ea796945bbd4ad7738126a74d20ec4dcf598",
+                                                                "0x9e1174a683774d09e81374001929231c788e37a34ac2306987010a09b38e5f78"
+                                                            ],
+                                                            "mandatory": false
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            "iat": 1777192616,
+                                            "iss": "did:web:infra-vc-registry-web-911368042037.asia-east2.run.app:issuers:principle",
+                                            "jti": "urn:uuid:example-degree-1",
+                                            "nbf": 1777192616,
+                                            "sub": "did:example:student1"
+                                        },
+                                        "is_success": true,
+                                        "description": "Checks a JWT credential by verifying its cryptographic signature using the key referenced by the DID in `iss`."
+                                    },
+                                    {
+                                        "args": "http://host.docker.internal:8787/api/verifier/policies/vc",
+                                        "policy": "webhook",
+                                        "result": {
+                                            "checks": {
+                                                "chain": "passed",
+                                                "merkle": "passed",
+                                                "revocation": "active",
+                                                "issuerTrust": "trusted"
+                                            },
+                                            "decision": "accept"
+                                        },
+                                        "is_success": true,
+                                        "description": "Sends the credential data to an webhook URL as HTTP POST, and returns the verified status based on the webhooks set status code (success = 200 - 299)."
+                                    }
+                                ]
+                            }
+                        ],
+                        "policiesRun": 4
+                    },
+                    "tokenResponse": {
+                        "error": null,
+                        "scope": null,
+                        "state": "8a77aa58-2a85-4c49-93be-e6df9c455770",
+                        "c_nonce": null,
+                        "id_token": null,
+                        "interval": null,
+                        "vp_token": "eyJraWQiOiJkaWQ6andrOmV5SnJkSGtpT2lKRlF5SXNJbU55ZGlJNklsQXRNalUySWl3aWEybGtJam9pTURGaFZsZzFiMkZ0UmtacFIwUlNUVzVTWmxJNVZXWmFXVXhEZHpab1ExbHNUbWhMYkhVNWJucDFheUlzSW5naU9pSmhTVE56VTNaSE5XbE5TVzFOUjAxT1NEWmtOUzF3ZFhOZlZUSTVWVWw2WWt0MlVVNXFkVWRZV0VOeklpd2llU0k2SW1OSU9GZFFVWEZ5V1hRemQzWTNTakJrTVRSTVJEbEZkelpTY1ZCd2NrRnJlVUZtVm1wM1pVbEZZMUVpZlEjMCIsInR5cCI6IkpXVCIsImFsZyI6IkVTMjU2In0.eyJzdWIiOiJkaWQ6andrOmV5SnJkSGtpT2lKRlF5SXNJbU55ZGlJNklsQXRNalUySWl3aWEybGtJam9pTURGaFZsZzFiMkZ0UmtacFIwUlNUVzVTWmxJNVZXWmFXVXhEZHpab1ExbHNUbWhMYkhVNWJucDFheUlzSW5naU9pSmhTVE56VTNaSE5XbE5TVzFOUjAxT1NEWmtOUzF3ZFhOZlZUSTVWVWw2WWt0MlVVNXFkVWRZV0VOeklpd2llU0k2SW1OSU9GZFFVWEZ5V1hRemQzWTNTakJrTVRSTVJEbEZkelpTY1ZCd2NrRnJlVUZtVm1wM1pVbEZZMUVpZlEiLCJuYmYiOjE3NzcyNTg5MDAsImlhdCI6MTc3NzI1ODk2MCwianRpIjoiRDJHb3R4Y0swSFU3IiwiaXNzIjoiZGlkOmp3azpleUpyZEhraU9pSkZReUlzSW1OeWRpSTZJbEF0TWpVMklpd2lhMmxrSWpvaU1ERmhWbGcxYjJGdFJrWnBSMFJTVFc1U1psSTVWV1phV1V4RGR6Wm9RMWxzVG1oTGJIVTVibnAxYXlJc0luZ2lPaUpoU1ROelUzWkhOV2xOU1cxTlIwMU9TRFprTlMxd2RYTmZWVEk1VlVsNllrdDJVVTVxZFVkWVdFTnpJaXdpZVNJNkltTklPRmRRVVhGeVdYUXpkM1kzU2pCa01UUk1SRGxGZHpaU2NWQndja0ZyZVVGbVZtcDNaVWxGWTFFaWZRIiwibm9uY2UiOiI4NmI2MzlkYy02OThiLTQ4ZmItYWE5Ny0yYTY2OTQyMjQxYWYiLCJhdWQiOiJodHRwOi8vaG9zdC5kb2NrZXIuaW50ZXJuYWw6NzAwMy9vcGVuaWQ0dmMvdmVyaWZ5IiwidnAiOnsiQGNvbnRleHQiOlsiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiXSwidHlwZSI6WyJWZXJpZmlhYmxlUHJlc2VudGF0aW9uIl0sImlkIjoiRDJHb3R4Y0swSFU3IiwiaG9sZGVyIjoiZGlkOmp3azpleUpyZEhraU9pSkZReUlzSW1OeWRpSTZJbEF0TWpVMklpd2lhMmxrSWpvaU1ERmhWbGcxYjJGdFJrWnBSMFJTVFc1U1psSTVWV1phV1V4RGR6Wm9RMWxzVG1oTGJIVTVibnAxYXlJc0luZ2lPaUpoU1ROelUzWkhOV2xOU1cxTlIwMU9TRFprTlMxd2RYTmZWVEk1VlVsNllrdDJVVTVxZFVkWVdFTnpJaXdpZVNJNkltTklPRmRRVVhGeVdYUXpkM1kzU2pCa01UUk1SRGxGZHpaU2NWQndja0ZyZVVGbVZtcDNaVWxGWTFFaWZRIiwidmVyaWZpYWJsZUNyZWRlbnRpYWwiOlsiZXlKaGJHY2lPaUpGVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0lzSW10cFpDSTZJbVJwWkRwM1pXSTZhVzVtY21FdGRtTXRjbVZuYVhOMGNua3RkMlZpTFRreE1UTTJPREEwTWpBek55NWhjMmxoTFdWaGMzUXlMbkoxYmk1aGNIQTZhWE56ZFdWeWN6cHdjbWx1WTJsd2JHVWphMlY1TFRFaWZRLmV5SnBjM01pT2lKa2FXUTZkMlZpT21sdVpuSmhMWFpqTFhKbFoybHpkSEo1TFhkbFlpMDVNVEV6Tmpnd05ESXdNemN1WVhOcFlTMWxZWE4wTWk1eWRXNHVZWEJ3T21semMzVmxjbk02Y0hKcGJtTnBjR3hsSWl3aWMzVmlJam9pWkdsa09tVjRZVzF3YkdVNmMzUjFaR1Z1ZERFaUxDSnBZWFFpT2pFM056Y3hPVEkyTVRZc0ltNWlaaUk2TVRjM056RTVNall4Tml3aWFuUnBJam9pZFhKdU9uVjFhV1E2WlhoaGJYQnNaUzFrWldkeVpXVXRNU0lzSW5aaklqcDdJa0JqYjI1MFpYaDBJanBiSW1oMGRIQnpPaTh2ZDNkM0xuY3pMbTl5Wnk4eU1ERTRMMk55WldSbGJuUnBZV3h6TDNZeElsMHNJblI1Y0dVaU9sc2lWbVZ5YVdacFlXSnNaVU55WldSbGJuUnBZV3dpTENKVmJtbDJaWEp6YVhSNVJHVm5jbVZsSWl3aVJXUjFZMkYwYVc5dVlXeFBZMk4xY0dGMGFXOXVZV3hEY21Wa1pXNTBhV0ZzSWl3aVZrNUZaSFZFWldkeVpXVkRjbVZrWlc1MGFXRnNJaXdpU1ZWVGJXRnlkRU5sY25SRGNtVmtaVzUwYVdGc0lsMHNJbU55WldSbGJuUnBZV3hUZFdKcVpXTjBJanA3SW1sa0lqb2laR2xrT21WNFlXMXdiR1U2YzNSMVpHVnVkREVpTENKa1pXZHlaV1VpT25zaWRIbHdaU0k2SWtKaFkyaGxiRzl5UkdWbmNtVmxJaXdpYm1GdFpTSTZJa0pUWXlCcGJpQkRiMjF3ZFhSbGNpQlRZMmxsYm1ObEluMHNJbWwxT21OdmJYQnZibVZ1ZEhNaU9sdDdJbTVoYldVaU9pSmthWEJzYjIxaElpd2liV0Z1WkdGMGIzSjVJanAwY25WbExDSmpiMjF3YjI1bGJuUlVlWEJsSWpvaVpHVm5jbVZsUTJWeWRHbG1hV05oZEdVaUxDSmpiMjF3YjI1bGJuUklZWE5vSWpvaU1IZzVNV1prWWpSaU9HSmtaakppT1RJNE9UUmxaRE01WWpGbFlXSTNOakU0TURGa1l6azVaVE00WWpObE0yUXlNalF4TjJSak16Vm1abVUxTjJFM1lXTTJJbjBzZXlKdVlXMWxJam9pZEhKaGJuTmpjbWx3ZENJc0ltMWhibVJoZEc5eWVTSTZabUZzYzJVc0ltTnZiWEJ2Ym1WdWRGUjVjR1VpT2lKaFkyRmtaVzFwWTFSeVlXNXpZM0pwY0hRaUxDSmpiMjF3YjI1bGJuUklZWE5vSWpvaU1IZzROamRrTkRjMU56STJZelUwWlRNeFptUm1NekEyTldFME5qSmlNekJrWkRCbU1Ea3lNVEExWm1FMFpqVXlZMlU1TnpNM05qWTBNVFk0TWpaaFlqRTFJbjFkZlN3aVpYWnBaR1Z1WTJVaU9sdDdJblI1Y0dVaU9sc2lTVlZUYldGeWRFTmxjblJOWlhKcmJHVlNaV05sYVhCMElsMHNJbU5vWVdsdVNXUWlPaUpsYVhBeE5UVTZNVEV4TlRVeE1URWlMQ0pqYjI1MGNtRmpkRUZrWkhKbGMzTWlPaUl3ZUdWRU1XTmxSV1kyTWtZNE9UWTBNR1ZETnpWalprTTVNRFJpTXpZd01tRTRPVU5sUkRZek5qRWlMQ0p0WlhKcmJHVlNiMjkwSWpvaU1IZzBaakptTjJKbE5EaGtPRGMyWmpaaVpUbGtPVE14WVdWak1Ea3pOMkU1WkdKallUUTNPVFExTkRrNU9XUm1NekF5WkRaa05EVTFNalZsT1RCa016SmpJaXdpWVc1amFHOXlWSGdpT2lJd2VEUmhNemxtTkRjNU56QTNObUV4T1RJd05qWTRZV05qT0RaallqYzFZakJtTlRNME9XTXlOV1JtWVdSbVltVTJPVFJsT0RNeU1XSTJaV1E1TkRZeU16TWlMQ0prWlhCc2IzbHRaVzUwVkhnaU9pSXdlRGRrTm1Ga09HWXhPVEJqWXpOa04yWXhaakEzWWpSbE5USXdZMk16WkRWak5qRXhOR1prWW1SaFl6VXpNak16TnpOak5HTTFZV0U1TTJFMU1EZG1PV0lpTENKc1pXRm1SVzVqYjJScGJtY2lPaUpqY21Wa1pXNTBhV0ZzU1VSOGZHTnZiWEJ2Ym1WdWRGUjVjR1Y4ZkdOdmJuUmxiblFpTENKdFpYSnJiR1ZVY21WbFUzQmxZeUk2ZXlKc1pXRm1TR0Z6YUVGc1p5STZJbk5vWVRJMU5pSXNJbTV2WkdWSVlYTm9RV3huSWpvaWEyVmpZMkZyTWpVMklpd2ljMjl5ZEZCaGFYSnpJanAwY25WbExDSnpiM0owVEdWaGRtVnpJanAwY25WbGZTd2lZMjl0Y0c5dVpXNTBjMUJ5YjI5bWN5STZXM3NpYm1GdFpTSTZJbVJwY0d4dmJXRWlMQ0p0WVc1a1lYUnZjbmtpT25SeWRXVXNJbWhoYzJnaU9pSXdlRGt4Wm1SaU5HSTRZbVJtTW1JNU1qZzVOR1ZrTXpsaU1XVmhZamMyTVRnd01XUmpPVGxsTXpoaU0yVXpaREl5TkRFM1pHTXpOV1ptWlRVM1lUZGhZellpTENKd2NtOXZaaUk2V3lJd2VESXlNR0ZpWlRNME56SXlNR05pWVdNek9EVTFOR1EwTW1JNFpEQmhNV1V5TkdReVpXWm1ZamsxWVRJeVltSTVZVFJsWm1ZNE9HWXlabUUyWmpreU1XWWlMQ0l3ZUdJNU16WTNObVpoWldSbVlqSmhNekExWVdJNU9EWmpObVZqTm1GaE5qWmtOREJqWXpoaU1UYzJaamd3TlRBNU5XTXhabUUyWXpnMlpUSXhZekl5WVdVaUxDSXdlR1JrWWpZMk1qZ3pNamhpTUdSaU1EbGtZMlJtWVRjME1tRTJPV1kyWVRobE9HTm1NRGN4TUdWbFpXRmxObVkyTWpNME5UaGtZMlZsWlROaE1tUTBPVGNpWFgwc2V5SnVZVzFsSWpvaWRISmhibk5qY21sd2RDSXNJbTFoYm1SaGRHOXllU0k2Wm1Gc2MyVXNJbWhoYzJnaU9pSXdlRGcyTjJRME56VTNNalpqTlRSbE16Rm1aR1l6TURZMVlUUTJNbUl6TUdSa01HWXdPVEl4TURWbVlUUm1OVEpqWlRrM016YzJOalF4TmpneU5tRmlNVFVpTENKd2NtOXZaaUk2V3lJd2VHUTVZakkzT1dZNE5ETTFaVFF3TXpKa01HUTRNMk01TURnMk9UZzNObVl5WXpSbVpqRXpNall3T0RkbE16WTBOMk0yTWprMU1tVTRNV0ZsWkRFME9EZ2lMQ0l3ZUdFMU5qUXhZekF5TWpreU56RmtNVEZsWTJZNVpqQTNNalJrTXpObFlUYzVOamswTldKaVpEUmhaRGMzTXpneE1qWmhOelJrTWpCbFl6UmtZMlkxT1RnaUxDSXdlRGxsTVRFM05HRTJPRE0zTnpSa01EbGxPREV6TnpRd01ERTVNamt5TXpGak56ZzRaVE0zWVRNMFlXTXlNekEyT1RnM01ERXdZVEE1WWpNNFpUVm1OemdpWFgxZGZWMHNJbWwxWDIxbGNtdHNaVjl5WldObGFYQjBJanA3SW5SNWNHVWlPaUpKVlZOdFlYSjBRMlZ5ZEUxbGNtdHNaVkpsWTJWcGNIUWlMQ0pqYUdGcGJrbGtJam9pWldsd01UVTFPakV4TVRVMU1URXhJaXdpWTI5dWRISmhZM1JCWkdSeVpYTnpJam9pTUhobFJERmpaVVZtTmpKR09EazJOREJsUXpjMVkyWkRPVEEwWWpNMk1ESmhPRGxEWlVRMk16WXhJaXdpYldWeWEyeGxVbTl2ZENJNklqQjROR1l5WmpkaVpUUTRaRGczTm1ZMlltVTVaRGt6TVdGbFl6QTVNemRoT1dSaVkyRTBOemswTlRRNU9UbGtaak13TW1RMlpEUTFOVEkxWlRrd1pETXlZeUlzSW1GdVkyaHZjbFI0SWpvaU1IZzBZVE01WmpRM09UY3dOelpoTVRreU1EWTJPR0ZqWXpnMlkySTNOV0l3WmpVek5EbGpNalZrWm1Ga1ptSmxOamswWlRnek1qRmlObVZrT1RRMk1qTXpJaXdpWkdWd2JHOTViV1Z1ZEZSNElqb2lNSGczWkRaaFpEaG1NVGt3WTJNelpEZG1NV1l3TjJJMFpUVXlNR05qTTJRMVl6WXhNVFJtWkdKa1lXTTFNekl6TXpjell6UmpOV0ZoT1ROaE5UQTNaamxpSWl3aWJHVmhaa1Z1WTI5a2FXNW5Jam9pWTNKbFpHVnVkR2xoYkVsRWZIeGpiMjF3YjI1bGJuUlVlWEJsZkh4amIyNTBaVzUwSWl3aWJXVnlhMnhsVkhKbFpWTndaV01pT25zaWJHVmhaa2hoYzJoQmJHY2lPaUp6YUdFeU5UWWlMQ0p1YjJSbFNHRnphRUZzWnlJNkltdGxZMk5oYXpJMU5pSXNJbk52Y25SUVlXbHljeUk2ZEhKMVpTd2ljMjl5ZEV4bFlYWmxjeUk2ZEhKMVpYMHNJbU52YlhCdmJtVnVkSE5RY205dlpuTWlPbHQ3SW01aGJXVWlPaUprYVhCc2IyMWhJaXdpYldGdVpHRjBiM0o1SWpwMGNuVmxMQ0pvWVhOb0lqb2lNSGc1TVdaa1lqUmlPR0prWmpKaU9USTRPVFJsWkRNNVlqRmxZV0kzTmpFNE1ERmtZems1WlRNNFlqTmxNMlF5TWpReE4yUmpNelZtWm1VMU4yRTNZV00ySWl3aWNISnZiMllpT2xzaU1IZ3lNakJoWW1Vek5EY3lNakJqWW1Gak16ZzFOVFJrTkRKaU9HUXdZVEZsTWpSa01tVm1abUk1TldFeU1tSmlPV0UwWldabU9EaG1NbVpoTm1ZNU1qRm1JaXdpTUhoaU9UTTJOelptWVdWa1ptSXlZVE13TldGaU9UZzJZelpsWXpaaFlUWTJaRFF3WTJNNFlqRTNObVk0TURVd09UVmpNV1poTm1NNE5tVXlNV015TW1GbElpd2lNSGhrWkdJMk5qSTRNekk0WWpCa1lqQTVaR05rWm1FM05ESmhOamxtTm1FNFpUaGpaakEzTVRCbFpXVmhaVFptTmpJek5EVTRaR05sWldVellUSmtORGszSWwxOUxIc2libUZ0WlNJNkluUnlZVzV6WTNKcGNIUWlMQ0p0WVc1a1lYUnZjbmtpT21aaGJITmxMQ0pvWVhOb0lqb2lNSGc0Tmpka05EYzFOekkyWXpVMFpUTXhabVJtTXpBMk5XRTBOakppTXpCa1pEQm1NRGt5TVRBMVptRTBaalV5WTJVNU56TTNOalkwTVRZNE1qWmhZakUxSWl3aWNISnZiMllpT2xzaU1IaGtPV0l5TnpsbU9EUXpOV1UwTURNeVpEQmtPRE5qT1RBNE5qazROelptTW1NMFptWXhNekkyTURnM1pUTTJORGRqTmpJNU5USmxPREZoWldReE5EZzRJaXdpTUhoaE5UWTBNV013TWpJNU1qY3haREV4WldObU9XWXdOekkwWkRNelpXRTNPVFk1TkRWaVltUTBZV1EzTnpNNE1USTJZVGMwWkRJd1pXTTBaR05tTlRrNElpd2lNSGc1WlRFeE56UmhOamd6TnpjMFpEQTVaVGd4TXpjME1EQXhPVEk1TWpNeFl6YzRPR1V6TjJFek5HRmpNak13TmprNE56QXhNR0V3T1dJek9HVTFaamM0SWwxOVhYMTlmUS5WN1BNVW5JcEI0c3hkVlU1SmxRdXdtVk14bXg4T3F3RlEtNFZpU1AxUk8zaFBVUGlLOUYwS1A3U243STZGNHlVSGdSVktSRzNhdlhobHdvcmZ5RHhaZyJdfX0.ov31t1fyn2HU6zURuWdb0kRhOkNKjmCYaTWcnCiWNuuH8NjiNSIghpjV_IKWqRn9lSg5AHo8iW3h_wScTo4VYw",
+                        "error_uri": null,
+                        "expires_in": null,
+                        "token_type": null,
+                        "access_token": null,
+                        "refresh_token": null,
+                        "error_description": null,
+                        "c_nonce_expires_in": null,
+                        "authorization_pending": null,
+                        "presentation_submission": {
+                            "id": "D2GotxcK0HU7",
+                            "definition_id": "D2GotxcK0HU7",
+                            "descriptor_map": [
+                                {
+                                    "id": "UniversityDegree",
+                                    "path": "$",
+                                    "format": "jwt_vp",
+                                    "path_nested": {
+                                        "id": null,
+                                        "path": "$.vp.verifiableCredential[0]",
+                                        "format": "jwt_vc",
+                                        "path_nested": null
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "verificationResult": true,
+                    "presentationDefinition": {
+                        "id": "D2GotxcK0HU7",
+                        "name": null,
+                        "format": null,
+                        "purpose": null,
+                        "input_descriptors": [
+                            {
+                                "id": "UniversityDegree",
+                                "name": null,
+                                "group": null,
+                                "format": {
+                                    "jwt_vc_json": {
+                                        "alg": [
+                                            "EdDSA"
+                                        ],
+                                        "proof_type": null
+                                    }
+                                },
+                                "schema": null,
+                                "purpose": null,
+                                "constraints": {
+                                    "fields": [
+                                        {
+                                            "id": null,
+                                            "name": null,
+                                            "path": [
+                                                "$.vc.type"
+                                            ],
+                                            "filter": {
+                                                "type": "array",
+                                                "contains": {
+                                                    "const": "UniversityDegree"
+                                                }
+                                            },
+                                            "purpose": null,
+                                            "optional": null,
+                                            "intent_to_retain": null
+                                        }
+                                    ],
+                                    "limit_disclosure": "required"
+                                }
+                            }
+                        ],
+                        "submission_requirements": null
+                    }
+                },
+                "created_at": "2026-04-27T03:02:42.718452+00:00",
+                "event_type": "SESSION_VERIFIED",
+                "verification_request_id": "8a77aa58-2a85-4c49-93be-e6df9c455770"
+            }
+        ],
+        "request": {
+            "id": "8a77aa58-2a85-4c49-93be-e6df9c455770",
+            "status": "VERIFIED",
+            "provider": "walt",
+            "verified": true,
+            "created_at": "2026-04-27T03:02:00.282179+00:00",
+            "updated_at": "2026-04-27T03:02:42.717356+00:00",
+            "reason_code": null,
+            "business_ref": "chapter-5-demo-1",
+            "candidate_ref": "student-demo-001"
+        },
+        "session": {
+            "id": "f2325f51-6341-4296-b4cc-14f8a065a8de",
+            "provider": "walt",
+            "deep_link": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=8a77aa58-2a85-4c49-93be-e6df9c455770&presentation_definition_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fpd%2F8a77aa58-2a85-4c49-93be-e6df9c455770&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=86b639dc-698b-48fb-aa97-2a66942241af&response_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify%2F8a77aa58-2a85-4c49-93be-e6df9c455770",
+            "offer_url": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=8a77aa58-2a85-4c49-93be-e6df9c455770&presentation_definition_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fpd%2F8a77aa58-2a85-4c49-93be-e6df9c455770&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=86b639dc-698b-48fb-aa97-2a66942241af&response_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify%2F8a77aa58-2a85-4c49-93be-e6df9c455770",
+            "created_at": "2026-04-27T03:02:00.712304+00:00",
+            "expires_at": null,
+            "qr_code_url": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=8a77aa58-2a85-4c49-93be-e6df9c455770&presentation_definition_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fpd%2F8a77aa58-2a85-4c49-93be-e6df9c455770&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=86b639dc-698b-48fb-aa97-2a66942241af&response_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify%2F8a77aa58-2a85-4c49-93be-e6df9c455770",
+            "provider_session_id": "8a77aa58-2a85-4c49-93be-e6df9c455770",
+            "raw_create_response": {
+                "presentationUrl": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=8a77aa58-2a85-4c49-93be-e6df9c455770&presentation_definition_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fpd%2F8a77aa58-2a85-4c49-93be-e6df9c455770&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=86b639dc-698b-48fb-aa97-2a66942241af&response_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify%2F8a77aa58-2a85-4c49-93be-e6df9c455770"
+            },
+            "verification_request_id": "8a77aa58-2a85-4c49-93be-e6df9c455770"
+        }
+    },
+    {
+        "events": [
+        ],
+        "request": {
+            "id": "72ab8b94-ccdd-4bc9-aa19-a1e6c3536997",
+            "status": "PENDING",
+            "provider": "walt",
+            "verified": false,
+            "created_at": "2026-04-26T15:40:04.378524+00:00",
+            "updated_at": "2026-04-26T15:40:04.496974+00:00",
+            "reason_code": null,
+            "business_ref": "chapter-5-demo",
+            "candidate_ref": "student-demo-001"
+        },
+        "session": {
+            "id": "7fda86ca-1812-41d4-9816-21986811e4a4",
+            "provider": "walt",
+            "deep_link": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=72ab8b94-ccdd-4bc9-aa19-a1e6c3536997&presentation_definition_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fpd%2F72ab8b94-ccdd-4bc9-aa19-a1e6c3536997&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=bf999f50-c4be-42cc-a104-630b2cbd9d88&response_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify%2F72ab8b94-ccdd-4bc9-aa19-a1e6c3536997",
+            "offer_url": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=72ab8b94-ccdd-4bc9-aa19-a1e6c3536997&presentation_definition_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fpd%2F72ab8b94-ccdd-4bc9-aa19-a1e6c3536997&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=bf999f50-c4be-42cc-a104-630b2cbd9d88&response_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify%2F72ab8b94-ccdd-4bc9-aa19-a1e6c3536997",
+            "created_at": "2026-04-26T15:40:04.494815+00:00",
+            "expires_at": null,
+            "qr_code_url": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=72ab8b94-ccdd-4bc9-aa19-a1e6c3536997&presentation_definition_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fpd%2F72ab8b94-ccdd-4bc9-aa19-a1e6c3536997&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=bf999f50-c4be-42cc-a104-630b2cbd9d88&response_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify%2F72ab8b94-ccdd-4bc9-aa19-a1e6c3536997",
+            "provider_session_id": "72ab8b94-ccdd-4bc9-aa19-a1e6c3536997",
+            "raw_create_response": {
+                "presentationUrl": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=72ab8b94-ccdd-4bc9-aa19-a1e6c3536997&presentation_definition_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fpd%2F72ab8b94-ccdd-4bc9-aa19-a1e6c3536997&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=bf999f50-c4be-42cc-a104-630b2cbd9d88&response_uri=http%3A%2F%2Fhost.docker.internal%3A7003%2Fopenid4vc%2Fverify%2F72ab8b94-ccdd-4bc9-aa19-a1e6c3536997"
+            },
+            "verification_request_id": "72ab8b94-ccdd-4bc9-aa19-a1e6c3536997"
+        }
+    },
+    {
+        "events": [
+        ],
+        "request": {
+            "id": "77523bd7-4245-4b4e-83d1-7e6eeb55733a",
+            "status": "PENDING",
+            "provider": "walt",
+            "verified": false,
+            "created_at": "2026-04-26T14:07:42.783982+00:00",
+            "updated_at": "2026-04-26T14:07:42.904514+00:00",
+            "reason_code": null,
+            "business_ref": "chapter-5-demo",
+            "candidate_ref": "student-demo-001"
+        },
+        "session": {
+            "id": "d882fc38-801a-4c71-b55a-2d019102ea92",
+            "provider": "walt",
+            "deep_link": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=77523bd7-4245-4b4e-83d1-7e6eeb55733a&presentation_definition_uri=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fpd%2F77523bd7-4245-4b4e-83d1-7e6eeb55733a&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=5d3704e1-ce14-44fc-a910-daea7bf85591&response_uri=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fverify%2F77523bd7-4245-4b4e-83d1-7e6eeb55733a",
+            "offer_url": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=77523bd7-4245-4b4e-83d1-7e6eeb55733a&presentation_definition_uri=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fpd%2F77523bd7-4245-4b4e-83d1-7e6eeb55733a&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=5d3704e1-ce14-44fc-a910-daea7bf85591&response_uri=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fverify%2F77523bd7-4245-4b4e-83d1-7e6eeb55733a",
+            "created_at": "2026-04-26T14:07:42.899843+00:00",
+            "expires_at": null,
+            "qr_code_url": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=77523bd7-4245-4b4e-83d1-7e6eeb55733a&presentation_definition_uri=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fpd%2F77523bd7-4245-4b4e-83d1-7e6eeb55733a&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=5d3704e1-ce14-44fc-a910-daea7bf85591&response_uri=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fverify%2F77523bd7-4245-4b4e-83d1-7e6eeb55733a",
+            "provider_session_id": "77523bd7-4245-4b4e-83d1-7e6eeb55733a",
+            "raw_create_response": {
+                "presentationUrl": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=77523bd7-4245-4b4e-83d1-7e6eeb55733a&presentation_definition_uri=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fpd%2F77523bd7-4245-4b4e-83d1-7e6eeb55733a&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=5d3704e1-ce14-44fc-a910-daea7bf85591&response_uri=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fverify%2F77523bd7-4245-4b4e-83d1-7e6eeb55733a"
+            },
+            "verification_request_id": "77523bd7-4245-4b4e-83d1-7e6eeb55733a"
+        }
+    },
+    {
+        "events": [
+        ],
+        "request": {
+            "id": "5e4e7bdc-772d-43af-ae97-1d09deb4a46e",
+            "status": "PENDING",
+            "provider": "walt",
+            "verified": false,
+            "created_at": "2026-04-26T06:14:01.295578+00:00",
+            "updated_at": "2026-04-26T06:14:01.50347+00:00",
+            "reason_code": null,
+            "business_ref": "chapter-5-smoke",
+            "candidate_ref": "student-demo-001"
+        },
+        "session": {
+            "id": "d411c8bb-434d-48c4-b120-454f6532f6f6",
+            "provider": "walt",
+            "deep_link": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=5e4e7bdc-772d-43af-ae97-1d09deb4a46e&presentation_definition_uri=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fpd%2F5e4e7bdc-772d-43af-ae97-1d09deb4a46e&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=21b6d1f6-0a52-4d45-b2c8-6ccb8c8ab175&response_uri=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fverify%2F5e4e7bdc-772d-43af-ae97-1d09deb4a46e",
+            "offer_url": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=5e4e7bdc-772d-43af-ae97-1d09deb4a46e&presentation_definition_uri=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fpd%2F5e4e7bdc-772d-43af-ae97-1d09deb4a46e&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=21b6d1f6-0a52-4d45-b2c8-6ccb8c8ab175&response_uri=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fverify%2F5e4e7bdc-772d-43af-ae97-1d09deb4a46e",
+            "created_at": "2026-04-26T06:14:01.501327+00:00",
+            "expires_at": null,
+            "qr_code_url": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=5e4e7bdc-772d-43af-ae97-1d09deb4a46e&presentation_definition_uri=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fpd%2F5e4e7bdc-772d-43af-ae97-1d09deb4a46e&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=21b6d1f6-0a52-4d45-b2c8-6ccb8c8ab175&response_uri=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fverify%2F5e4e7bdc-772d-43af-ae97-1d09deb4a46e",
+            "provider_session_id": "5e4e7bdc-772d-43af-ae97-1d09deb4a46e",
+            "raw_create_response": {
+                "presentationUrl": "openid4vp://authorize?response_type=vp_token&client_id=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fverify&response_mode=direct_post&state=5e4e7bdc-772d-43af-ae97-1d09deb4a46e&presentation_definition_uri=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fpd%2F5e4e7bdc-772d-43af-ae97-1d09deb4a46e&client_id_scheme=redirect_uri&client_metadata=%7B%22authorization_encrypted_response_alg%22%3A%22ECDH-ES%22%2C%22authorization_encrypted_response_enc%22%3A%22A256GCM%22%7D&nonce=21b6d1f6-0a52-4d45-b2c8-6ccb8c8ab175&response_uri=http%3A%2F%2Flocalhost%3A7003%2Fopenid4vc%2Fverify%2F5e4e7bdc-772d-43af-ae97-1d09deb4a46e"
+            },
+            "verification_request_id": "5e4e7bdc-772d-43af-ae97-1d09deb4a46e"
+        }
+    }
+]

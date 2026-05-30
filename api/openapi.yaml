@@ -130,6 +130,14 @@ components:
         candidateRef:
           type: string
           example: cand-456
+        credentialTypes:
+          type: array
+          description: Optional credential type names to request from the wallet. Defaults to UniversityDegree when omitted.
+          items:
+            type: string
+          example:
+            - DiplomaCredential
+            - TranscriptCredential
     VerificationSession:
       type: object
       properties:

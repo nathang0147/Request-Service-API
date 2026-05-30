@@ -79,11 +79,20 @@ func TestServiceCreateRequestPersistsSessionAndReturnsPendingResponse(t *testing
 	service := NewService("walt", repository, provider)
 
 	response, err := service.CreateRequest(context.Background(), CreateRequestInput{
-		BusinessRef:  "job-123",
-		CandidateRef: "cand-456",
+		BusinessRef:     "job-123",
+		CandidateRef:    "cand-456",
+		CredentialTypes: []string{"DiplomaCredential", "TranscriptCredential"},
 	})
 	if err != nil {
 		t.Fatalf("expected create request to succeed, got error: %v", err)
+	}
+
+	if len(provider.createSessionInput.CredentialTypes) != 2 {
+		t.Fatalf("expected credential types to reach provider, got %+v", provider.createSessionInput.CredentialTypes)
+	}
+
+	if provider.createSessionInput.CredentialTypes[0] != "DiplomaCredential" || provider.createSessionInput.CredentialTypes[1] != "TranscriptCredential" {
+		t.Fatalf("expected requested credential types to round-trip, got %+v", provider.createSessionInput.CredentialTypes)
 	}
 
 	if repository.createdSession.ProviderSessionID != "provider-session-123" {
@@ -219,9 +228,12 @@ func (repository *stubRepository) GetLatestSessionByRequestID(ctx context.Contex
 type stubSessionProvider struct {
 	createSessionResult ProviderSession
 	createSessionErr    error
+	createSessionInput  ProviderSessionInput
 }
 
-func (provider *stubSessionProvider) CreateSession(_ context.Context, _ ProviderSessionInput) (ProviderSession, error) {
+func (provider *stubSessionProvider) CreateSession(_ context.Context, input ProviderSessionInput) (ProviderSession, error) {
+	provider.createSessionInput = input
+
 	if provider.createSessionErr != nil {
 		return ProviderSession{}, provider.createSessionErr
 	}
